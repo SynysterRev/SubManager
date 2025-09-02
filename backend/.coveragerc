@@ -1,0 +1,15 @@
+[coverage:run]
+omit =
+    manage.py
+    subApi/*
+    */migrations/*
+    */apps.py
+    */admin.py
+    */tests/*
+    */__init__.py
+    */settings/*
+    */wsgi.py
+    */asgi.py
+    venv/*
+    env/*
+    .venv/*
