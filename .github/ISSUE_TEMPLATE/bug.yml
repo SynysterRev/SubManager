@@ -19,15 +19,8 @@ body:
     attributes:
       label: Bug type
       options:
-        - label: Gameplay
-        - label: Data
-        - label: UI
-        - label: Shader
-        - label: VFX
-        - label: SFX
-        - label: IA
-        - label: Level Design
-        - label: Game Design
-        - label: Tools
+        - label: Backend
+        - label: Frontend
+        - label: Mobile
     validations:
       required: true
