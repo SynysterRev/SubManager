@@ -1,5 +1,3 @@
-from datetime import date
-
 import pytest
 from rest_framework.test import APIClient
 
@@ -15,7 +13,7 @@ def test_subscription_list_view(base_user, base_subscription):
         name="Test2",
         category="Test",
         price=30.0,
-        payment_date=date.today(),
+        payment_day=5,
         user=base_user,
     )
 
@@ -64,7 +62,7 @@ def test_subscription_list_only_current_user_view(
         name="Test2",
         category="Test",
         price=30.0,
-        payment_date=date.today(),
+        payment_day=4,
         user=new_user,
     )
 
@@ -106,7 +104,7 @@ def test_create_subscription_view(base_user):
         "name": "New",
         "category": "Cat",
         "price": 25.0,
-        "payment_date": "2025-09-02",
+        "payment_day": 5,
     }
 
     response = client.post("/api/subscriptions/", data, format="json")
@@ -123,7 +121,7 @@ def test_create_subscription_view(base_user):
         "name",
         "category",
         "price",
-        "payment_date",
+        "payment_day",
     ],
 )
 def test_create_subscription_missing_field_view(base_user, field):
@@ -134,7 +132,7 @@ def test_create_subscription_missing_field_view(base_user, field):
         "name": "New",
         "category": "Cat",
         "price": 25.0,
-        "payment_date": "2025-09-02",
+        "payment_day": 5,
     }
     data.pop(field)
 
@@ -152,7 +150,7 @@ def test_create_subscription_missing_field_view(base_user, field):
         ("name", None),
         ("category", None),
         ("price", None),
-        ("payment_date", None),
+        ("payment_day", None),
     ],
 )
 def test_create_subscription_field_empty_view(base_user, field, value):
@@ -163,7 +161,7 @@ def test_create_subscription_field_empty_view(base_user, field, value):
         "name": "New",
         "category": "Cat",
         "price": 25.0,
-        "payment_date": "2025-09-02",
+        "payment_day": 5,
         field: value,
     }
 
@@ -181,7 +179,7 @@ def test_create_subscription_field_empty_view(base_user, field, value):
         ("name", "Test"),
         ("category", "Test"),
         ("price", 10),
-        ("payment_date", "2025-09-12"),
+        ("payment_day", 5),
     ],
 )
 def test_put_subscription_view(base_subscription, base_user, field, value):
@@ -192,7 +190,7 @@ def test_put_subscription_view(base_subscription, base_user, field, value):
         "name": base_subscription.name,
         "category": base_subscription.category,
         "price": base_subscription.price,
-        "payment_date": base_subscription.payment_date,
+        "payment_day": base_subscription.payment_day,
         field: value,
     }
 
@@ -216,7 +214,7 @@ def test_put_subscription_forbidden_user_field_view(
         "name": base_subscription.name,
         "category": base_subscription.category,
         "price": base_subscription.price,
-        "payment_date": base_subscription.payment_date,
+        "payment_day": base_subscription.payment_day,
         "user": new_user.id,
     }
 
