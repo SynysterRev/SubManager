@@ -26,6 +26,13 @@ class SubscriptionViewSet(viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
-        total_price = queryset.aggregate(total=Sum("price"))["total"] or 0
+        total_price_month = queryset.aggregate(total=Sum("price"))["total"] or 0
+        total_price_year = total_price_month * 12
         serializer = self.get_serializer(queryset, many=True)
-        return Response({"total_price": total_price, "subscriptions": serializer.data})
+        return Response(
+            {
+                "total_price_month": total_price_month,
+                "total_price_year": total_price_year,
+                "subscriptions": serializer.data,
+            }
+        )

@@ -1,5 +1,3 @@
-from datetime import date
-
 import pytest
 from rest_framework.test import APIClient
 
@@ -15,7 +13,7 @@ def test_subscription_list_view(base_user, base_subscription):
         name="Test2",
         category="Test",
         price=30.0,
-        payment_date=date.today(),
+        payment_day=5,
         user=base_user,
     )
 
@@ -25,11 +23,14 @@ def test_subscription_list_view(base_user, base_subscription):
     data = response.json()
 
     expected_total = sum(s.price for s in Subscription.objects.filter(user=base_user))
-    assert data["total_price"] == expected_total
+    expected_total_year = expected_total * 12
+
+    assert data["totalPriceMonth"] == expected_total
+    assert data["totalPriceYear"] == expected_total_year
 
     assert (
-        len(data["subscriptions"])
-        == Subscription.objects.filter(user=base_user).count()
+            len(data["subscriptions"])
+            == Subscription.objects.filter(user=base_user).count()
     )
 
 
@@ -44,17 +45,18 @@ def test_subscription_list_empty_view(base_user):
     data = response.json()
 
     expected_total = 0
-    assert data["total_price"] == expected_total
+    assert data["totalPriceMonth"] == expected_total
+    assert data["totalPriceYear"] == expected_total * 12
 
     assert (
-        len(data["subscriptions"])
-        == Subscription.objects.filter(user=base_user).count()
+            len(data["subscriptions"])
+            == Subscription.objects.filter(user=base_user).count()
     )
 
 
 @pytest.mark.django_db
 def test_subscription_list_only_current_user_view(
-    base_subscription, base_user, user_model
+        base_subscription, base_user, user_model
 ):
     client = APIClient()
     client.force_authenticate(user=base_user)
@@ -64,7 +66,7 @@ def test_subscription_list_only_current_user_view(
         name="Test2",
         category="Test",
         price=30.0,
-        payment_date=date.today(),
+        payment_day=4,
         user=new_user,
     )
 
@@ -74,11 +76,12 @@ def test_subscription_list_only_current_user_view(
     data = response.json()
 
     expected_total = sum(s.price for s in Subscription.objects.filter(user=base_user))
-    assert data["total_price"] == expected_total
+    assert data["totalPriceMonth"] == expected_total
+    assert data["totalPriceYear"] == expected_total * 12
 
     assert (
-        len(data["subscriptions"])
-        == Subscription.objects.filter(user=base_user).count()
+            len(data["subscriptions"])
+            == Subscription.objects.filter(user=base_user).count()
     )
 
 
@@ -106,7 +109,7 @@ def test_create_subscription_view(base_user):
         "name": "New",
         "category": "Cat",
         "price": 25.0,
-        "payment_date": "2025-09-02",
+        "payment_day": 5,
     }
 
     response = client.post("/api/subscriptions/", data, format="json")
@@ -118,15 +121,15 @@ def test_create_subscription_view(base_user):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "field",
+    "field, camel",
     [
-        "name",
-        "category",
-        "price",
-        "payment_date",
+        ("name", "name"),
+        ("category", "category"),
+        ("price", "price"),
+        ("payment_day", "paymentDay"),
     ],
 )
-def test_create_subscription_missing_field_view(base_user, field):
+def test_create_subscription_missing_field_view(base_user, field, camel):
     client = APIClient()
     client.force_authenticate(user=base_user)
 
@@ -134,15 +137,15 @@ def test_create_subscription_missing_field_view(base_user, field):
         "name": "New",
         "category": "Cat",
         "price": 25.0,
-        "payment_date": "2025-09-02",
+        "payment_day": 5,
     }
     data.pop(field)
 
     response = client.post("/api/subscriptions/", data, format="json")
     assert response.status_code == 400
     response_data = response.json()
-    assert field in response_data
-    assert response_data[field] == ["This field is required."]
+    assert camel in response_data
+    assert response_data[camel] == ["This field is required."]
 
 
 @pytest.mark.django_db
@@ -152,7 +155,7 @@ def test_create_subscription_missing_field_view(base_user, field):
         ("name", None),
         ("category", None),
         ("price", None),
-        ("payment_date", None),
+        ("paymentDay", None),
     ],
 )
 def test_create_subscription_field_empty_view(base_user, field, value):
@@ -163,7 +166,7 @@ def test_create_subscription_field_empty_view(base_user, field, value):
         "name": "New",
         "category": "Cat",
         "price": 25.0,
-        "payment_date": "2025-09-02",
+        "payment_day": 5,
         field: value,
     }
 
@@ -181,7 +184,7 @@ def test_create_subscription_field_empty_view(base_user, field, value):
         ("name", "Test"),
         ("category", "Test"),
         ("price", 10),
-        ("payment_date", "2025-09-12"),
+        ("paymentDay", 5),
     ],
 )
 def test_put_subscription_view(base_subscription, base_user, field, value):
@@ -192,7 +195,7 @@ def test_put_subscription_view(base_subscription, base_user, field, value):
         "name": base_subscription.name,
         "category": base_subscription.category,
         "price": base_subscription.price,
-        "payment_date": base_subscription.payment_date,
+        "payment_day": base_subscription.payment_day,
         field: value,
     }
 
@@ -207,7 +210,7 @@ def test_put_subscription_view(base_subscription, base_user, field, value):
 
 @pytest.mark.django_db
 def test_put_subscription_forbidden_user_field_view(
-    base_subscription, base_user, user_model
+        base_subscription, base_user, user_model
 ):
     client = APIClient()
     client.force_authenticate(user=base_user)
@@ -216,7 +219,7 @@ def test_put_subscription_forbidden_user_field_view(
         "name": base_subscription.name,
         "category": base_subscription.category,
         "price": base_subscription.price,
-        "payment_date": base_subscription.payment_date,
+        "payment_day": base_subscription.payment_day,
         "user": new_user.id,
     }
 

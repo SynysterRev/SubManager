@@ -1,5 +1,4 @@
 import datetime
-from datetime import date
 
 import pytest
 from rest_framework.exceptions import ValidationError
@@ -19,10 +18,11 @@ def test_details_contains_expected_fields(base_subscription):
         "name",
         "category",
         "price",
-        "payment_date",
+        "payment_day",
         "is_active",
         "created_at",
         "user",
+        "days_before_next_payment",
     }
     assert set(data.keys()) == expected_fields
     assert data["name"] == base_subscription.name
@@ -30,7 +30,10 @@ def test_details_contains_expected_fields(base_subscription):
     assert data["price"] == base_subscription.price
     assert data["is_active"] == base_subscription.is_active
     assert data["user"] == base_subscription.user.id
-    assert data["payment_date"] == base_subscription.payment_date.isoformat()
+    assert data["payment_day"] == base_subscription.payment_day
+    assert (
+        data["days_before_next_payment"] == base_subscription.days_before_next_payment
+    )
 
 
 @pytest.mark.django_db
@@ -40,7 +43,7 @@ def test_list_contains_expected_fields(base_subscription, base_user):
         category="Test2",
         user=base_user,
         price=30.2,
-        payment_date=date.today(),
+        payment_day=5,
     )
     serializer = SubscriptionListSerializer(
         instance=[base_subscription, sub2], many=True
@@ -49,7 +52,14 @@ def test_list_contains_expected_fields(base_subscription, base_user):
 
     assert isinstance(data, list)
     assert len(data) == 2
-    expected_fields = {"id", "name", "category", "price", "is_active", "payment_date"}
+    expected_fields = {
+        "id",
+        "name",
+        "category",
+        "price",
+        "is_active",
+        "payment_day",
+    }
     for i, sub in enumerate([base_subscription, sub2]):
         assert set(data[i].keys()) == expected_fields
         assert data[i]["id"] == sub.id
@@ -57,7 +67,7 @@ def test_list_contains_expected_fields(base_subscription, base_user):
         assert data[i]["category"] == sub.category
         assert data[i]["price"] == sub.price
         assert data[i]["is_active"] == sub.is_active
-        assert data[i]["payment_date"] == sub.payment_date.isoformat()
+        assert data[i]["payment_day"] == sub.payment_day
 
 
 @pytest.mark.django_db
@@ -68,7 +78,7 @@ def test_list_contains_expected_fields(base_subscription, base_user):
         ("category", str),
         ("price", float),
         ("is_active", bool),
-        ("payment_date", str),
+        ("payment_day", int),
         ("created_at", str),
         ("user", int),
         ("id", int),
@@ -80,23 +90,13 @@ def test_fields_correct_types(base_subscription, field, type_value):
 
 
 @pytest.mark.django_db
-def test_date_correct_format(base_subscription):
-    data = SubscriptionDetailSerializer(instance=base_subscription).data
-    payment_date = data["payment_date"]
-    try:
-        datetime.datetime.fromisoformat(data["payment_date"])
-    except ValueError:
-        pytest.fail(f"payment_date is not a valid ISO format: {payment_date}")
-
-
-@pytest.mark.django_db
-def test_date_incorrect_format(base_user):
+def test_payment_incorrect_value(base_user):
     data = {
         "name": "Test",
         "category": "Cat",
         "price": 10.0,
         "user": base_user.id,
-        "payment_date": "31-12-2025",
+        "payment_day": -5,
     }
     serializer = SubscriptionDetailSerializer(data=data)
     with pytest.raises(ValidationError):
@@ -110,7 +110,7 @@ def test_list_ordered(base_subscription, base_user):
         category="Test2",
         user=base_user,
         price=30.2,
-        payment_date=date.today(),
+        payment_day=5,
     )
 
     base_subscription.created_at = datetime.datetime.now() - datetime.timedelta(days=1)

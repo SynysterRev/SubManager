@@ -1,5 +1,3 @@
-from datetime import date
-
 import pytest
 
 from subscriptions.models import Subscription
@@ -24,5 +22,5 @@ def base_subscription(base_user):
         category="Test",
         user=base_user,
         price=50.0,
-        payment_date=date.today(),
+        payment_day=5,
     )

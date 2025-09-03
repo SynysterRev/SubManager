@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 
 import pytest
 from django.core.exceptions import ValidationError
@@ -14,7 +14,7 @@ def test_create_subscription_success(user_model, base_user):
         category="Test",
         user=base_user,
         price=50.0,
-        payment_date=date.today(),
+        payment_day=5,
     )
     assert sub.name == "Test"
     assert sub.price == 50.0
@@ -32,7 +32,7 @@ def test_create_subscription_with_nonexistent_user(user_model):
                 category="Test",
                 user_id=999,  # ID does not exist
                 price=15.99,
-                payment_date=date.today(),
+                payment_day=5,
             )
             connection.check_constraints()
 
@@ -44,7 +44,7 @@ def test_create_subscription_with_nonexistent_user(user_model):
         ("name", None),
         ("category", None),
         ("price", None),
-        ("payment_date", None),
+        ("payment_day", None),
         ("user", None),
     ],
 )
@@ -53,7 +53,7 @@ def test_subscription_required_fields(user_model, base_user, field, value):
         "name": "Test",
         "category": "Flower",
         "price": 19.99,
-        "payment_date": date.today(),
+        "payment_day": 5,
         "user": base_user,
     }
 
@@ -68,10 +68,70 @@ def test_subscription_required_fields(user_model, base_user, field, value):
 @pytest.mark.django_db
 def test_subscription_ordering(user_model, base_user):
     sub1 = Subscription.objects.create(
-        name="A", category="Cat", price=10, user=base_user, payment_date=date.today()
+        name="A", category="Cat", price=10, user=base_user, payment_day=5
     )
     sub2 = Subscription.objects.create(
-        name="B", category="Cat", price=20, user=base_user, payment_date=date.today()
+        name="B", category="Cat", price=20, user=base_user, payment_day=5
     )
     subs = list(Subscription.objects.all())
     assert subs == [sub1, sub2]
+
+
+@pytest.mark.django_db
+def test_date_next_payment_future_day(base_subscription, mocker):
+    base_subscription.payment_day = 15
+    base_subscription.save()
+
+    fake_now = datetime(2025, 9, 10)
+    mocker.patch("django.utils.timezone.now", return_value=fake_now)
+
+    next_payment = base_subscription.date_next_payment()
+    assert next_payment == date(2025, 9, 15)
+
+
+@pytest.mark.django_db
+def test_date_next_payment_past_day(base_subscription, mocker):
+    base_subscription.payment_day = 15
+    base_subscription.save()
+
+    fake_now = datetime(2025, 9, 20)
+    mocker.patch("django.utils.timezone.now", return_value=fake_now)
+
+    next_payment = base_subscription.date_next_payment()
+    assert next_payment == date(2025, 10, 15)
+
+
+@pytest.mark.django_db
+def test_date_next_payment_payment_day_exceeds_month(base_subscription, mocker):
+    base_subscription.payment_day = 31
+    base_subscription.save()
+
+    fake_now = datetime(2025, 2, 28)
+    mocker.patch("django.utils.timezone.now", return_value=fake_now)
+
+    next_payment = base_subscription.date_next_payment()
+    assert next_payment == date(2025, 2, 28)
+
+
+@pytest.mark.django_db
+def test_days_before_next_payment(base_subscription, mocker):
+    base_subscription.payment_day = 15
+    base_subscription.save()
+
+    fake_now = datetime(2025, 9, 10)
+    mocker.patch("django.utils.timezone.now", return_value=fake_now)
+
+    days = base_subscription.days_before_next_payment
+    assert days == 5
+
+
+@pytest.mark.django_db
+def test_days_before_next_payment_next_month(base_subscription, mocker):
+    base_subscription.payment_day = 15
+    base_subscription.save()
+
+    fake_now = datetime(2025, 9, 20)
+    mocker.patch("django.utils.timezone.now", return_value=fake_now)
+
+    days = base_subscription.days_before_next_payment
+    assert days == 25
