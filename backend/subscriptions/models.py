@@ -9,8 +9,9 @@ class Subscription(models.Model):
     price = models.FloatField()
     payment_date = models.DateField()
     is_active = models.BooleanField(default=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
-                                related_name="subscriptions")
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="subscriptions"
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
