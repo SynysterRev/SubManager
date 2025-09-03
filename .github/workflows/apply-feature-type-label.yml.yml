@@ -1,0 +1,28 @@
+name: Add labels from 'feature_type'
+on:
+  issues:
+    types: [opened]
+permissions:
+  issues: write
+jobs:
+  add-labels:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Extract and add labels
+        run: |
+          matched_labels=()
+          while read -r line; do
+            case "$line" in
+              "- [x] Frontend") matched_labels+=("Frontend") ;;
+              "- [x] Backend") matched_labels+=("Backend") ;;
+              "- [x] Mobile") matched_labels+=("Mobile") ;;
+            esac
+          done <<< "${{ github.event.issue.body }}"
+          
+          for label in "${matched_labels[@]}"; do
+            echo "Adding label: $label"
+            gh issue edit ${{ github.event.issue.number }} --add-label "$label" --repo ${{ github.repository }}
+          done
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
