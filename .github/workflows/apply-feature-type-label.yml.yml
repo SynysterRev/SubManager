@@ -8,8 +8,12 @@ jobs:
   add-labels:
     runs-on: ubuntu-latest
     steps:
-      - name: Extract and add labels
+      - name: Extract labels from body issue
+        id: extract
         run: |
+          echo "Body:"
+          echo "${{ github.event.issue.body }}"
+          echo "----"
           matched_labels=()
           while read -r line; do
             case "$line" in
@@ -18,11 +22,28 @@ jobs:
               "- [x] Mobile") matched_labels+=("Mobile") ;;
             esac
           done <<< "${{ github.event.issue.body }}"
-          
-          for label in "${matched_labels[@]}"; do
-            echo "Adding label: $label"
-            gh issue edit ${{ github.event.issue.number }} --add-label "$label" --repo ${{ github.repository }}
-          done
+          # Écrire les étiquettes dans un fichier temporaire pour éviter les problèmes avec $GITHUB_OUTPUT
+          printf '%s\n' "${matched_labels[@]}" > labels.txt
+          echo "labels_file=labels.txt" >> "$GITHUB_OUTPUT"
+        shell: bash
+      - name: Debug labels
+        run: |
+          echo "Étiquettes extraites :"
+          cat labels.txt
+          echo "Étiquettes ligne par ligne :"
+          while IFS= read -r label; do
+            echo "Étiquette : '$label'"
+          done < labels.txt
+        shell: bash
+      - name: Add labels to the issue
+        if: steps.extract.outputs.labels_file != ''
+        run: |
+          while IFS= read -r label; do
+            if [ -n "$label" ]; then
+              echo "Ajout de l'étiquette : '$label'"
+              gh issue edit ${{ github.event.issue.number }} --add-label "$label" --repo ${{ github.repository }}
+            fi
+          done < labels.txt
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash
