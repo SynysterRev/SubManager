@@ -16,8 +16,12 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
 
-urlpatterns = [
-    path("admin/", admin.site.urls),
-]
+from subscriptions import views
+
+router = DefaultRouter()
+router.register("subscriptions", views.SubscriptionViewSet, basename="subscription")
+
+urlpatterns = [path("admin/", admin.site.urls), path("api/", include(router.urls))]
