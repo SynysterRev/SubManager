@@ -1,3 +1,5 @@
+from datetime import date, datetime
+
 import pytest
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError, transaction, connection
@@ -73,3 +75,63 @@ def test_subscription_ordering(user_model, base_user):
     )
     subs = list(Subscription.objects.all())
     assert subs == [sub1, sub2]
+
+
+@pytest.mark.django_db
+def test_date_next_payment_future_day(base_subscription, mocker):
+    base_subscription.payment_day = 15
+    base_subscription.save()
+
+    fake_now = datetime(2025, 9, 10)
+    mocker.patch("django.utils.timezone.now", return_value=fake_now)
+
+    next_payment = base_subscription.date_next_payment()
+    assert next_payment == date(2025, 9, 15)
+
+
+@pytest.mark.django_db
+def test_date_next_payment_past_day(base_subscription, mocker):
+    base_subscription.payment_day = 15
+    base_subscription.save()
+
+    fake_now = datetime(2025, 9, 20)
+    mocker.patch("django.utils.timezone.now", return_value=fake_now)
+
+    next_payment = base_subscription.date_next_payment()
+    assert next_payment == date(2025, 10, 15)
+
+
+@pytest.mark.django_db
+def test_date_next_payment_payment_day_exceeds_month(base_subscription, mocker):
+    base_subscription.payment_day = 31
+    base_subscription.save()
+
+    fake_now = datetime(2025, 2, 28)
+    mocker.patch("django.utils.timezone.now", return_value=fake_now)
+
+    next_payment = base_subscription.date_next_payment()
+    assert next_payment == date(2025, 2, 28)
+
+
+@pytest.mark.django_db
+def test_days_before_next_payment(base_subscription, mocker):
+    base_subscription.payment_day = 15
+    base_subscription.save()
+
+    fake_now = datetime(2025, 9, 10)
+    mocker.patch("django.utils.timezone.now", return_value=fake_now)
+
+    days = base_subscription.days_before_next_payment
+    assert days == 5
+
+
+@pytest.mark.django_db
+def test_days_before_next_payment_next_month(base_subscription, mocker):
+    base_subscription.payment_day = 15
+    base_subscription.save()
+
+    fake_now = datetime(2025, 9, 20)
+    mocker.patch("django.utils.timezone.now", return_value=fake_now)
+
+    days = base_subscription.days_before_next_payment
+    assert days == 25

@@ -22,6 +22,7 @@ def test_details_contains_expected_fields(base_subscription):
         "is_active",
         "created_at",
         "user",
+        "days_before_next_payment"
     }
     assert set(data.keys()) == expected_fields
     assert data["name"] == base_subscription.name
@@ -30,6 +31,8 @@ def test_details_contains_expected_fields(base_subscription):
     assert data["is_active"] == base_subscription.is_active
     assert data["user"] == base_subscription.user.id
     assert data["payment_day"] == base_subscription.payment_day
+    assert data[
+               "days_before_next_payment"] == base_subscription.days_before_next_payment
 
 
 @pytest.mark.django_db
@@ -48,7 +51,14 @@ def test_list_contains_expected_fields(base_subscription, base_user):
 
     assert isinstance(data, list)
     assert len(data) == 2
-    expected_fields = {"id", "name", "category", "price", "is_active", "payment_day"}
+    expected_fields = {
+        "id",
+        "name",
+        "category",
+        "price",
+        "is_active",
+        "payment_day",
+    }
     for i, sub in enumerate([base_subscription, sub2]):
         assert set(data[i].keys()) == expected_fields
         assert data[i]["id"] == sub.id

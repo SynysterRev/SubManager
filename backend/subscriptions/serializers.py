@@ -17,6 +17,7 @@ class SubscriptionListSerializer(serializers.ModelSerializer):
 class SubscriptionDetailSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(read_only=True)
     created_at = serializers.DateTimeField(read_only=True)
+    days_before_next_payment = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Subscription
