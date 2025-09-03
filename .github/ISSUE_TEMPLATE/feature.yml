@@ -1,0 +1,35 @@
+name: Feature Request
+description: Suggest a new feature or improvement
+title: "[Feature] "
+labels: ["feature"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Description
+        Clearly describe the feature or improvement you’d like to see.
+
+  - id: description
+    type: textarea
+    attributes:
+      label: Description
+      description: Describe your feature.
+      placeholder: Your description here
+
+  - id: feature_type
+    type: checkboxes
+    attributes:
+      label: Feature type
+      options:
+        - label: Gameplay
+        - label: Data
+        - label: UI
+        - label: Shader
+        - label: VFX
+        - label: SFX
+        - label: IA
+        - label: Level Design
+        - label: Game Design
+        - label: Tools
+    validations:
+      required: true

@@ -1,0 +1,33 @@
+name: Bug Report
+description: Report a bug or issue
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: bug_description
+    attributes:
+      label: Bug description
+      description: Describe what does not work, step by step.
+      placeholder: "Description here"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: bug_type
+    attributes:
+      type: checkboxes
+    attributes:
+      label: Bug type
+      options:
+        - label: Gameplay
+        - label: Data
+        - label: UI
+        - label: Shader
+        - label: VFX
+        - label: SFX
+        - label: IA
+        - label: Level Design
+        - label: Game Design
+        - label: Tools
+    validations:
+      required: true
