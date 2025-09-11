@@ -61,7 +61,7 @@ namespace SubManager.Application.Services
                 // unique id for token
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 // Issued at (date and time of token generation), meaning when the token is created
-                new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
+                new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString()),
                 //unique name identifier of the user (email), optional
                 new Claim(ClaimTypes.NameIdentifier, user.Email!),
             };
@@ -94,7 +94,7 @@ namespace SubManager.Application.Services
             };
         }
 
-        public bool IsTokenValid(string token)
+        public ClaimsPrincipal? IsTokenValid(string token)
         {
             var secretKey = _configuration["Jwt:Key"];
 
@@ -125,12 +125,11 @@ namespace SubManager.Application.Services
 
             try
             {
-                tokenHandler.ValidateToken(token, validationParameters, out _);
-                return true;
+                return tokenHandler.ValidateToken(token, validationParameters, out _);
             }
             catch
             {
-                return false; // Invalid token
+                return null; // Invalid token
             }
         }
 
@@ -152,7 +151,7 @@ namespace SubManager.Application.Services
 
         private RefreshToken GenerateRefreshToken(ApplicationUser user)
         {
-            var expirationTime = _configuration["Jwt:RefreshToken"];
+            var expirationTime = _configuration["RefreshToken:EXPIRATION_DAYS"];
 
             if (string.IsNullOrEmpty(expirationTime))
             {

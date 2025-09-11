@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
 using SubManager.API.Data;
 using SubManager.API.Middlewares;
@@ -10,6 +11,8 @@ using SubManager.API.StartupExtensions;
 using SubManager.Domain.IdentityEntities;
 
 var builder = WebApplication.CreateBuilder(args);
+
+IdentityModelEventSource.ShowPII = true;
 
 // Add services to the container.
 

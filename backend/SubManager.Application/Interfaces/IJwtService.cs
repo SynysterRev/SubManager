@@ -1,5 +1,6 @@
 ﻿using SubManager.Application.DTO.Account;
 using SubManager.Domain.IdentityEntities;
+using System.Security.Claims;
 
 namespace SubManager.Application.Interfaces
 {
@@ -24,8 +25,8 @@ namespace SubManager.Application.Interfaces
         /// Check if an access token is valid
         /// </summary>
         /// <param name="token">The token to check</param>
-        /// <returns>True if valid, false otherwise</returns>
-        public bool IsTokenValid(string token);
+        /// <returns>The ClaimsPrincipal if true, null otherwise</returns>
+        public ClaimsPrincipal? IsTokenValid(string token);
 
         /// <summary>
         /// Generate a refresh token

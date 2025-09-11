@@ -45,9 +45,10 @@ namespace SubManager.API.StartupExtensions
             });
 
             services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
+            services.AddScoped<IJwtRepository, JwtRepository>();
 
             services.AddScoped<ISubscriptionService, SubscriptionService>();
-            services.AddTransient<IJwtService, JwtService>();
+            services.AddScoped<IJwtService, JwtService>();
 
             services.Configure<PaginationOptions>(configuration.GetSection(PaginationOptions.SectionName));
 

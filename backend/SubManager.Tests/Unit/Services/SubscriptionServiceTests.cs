@@ -214,7 +214,7 @@ namespace SubManager.Tests.Unit.Services
 
             _subscriptionRepositoryMock.Setup(s => s.GetSubscriptionByIdAsync(It.IsAny<int>())).ReturnsAsync(baseSub);
 
-            _subscriptionRepositoryMock.Setup(s => s.UpdateSubscriptionAsync(It.IsAny<Subscription>())).ReturnsAsync((Subscription s) => s);
+            //_subscriptionRepositoryMock.Setup(s => s.UpdateSubscriptionAsync(It.IsAny<Subscription>())).ReturnsAsync((Subscription s) => s);
 
             var updatedSubscription = await _subscriptionService.UpdateSubscriptionAsync(baseSub.Id, subcriptionUpdate, baseSub.UserId);
             baseSub.PaymentDay = 18;

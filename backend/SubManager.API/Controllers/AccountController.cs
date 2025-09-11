@@ -100,12 +100,17 @@ namespace SubManager.API.Controllers
 
         [HttpGet("api/logout")]
         [Authorize]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
 
             var token = Request.Cookies["refreshToken"];
             var user = await _userManager.GetUserAsync(HttpContext.User);
+            
+            var nameIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             if (string.IsNullOrEmpty(token))
             {
