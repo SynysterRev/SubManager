@@ -24,9 +24,9 @@ namespace SubManager.Infrastructure.Repositories
             _dbContext.RefreshTokens.Add(token);
         }
 
-        public async Task<RefreshToken?> GetRefreshToken(string token)
+        public async Task<RefreshToken?> GetRefreshToken(string token, Guid userId)
         {
-            return await _dbContext.RefreshTokens.FirstOrDefaultAsync(t => t.Token == token);
+            return await _dbContext.RefreshTokens.FirstOrDefaultAsync(t => t.Token == token && t.UserId == userId);
         }
 
         public async Task SaveChangesAsync()

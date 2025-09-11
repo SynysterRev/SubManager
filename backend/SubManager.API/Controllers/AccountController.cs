@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Azure.Core;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SubManager.Application.DTO.Account;
 using SubManager.Application.Interfaces;
+using SubManager.Domain.Entities;
 using SubManager.Domain.IdentityEntities;
+using System.Security.Claims;
 
 namespace SubManager.API.Controllers
 {
@@ -17,9 +20,9 @@ namespace SubManager.API.Controllers
         private readonly IJwtService _jwtService;
 
         public AccountController(
-            UserManager<ApplicationUser> userManager, 
-            SignInManager<ApplicationUser> signInManager, 
-            RoleManager<ApplicationRole> roleManager, 
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager,
+            RoleManager<ApplicationRole> roleManager,
             IJwtService jwtService)
         {
             _userManager = userManager;
@@ -45,6 +48,15 @@ namespace SubManager.API.Controllers
                 await _signInManager.SignInAsync(user, isPersistent: false);
 
                 var token = await _jwtService.CreateJwtTokenAsync(user);
+                var refreshToken = await _jwtService.GenerateRefreshTokenAsync(user);
+
+                Response.Cookies.Append("refreshToken", refreshToken.Token, new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.Strict,
+                    Expires = refreshToken.Expire
+                });
 
                 return Ok(token);
             }
@@ -73,14 +85,40 @@ namespace SubManager.API.Controllers
 
             await _signInManager.SignInAsync(user, isPersistent: false);
             var token = await _jwtService.CreateJwtTokenAsync(user);
+            var refreshToken = await _jwtService.GenerateRefreshTokenAsync(user);
+
+            Response.Cookies.Append("refreshToken", refreshToken.Token, new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.Strict,
+                Expires = refreshToken.Expire
+            });
 
             return Ok(token);
         }
 
         [HttpGet("api/logout")]
+        [Authorize]
         public async Task<ActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
+
+            var token = Request.Cookies["refreshToken"];
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+
+            if (string.IsNullOrEmpty(token))
+            {
+                return BadRequest("No refresh token found");
+            }
+
+            if (user == null)
+            {
+                return BadRequest("No user found");
+            }
+
+            await _jwtService.RevokeRefreshTokenAsync(user, token);
+            Response.Cookies.Delete("refreshToken");
 
             return NoContent();
         }
@@ -93,10 +131,33 @@ namespace SubManager.API.Controllers
         }
 
         [HttpPost("api/refresh-token")]
-        public async Task<IActionResult> RefreshToken(RefreshTokenDto refreshToken)
+        public async Task<ActionResult<TokenDto>> RefreshToken()
         {
+            var token = Request.Cookies["refreshToken"];
+            var user = await _userManager.GetUserAsync(HttpContext.User);
 
+            if (string.IsNullOrEmpty(token))
+            {
+                return BadRequest("No refresh token found");
+            }
+
+            if (user == null)
+            {
+                return BadRequest("No user found");
+            }
+
+            var newToken = await _jwtService.RotateRefreshTokenAsync(token, user);
+            var accessToken = await _jwtService.CreateJwtTokenAsync(user);
+
+            Response.Cookies.Append("refreshToken", newToken.Token, new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.Strict,
+                Expires = newToken.Expire
+            });
+
+            return Ok(accessToken);
         }
-
     }
 }

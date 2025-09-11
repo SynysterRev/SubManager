@@ -174,14 +174,21 @@ namespace SubManager.Application.Services
             };
         }
 
-        public async Task<RefreshTokenDto> RotateRefreshTokenAsync(string oldToken, ApplicationUser user)
+        private async Task<RefreshToken> GetRefreshToken(string refreshToken, Guid userId)
         {
-            var existingToken = await _jwtRepository.GetRefreshToken(oldToken);
+            var existingToken = await _jwtRepository.GetRefreshToken(refreshToken, userId);
 
-            if (existingToken == null || existingToken.IsRevoked || existingToken.Expires >= DateTime.UtcNow)
+            if (existingToken == null || existingToken.IsRevoked || existingToken.Expires <= DateTime.UtcNow)
             {
                 throw new UnauthorizedAccessException("Refresh token invalid");
             }
+
+            return existingToken;
+        }
+
+        public async Task<RefreshTokenDto> RotateRefreshTokenAsync(string oldToken, ApplicationUser user)
+        {
+            var existingToken = await GetRefreshToken(oldToken, user.Id);
 
             existingToken.IsRevoked = true;
             existingToken.RevokedAt = DateTime.UtcNow;
@@ -197,6 +204,15 @@ namespace SubManager.Application.Services
                 Expire = newToken.Expires,
                 IsRevoked = false
             };
+        }
+
+        public async Task RevokeRefreshTokenAsync(ApplicationUser user, string token)
+        {
+            var existingToken = await GetRefreshToken(token, user.Id);
+
+            existingToken.IsRevoked = true;
+            existingToken.RevokedAt = DateTime.UtcNow;
+            await _jwtRepository.SaveChangesAsync();
         }
     }
 }

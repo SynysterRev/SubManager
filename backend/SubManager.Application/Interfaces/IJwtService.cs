@@ -1,10 +1,5 @@
 ﻿using SubManager.Application.DTO.Account;
 using SubManager.Domain.IdentityEntities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SubManager.Application.Interfaces
 {
@@ -16,6 +11,14 @@ namespace SubManager.Application.Interfaces
         /// <param name="user">The connected user</param>
         /// <returns>A jwt token</returns>
         public Task<TokenDto> CreateJwtTokenAsync(ApplicationUser user);
+
+        /// <summary>
+        /// Revoke the specified refresh token
+        /// </summary>
+        /// <param name="user">The token's user</param>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public Task RevokeRefreshTokenAsync(ApplicationUser user, string token);
 
         /// <summary>
         /// Check if an access token is valid
