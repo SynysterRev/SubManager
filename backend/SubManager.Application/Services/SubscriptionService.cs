@@ -94,7 +94,8 @@ namespace SubManager.Application.Services
             var response = new SubscriptionsResponseDto
             {
                 Subscriptions = subscriptionDtos,
-                TotalCost = totalCostTask.Result,
+                TotalCostMonth = totalCostTask.Result,
+                TotalCostYear = totalCostTask.Result * 12,
             };
 
             return paginatedTask.Result.ToResponse(response);
