@@ -1,37 +1,29 @@
-# name: FastApi CI
+name: api-ci
+on:
+  push:
+    branches: 
+      - "backend"
+  pull_request:
+    branches: 
+      - "backend"
 
-# on:
-#   push:
-#     branches:
-#       - "backend"
-#   pull_request:
-#     branches:
-#       - "backend"
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
 
-# jobs:
-#   tests-and-lint:
-#     runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+  
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
 
-#     steps:
-#       - uses: actions/checkout@v4
+    - name: Restore dependencies
+      run: dotnet restore SubManager.sln
 
-#       - name: Set up Python
-#         uses: actions/setup-python@v4
-#         with:
-#           python-version: 3.13
+    - name: Build
+      run: dotnet build SubManager.sln --no-restore
 
-#       - name: Install dependencies
-#         working-directory: backend
-#         run: |
-#           python -m pip install --upgrade pip
-#           pip install -r requirements.txt
-          
-#       - name: Run flake8
-#         working-directory: backend
-#         run: |
-#           flake8
-
-#       - name: Run Pytest with Coverage
-#         working-directory: backend
-#         run: |
-#           pytest
+    - name: Run tests
+      run: dotnet test SubManager.sln --no-build --verbosity normal
