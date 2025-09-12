@@ -1,94 +1,87 @@
-﻿//using Microsoft.AspNetCore.Http;
-//using Microsoft.AspNetCore.Mvc;
-//using SubManager.Application.Interfaces;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using SubManager.API.Extensions;
+using SubManager.Application.DTO.Pagination;
+using SubManager.Application.DTO.Subscription;
+using SubManager.Application.Interfaces;
 
-//namespace SubManager.API.Controllers
-//{
-//    [ApiController]
-//    [Route("api/[controller]")]
-//    public class UserController : Controller
-//    {
-//        private readonly ISubscriptionService _subscriptionService;
-//        private readonly ILogger<SubscriptionController> _logger;
+namespace SubManager.API.Controllers
+{
+    [ApiController]
+    [Authorize]
+    [Route("api/[controller]")]
+    public class UserController : Controller
+    {
+        private readonly ISubscriptionService _subscriptionService;
+        private readonly ILogger<SubscriptionController> _logger;
 
-//        public UserController(ISubscriptionService subscriptionService, ILogger<SubscriptionController> logger)
-//        {
-//            _subscriptionService = subscriptionService;
-//            _logger = logger;
-//        }
-//        // GET: UserController
-//        public ActionResult Index()
-//        {
-//            return View();
-//        }
+        public UserController(ISubscriptionService subscriptionService, ILogger<SubscriptionController> logger)
+        {
+            _subscriptionService = subscriptionService;
+            _logger = logger;
+        }
 
-//        // GET: UserController/Details/5
-//        public ActionResult Details(int id)
-//        {
-//            return View();
-//        }
+        [HttpGet]
+        public ActionResult Index()
+        {
+            return View();
+        }
 
-//        // GET: UserController/Create
-//        public ActionResult Create()
-//        {
-//            return View();
-//        }
 
-//        // POST: UserController/Create
-//        [HttpPost]
-//        [ValidateAntiForgeryToken]
-//        public ActionResult Create(IFormCollection collection)
-//        {
-//            try
-//            {
-//                return RedirectToAction(nameof(Index));
-//            }
-//            catch
-//            {
-//                return View();
-//            }
-//        }
+        [HttpGet("{id}")]
+        public ActionResult Details(int id)
+        {
+            return View();
+        }
 
-//        // GET: UserController/Edit/5
-//        public ActionResult Edit(int id)
-//        {
-//            return View();
-//        }
+        [HttpGet("me/subscriptions")]
+        public async Task<ActionResult<PaginatedResponse<SubscriptionsResponseDto>>> GetSubscriptions([FromQuery] int pageNumber = 1)
+        {
+            var userId = User.GetUserId();
 
-//        // POST: UserController/Edit/5
-//        [HttpPost]
-//        [ValidateAntiForgeryToken]
-//        public ActionResult Edit(int id, IFormCollection collection)
-//        {
-//            try
-//            {
-//                return RedirectToAction(nameof(Index));
-//            }
-//            catch
-//            {
-//                return View();
-//            }
-//        }
+            var subscriptions = await _subscriptionService.GetSubscryptionsByUserAsync(userId, pageNumber);
+            _logger.LogInformation("Get all subscriptions for user {id}", userId.ToString());
+            return Ok(subscriptions);
+        }
 
-//        // GET: UserController/Delete/5
-//        public ActionResult Delete(int id)
-//        {
-//            return View();
-//        }
+        [HttpPost("me/subscriptions")]
+        public async Task<ActionResult<SubscriptionDto>> CreateSubscription(SubscriptionCreateDto subscriptionCreate)
+        {
+            var userId = User.GetUserId();
 
-//        // POST: UserController/Delete/5
-//        [HttpPost]
-//        [ValidateAntiForgeryToken]
-//        public ActionResult Delete(int id, IFormCollection collection)
-//        {
-//            try
-//            {
-//                return RedirectToAction(nameof(Index));
-//            }
-//            catch
-//            {
-//                return View();
-//            }
-//        }
-//    }
-//}
+            var newSub = await _subscriptionService.CreateSubscriptionAsync(subscriptionCreate, userId);
+            _logger.LogInformation("Subscription created with ID {subID} for user {id}", newSub.Id, userId.ToString());
+            return CreatedAtAction(nameof(GetSubscriptionDetails), new { subId = newSub.Id }, newSub);
+        }
+
+        [HttpGet("me/subscriptions/{subId}")]
+        public async Task<ActionResult<SubscriptionDto>> GetSubscriptionDetails(int subId)
+        {
+            var userId = User.GetUserId();
+
+            var subscriptions = await _subscriptionService.GetSubscriptionByIdAsync(subId, userId);
+            _logger.LogInformation("Get subscription {subId} for user {id}", subId, userId.ToString());
+            return Ok(subscriptions);
+        }
+
+        [HttpPut("me/subscriptions/{subId}")]
+        public async Task<ActionResult<SubscriptionDto>> UpdateSubscription(int subId, SubscriptionUpdateDto subscriptionUpdate)
+        {
+            var userId = User.GetUserId();
+
+            var updatedSub = await _subscriptionService.UpdateSubscriptionAsync(subId, subscriptionUpdate, userId);
+            return Ok(updatedSub);
+        }
+
+        [HttpDelete("me/subscriptions/{subId}")]
+        public async Task<IActionResult> DeleteSubscription(int subId)
+        {
+            var userId = User.GetUserId();
+
+            await _subscriptionService.DeleteSubscriptionAsync(subId, userId);
+            _logger.LogInformation("Subscription deleted with ID {subId} for user {userId}", subId, userId);
+
+            return NoContent();
+        }
+    }
+}

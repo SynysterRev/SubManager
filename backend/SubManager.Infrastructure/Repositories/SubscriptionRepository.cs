@@ -37,9 +37,9 @@ namespace SubManager.Infrastructure.Repositories
             return _context.Subscriptions.Where(s => s.UserId == userId);
         }
 
-        public async Task<Subscription?> GetSubscriptionByIdAsync(int subscriptionId)
+        public async Task<Subscription?> GetSubscriptionByIdAsync(int subscriptionId, Guid userId)
         {
-            return await _context.Subscriptions.FirstOrDefaultAsync(s => s.Id == subscriptionId);
+            return await _context.Subscriptions.FirstOrDefaultAsync(s => s.Id == subscriptionId && s.UserId == userId);
         }
 
         public async Task SaveChangesAsync()

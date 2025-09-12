@@ -1,4 +1,5 @@
-﻿using SubManager.Application.DTO.Subscription;
+﻿using SubManager.Application.DTO.Pagination;
+using SubManager.Application.DTO.Subscription;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +20,9 @@ namespace SubManager.Application.Interfaces
         /// <summary>
         /// Update an existing subscription
         /// </summary>
+        /// <param name="subscriptionId">The ID of the subscription to update</param>
         /// <param name="subscriptionUpdate">The data for the subscription to update</param>
+        /// <param name="userId">The ID of the current user</param>
         /// <returns>The updated subscription</returns>
         public Task<SubscriptionDto> UpdateSubscriptionAsync(int subscriptionId, SubscriptionUpdateDto subscriptionUpdate, Guid userId);
 
@@ -27,12 +30,14 @@ namespace SubManager.Application.Interfaces
         /// Get all the subscriptions for a specific user
         /// </summary>
         /// <param name="userId">ID of the user</param>
-        /// <returns>A list of subscriptionDto created by the user</returns>
-        public Task<List<SubscriptionDto>> GetSubscryptionsByUserAsync(Guid userId, int pageNumber);
+        /// <param name="pageNumber">Index of the pagination</param>
+        /// <returns>A paginated list of SubscriptionsResponseDto created by the user</returns>
+        public Task<PaginatedResponse<SubscriptionsResponseDto>> GetSubscryptionsByUserAsync(Guid userId, int pageNumber);
 
         /// <summary>
         /// Get All the subscriptions
         /// </summary>
+        /// <param name="pageNumber">Index of the pagination</param>
         /// <returns>A list of subscriptionDto</returns>
         public Task<List<SubscriptionDto>> GetAllSubscryptionsAsync(int pageNumber);
 
@@ -40,13 +45,15 @@ namespace SubManager.Application.Interfaces
         /// Get the subscription corresponding to the ID
         /// </summary>
         /// <param name="subscriptionId">The ID of the subscription</param>
+        /// <param name="userId">ID of the current user</param>
         /// <returns>The subscription dto if existing, an 404 exception otherwise</returns>
-        public Task<SubscriptionDto> GetSubscriptionByIdAsync(int subscriptionId);
+        public Task<SubscriptionDto> GetSubscriptionByIdAsync(int subscriptionId, Guid userId);
 
         /// <summary>
         /// Delete a subscription
         /// </summary>
         /// <param name="subscriptionId">The ID of the subscription to delete</param>
+        /// <param name="userId">ID of the current user</param>
         public Task DeleteSubscriptionAsync(int subscriptionId, Guid userId);
     }
 }

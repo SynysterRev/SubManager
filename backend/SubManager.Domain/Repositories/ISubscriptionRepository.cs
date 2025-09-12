@@ -26,8 +26,9 @@ namespace SubManager.Domain.Repositories
         /// Get subscription by its ID
         /// </summary>
         /// <param name="subscriptionId">The ID of the subscription</param>
+        /// <param name="userId">The ID of the current user</param>
         /// <returns>The subscription if found, null otherwise</returns>
-        public Task<Subscription?> GetSubscriptionByIdAsync(int subscriptionId);
+        public Task<Subscription?> GetSubscriptionByIdAsync(int subscriptionId, Guid userId);
 
         /// <summary>
         /// Add a new subscription in the database
