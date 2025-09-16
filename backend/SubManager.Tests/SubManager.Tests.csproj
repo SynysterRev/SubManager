@@ -24,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SubManager.API\SubManager.API.csproj" />
     <ProjectReference Include="..\SubManager.Application\SubManager.Application.csproj" />
     <ProjectReference Include="..\SubManager.Domain\SubManager.Domain.csproj" />
     <ProjectReference Include="..\SubManager.Infrastructure\SubManager.Infrastructure.csproj" />

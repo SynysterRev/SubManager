@@ -26,7 +26,7 @@ namespace SubManager.Application.Extensions
                 IsActive = subscription.IsActive,
                 Name = subscription.Name,
                 Price = subscription.Price,
-                PaymentDay = nextPayment,
+                PaymentDate = nextPayment,
                 DaysBeforeNextPayment = (nextPayment - today).Days,
                 YearCost = subscription.Price * 12,
                 UserId = subscription.UserId,

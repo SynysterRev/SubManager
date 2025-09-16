@@ -8,7 +8,7 @@ namespace SubManager.API.Extensions
         {
             var userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(userId))
-                throw new UnauthorizedAccessException("User ID claim is missing");
+                throw new UnauthorizedAccessException("User not authentified");
 
             return Guid.Parse(userId);
         }

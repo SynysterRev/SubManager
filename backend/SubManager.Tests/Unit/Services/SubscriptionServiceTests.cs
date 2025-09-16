@@ -13,10 +13,8 @@ using SubManager.Application.Services;
 using SubManager.Domain.Entities;
 using SubManager.Domain.IdentityEntities;
 using SubManager.Domain.Repositories;
-using System;
 using System.ComponentModel.DataAnnotations;
 using Xunit;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace SubManager.Tests.Unit.Services
 {
@@ -323,7 +321,9 @@ namespace SubManager.Tests.Unit.Services
         public async Task GetSubscriptionByIdAsync_ShouldReturnSubscription_WhenExists()
         {
             var userId = Guid.NewGuid();
-            var subscription = _fixture.Create<Subscription>();
+            var subscription = _fixture.Build<Subscription>()
+                .With(s => s.PaymentDay, 15)
+                .Create();
             _subscriptionRepositoryMock
                 .Setup(r => r.GetSubscriptionByIdAsync(subscription.Id, It.IsAny<Guid>()))
                 .ReturnsAsync(subscription);

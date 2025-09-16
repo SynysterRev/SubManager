@@ -13,25 +13,12 @@ namespace SubManager.API.Controllers
     public class UserController : Controller
     {
         private readonly ISubscriptionService _subscriptionService;
-        private readonly ILogger<SubscriptionController> _logger;
+        private readonly ILogger<UserController> _logger;
 
-        public UserController(ISubscriptionService subscriptionService, ILogger<SubscriptionController> logger)
+        public UserController(ISubscriptionService subscriptionService, ILogger<UserController> logger)
         {
             _subscriptionService = subscriptionService;
             _logger = logger;
-        }
-
-        [HttpGet]
-        public ActionResult Index()
-        {
-            return View();
-        }
-
-
-        [HttpGet("{id}")]
-        public ActionResult Details(int id)
-        {
-            return View();
         }
 
         [HttpGet("me/subscriptions")]

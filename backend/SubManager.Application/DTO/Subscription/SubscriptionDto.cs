@@ -16,7 +16,7 @@ namespace SubManager.Application.DTO.Subscription
         public bool IsActive { get; set; }
         public DateTime CreatedAt { get; set; }
         public int DaysBeforeNextPayment { get; set; }
-        public DateTime PaymentDay { get; set; }
+        public DateTime PaymentDate { get; set; }
         public Guid UserId { get; set; }
     }
 }
