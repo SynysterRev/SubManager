@@ -28,11 +28,11 @@ namespace SubManager.Tests.Unit.Controllers
         private readonly Mock<ISubscriptionService> _subscriptionServiceMock;
         private readonly Mock<ISubscriptionRepository> _subscriptionRepositoryMock;
         private readonly Mock<UserManager<ApplicationUser>> _userManagerMock;
-        private readonly Mock<ILogger<UserController>> _loggerMock;
+        private readonly Mock<ILogger<MeController>> _loggerMock;
 
         private readonly ISubscriptionService _subscriptionService;
         private readonly ISubscriptionRepository _subscriptionRepository;
-        private readonly ILogger<UserController> _logger;
+        private readonly ILogger<MeController> _logger;
 
         private readonly IFixture _fixture;
 
@@ -53,7 +53,7 @@ namespace SubManager.Tests.Unit.Controllers
             _userManagerMock = new Mock<UserManager<ApplicationUser>>(
                 store.Object, null, null, null, null, null, null, null, null);
 
-            _loggerMock = new Mock<ILogger<UserController>>();
+            _loggerMock = new Mock<ILogger<MeController>>();
             _logger = _loggerMock.Object;
         }
 
@@ -86,7 +86,7 @@ namespace SubManager.Tests.Unit.Controllers
                 new Subscription { Id = 2, Name = "Spotify", Price = 10, IsActive = true, PaymentDay = 18 }
             }.AsQueryable();
 
-            UserController userController = new UserController(_subscriptionService, _logger);
+            MeController userController = new MeController(_subscriptionService, _logger);
             SetUserWithClaims(userController, userId);
 
             var expectedResponse = new PaginatedResponse<SubscriptionsResponseDto>
@@ -138,7 +138,7 @@ namespace SubManager.Tests.Unit.Controllers
         {
             var userId = Guid.NewGuid();
 
-            UserController userController = new UserController(_subscriptionService, _logger);
+            MeController userController = new MeController(_subscriptionService, _logger);
             userController.ControllerContext = new ControllerContext
             {
                 HttpContext = new DefaultHttpContext() // no user
@@ -154,7 +154,7 @@ namespace SubManager.Tests.Unit.Controllers
         {
             var userId = Guid.NewGuid();
 
-            UserController userController = new UserController(_subscriptionService, _logger);
+            MeController userController = new MeController(_subscriptionService, _logger);
             SetUserWithClaims(userController, userId);
 
             var subcriptionCreate = _fixture.Build<SubscriptionCreateDto>()
@@ -187,7 +187,7 @@ namespace SubManager.Tests.Unit.Controllers
         {
             var userId = Guid.NewGuid();
             var invalidDto = new SubscriptionCreateDto();
-            var controller = new UserController(_subscriptionServiceMock.Object, _logger);
+            var controller = new MeController(_subscriptionServiceMock.Object, _logger);
             SetUserWithClaims(controller, userId);
 
             controller.ModelState.AddModelError("Name", "Required");
@@ -212,7 +212,7 @@ namespace SubManager.Tests.Unit.Controllers
                 .Setup(s => s.GetSubscriptionByIdAsync(subId, userId))
                 .ReturnsAsync(expectedSubscription);
 
-            var controller = new UserController(_subscriptionServiceMock.Object, _logger);
+            var controller = new MeController(_subscriptionServiceMock.Object, _logger);
             SetUserWithClaims(controller, userId);
 
             var result = await controller.GetSubscriptionDetails(subId);
@@ -233,7 +233,7 @@ namespace SubManager.Tests.Unit.Controllers
                 .Setup(s => s.GetSubscriptionByIdAsync(subId, userId))
                 .ThrowsAsync(new NotFoundException($"Subscription {subId} not found"));
 
-            var controller = new UserController(_subscriptionServiceMock.Object, _logger);
+            var controller = new MeController(_subscriptionServiceMock.Object, _logger);
             SetUserWithClaims(controller, userId);
 
             Func<Task> act = async () => await controller.GetSubscriptionDetails(subId);
@@ -254,7 +254,7 @@ namespace SubManager.Tests.Unit.Controllers
                 .Setup(s => s.UpdateSubscriptionAsync(subId, subscriptionUpdate, userId))
                 .ReturnsAsync(updatedSubscription);
 
-            var controller = new UserController(_subscriptionServiceMock.Object, _logger);
+            var controller = new MeController(_subscriptionServiceMock.Object, _logger);
             SetUserWithClaims(controller, userId);
 
             var result = await controller.UpdateSubscription(subId, subscriptionUpdate);
@@ -276,7 +276,7 @@ namespace SubManager.Tests.Unit.Controllers
                 .Setup(s => s.UpdateSubscriptionAsync(subId, updateDto, userId))
                 .ThrowsAsync(new NotFoundException($"Subscription {subId} not found"));
 
-            var controller = new UserController(_subscriptionServiceMock.Object, _logger);
+            var controller = new MeController(_subscriptionServiceMock.Object, _logger);
             SetUserWithClaims(controller, userId);
 
             Func<Task> act = async () => await controller.UpdateSubscription(subId, updateDto);
@@ -295,7 +295,7 @@ namespace SubManager.Tests.Unit.Controllers
                 .Setup(s => s.DeleteSubscriptionAsync(subId, userId))
                 .Returns(Task.CompletedTask);
 
-            var controller = new UserController(_subscriptionServiceMock.Object, _logger);
+            var controller = new MeController(_subscriptionServiceMock.Object, _logger);
             SetUserWithClaims(controller, userId);
 
             var result = await controller.DeleteSubscription(subId);
@@ -315,7 +315,7 @@ namespace SubManager.Tests.Unit.Controllers
                 .Setup(s => s.DeleteSubscriptionAsync(subId, userId))
                 .ThrowsAsync(new NotFoundException($"Subscription {subId} not found"));
 
-            var controller = new UserController(_subscriptionServiceMock.Object, _logger);
+            var controller = new MeController(_subscriptionServiceMock.Object, _logger);
             SetUserWithClaims(controller, userId);
 
             Func<Task> act = async () => await controller.DeleteSubscription(subId);
