@@ -1,6 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../data/repositories/auth_repository_impl.dart';
+import '../../domain/repositories/auth_repository.dart';
 import '../../domain/usecases/login.dart';
 import '../../domain/usecases/register.dart';
+import 'subscription_prodivers.dart';
 
 class AuthState {
   final bool isLoading;
@@ -25,6 +28,29 @@ class AuthState {
     );
   }
 }
+
+final authRepositoryProvider = Provider<AuthRepository>((ref) {
+  final apiService = ref.watch(apiServiceProvider);
+  return AuthRepositoryImpl(apiService);
+});
+
+final loginUseCaseProvider = Provider<Login>((ref) {
+  final repository = ref.watch(authRepositoryProvider);
+  return Login(repository);
+});
+
+final registerUseCaseProvider = Provider<Register>((ref) {
+  final repository = ref.watch(authRepositoryProvider);
+  return Register(repository);
+});
+
+final authNotifierProvider = StateNotifierProvider<AuthNotifier, AuthState>((
+  ref,
+) {
+  final login = ref.watch(loginUseCaseProvider);
+  final register = ref.watch(registerUseCaseProvider);
+  return AuthNotifier(loginUseCase: login, registerUseCase: register);
+});
 
 class AuthNotifier extends StateNotifier<AuthState> {
   final Login loginUseCase;

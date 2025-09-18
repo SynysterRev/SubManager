@@ -19,7 +19,7 @@ class HomePage extends StatelessWidget {
       paymentDate: DateTime.now(),
       isActive: true,
       userId: "azeq",
-      createdAt: DateTime.now()
+      createdAt: DateTime.now(),
     ),
     Subscription(
       id: 2,
@@ -31,12 +31,12 @@ class HomePage extends StatelessWidget {
       paymentDate: DateTime.now(),
       isActive: true,
       userId: "azeq",
-      createdAt: DateTime.now()
+      createdAt: DateTime.now(),
     ),
   ];
 
   @override
-  Widget build(BuildContext context) {    
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("SubTracker"),
@@ -88,7 +88,6 @@ class HomePage extends StatelessWidget {
 
             // --- Sub list ---
             SubscriptionsList(
-              subscriptions: subscriptions,
               onToggleSubscription: (subscription, isActive) {
                 print('${subscription.name} toggled: $isActive');
               },

@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
+import 'package:sub_manager/domain/entities/token.dart';
 import '../storage/token_storage.dart';
 
 class DioClient {
@@ -19,17 +20,29 @@ class DioClient {
             ),
           ),
       _cookieJar = CookieJar() {
-    // Ajout de l’intercepteur pour gérer les cookies
+    //  Interceptor handle cookies (refresh token)
     _dio.interceptors.add(CookieManager(_cookieJar));
 
-    // Ajout de l’intercepteur JWT avec refresh automatique
     _dio.interceptors.add(
       InterceptorsWrapper(
+        onRequest: (options, handler) async {
+          final token = await TokenStorage.getToken();
+          if (token != null) {
+            if (token.isExpired) {
+              final newToken = await refreshToken();
+              options.headers['Authorization'] = 'Bearer ${newToken.token}';
+              print("token expired");
+            } else {
+              options.headers['Authorization'] = 'Bearer ${token.token}';
+              print("old token");
+            }
+          }
+          return handler.next(options);
+        },
         onError: (e, handler) async {
           if (e.response?.statusCode == 401) {
             try {
               final newToken = await refreshToken();
-              // Refaire la requête originale avec le nouveau token
               final opts = e.requestOptions;
               opts.headers['Authorization'] = 'Bearer $newToken';
               final cloneReq = await _dio.request(
@@ -42,14 +55,15 @@ class DioClient {
             } catch (_) {
               return handler.next(e);
             }
+          } else {
+            return handler.next(e);
           }
-          return handler.next(e);
         },
       ),
     );
   }
 
-  Future<String> refreshToken() async {
+  Future<Token> refreshToken() async {
     final response = await _dio.post('/api/refresh-token');
     final newToken = response.data['token'] ?? response.data['accessToken'];
     if (newToken != null) {

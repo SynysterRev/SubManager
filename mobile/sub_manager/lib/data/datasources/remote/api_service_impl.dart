@@ -4,6 +4,7 @@ import '../../../core/errors/exceptions.dart';
 import '../../../core/storage/token_storage.dart';
 import '../../models/paginated_response_model.dart';
 import '../../models/subscriptions_response_model.dart';
+import '../../models/token_model.dart';
 import 'api_service.dart';
 
 class ApiServiceImpl implements ApiService {
@@ -18,16 +19,17 @@ class ApiServiceImpl implements ApiService {
     try {
       final response = await dio.get(
         '/api/me/subscriptions',
-        queryParameters: {'pageIndex': page},
+        queryParameters: {'pageNumber': page},
       );
-
+      print(response.data);
       return PaginatedResponseModel.fromJson(
         response.data,
         (json) =>
             SubscriptionsResponseModel.fromJson(json as Map<String, dynamic>),
       );
     } catch (e) {
-      throw ServerException('Erreur lors de la récupération des abonnements');
+      print(e);
+      throw ServerException('Error when getting subscriptions');
     }
   }
 
@@ -39,11 +41,11 @@ class ApiServiceImpl implements ApiService {
     );
 
     if (response.statusCode == 200) {
-      final token = response.data['token'];
+      final token = TokenModel.fromJson(response.data).toEntity();
       await TokenStorage.saveToken(token);
-      print('✅ Token sauvegardé');
+      print('Token saved');
     } else {
-      throw Exception('Échec du login');
+      throw Exception('Login failed');
     }
   }
 
@@ -56,17 +58,14 @@ class ApiServiceImpl implements ApiService {
     );
 
     if (response.statusCode == 200) {
-      final data = response.data; // Map<String, dynamic>
-      final token = data['token'] as String;
-      final expiration = DateTime.parse(data['expiration'] as String);
-      final isPremium = data['isPremium'] as bool;
+      final data = response.data;
+      final token = TokenModel.fromJson(data).toEntity();
 
-      // Sauvegarde du token et des infos utilisateur
+      // Save token
       await TokenStorage.saveToken(token);
-      await TokenStorage.saveIsPremium(isPremium);
-      print('✅ Token sauvegardé, expire le $expiration');
+      print('Token saved, expired ${token.expiration}');
     } else {
-      throw Exception('Échec de l’inscription');
+      throw Exception('Fail to register');
     }
   }
 
