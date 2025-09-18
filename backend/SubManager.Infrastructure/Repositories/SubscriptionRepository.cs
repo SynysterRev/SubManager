@@ -34,7 +34,7 @@ namespace SubManager.Infrastructure.Repositories
 
         public IQueryable<Subscription> GetAllSubscriptionsByUser(Guid userId)
         {
-            return _context.Subscriptions.Where(s => s.UserId == userId);
+            return _context.Subscriptions.Where(s => s.UserId == userId).OrderBy(s => s.Id);
         }
 
         public async Task<Subscription?> GetSubscriptionByIdAsync(int subscriptionId, Guid userId)

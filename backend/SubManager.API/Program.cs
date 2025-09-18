@@ -79,6 +79,7 @@ if (app.Environment.IsDevelopment())
 else
 {
     app.UseExceptionHandlingMiddleware();
+    app.UseHttpsRedirection();
 }
 
 using (var scope = app.Services.CreateScope())
@@ -86,8 +87,6 @@ using (var scope = app.Services.CreateScope())
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
     await RoleSeeder.SeedRolesAsync(roleManager);
 }
-
-app.UseHttpsRedirection();
 
 app.UseCors();
 
