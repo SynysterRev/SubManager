@@ -1,17 +1,132 @@
-# SubManager
+# SubManager - Subscription Management System
 
-To start with docker use the following CMD:
+A web application for tracking and managing personal subscriptions with automatic monthly and yearly cost calculations.
 
-Build:
+## Context
 
-```docker-compose -f docker-compose.yml -f docker-compose.dev.yml build```
+Personal project developed to:
+- Track my multiple subscriptions (streaming, SaaS, sports)
+- Demonstrate proficiency with .NET and React in a business context
+- Apply software architecture patterns (Clean Architecture, Repository Pattern, JWT Authentication)
 
-Start:
+## Features
 
-```docker-compose -f docker-compose.yml -f docker-compose.dev.yml up```
+- JWT authentication with refresh tokens
+- Full CRUD operations for subscriptions
+- Dashboard with statistics (total monthly/yearly costs)
+- Cost breakdown by category
+- Multi-user support (isolated user data)
+- Paginated results
+- REST API with Swagger documentation
 
-```docker-compose -f docker-compose.yml -f docker-compose.dev.yml up *directory_name*```
+## Tech Stack
 
-Both:
+**Backend:**
+- .NET 8 / C#
+- ASP.NET Core Web API
+- Entity Framework Core (Code First)
+- PostgreSQL / SQL Server
+- JWT Authentication
+- Clean Architecture with Repository Pattern
 
-```docker-compose -f docker-compose.yml -f docker-compose.dev.yml up --build```
+**Frontend:**
+- React 18 with TypeScript
+- Vite
+- Axios
+- Tailwind CSS
+- Recharts (data visualization)
+
+**Infrastructure:**
+- Docker & Docker Compose
+- Unit tests (xUnit)
+
+## Getting Started
+
+### Using Docker (recommended)
+```bash
+# Build and start all services
+docker-compose -f docker-compose.yml -f docker-compose.dev.yml up --build
+
+# Start specific service
+docker-compose -f docker-compose.yml -f docker-compose.dev.yml up [service_name]
+```
+
+### Manual Setup
+
+**Backend:**
+```bash
+cd SubManager.API
+dotnet restore
+dotnet ef database update
+dotnet run
+```
+
+**Frontend:**
+```bash
+cd SubManager.Application
+npm install
+npm run dev
+```
+
+## API Documentation
+
+Once running, access Swagger UI at: `https://localhost:5001/swagger`
+
+**Main endpoints:**
+- `POST /api/register` - Create new account
+- `POST /api/login` - Authenticate user
+- `GET /api/me/subscriptions` - Get user subscriptions (paginated)
+- `POST /api/me/subscriptions` - Create subscription
+- `GET /api/me/subscriptions/{id}` - Get subscription details
+- `PUT /api/me/subscriptions/{id}` - Update subscription
+- `DELETE /api/me/subscriptions/{id}` - Delete subscription
+- `GET /api/me/subscriptions/stats` - Get user statistics
+
+## Architecture
+```
+SubManager/
+├── SubManager.API/          # Web API layer
+├── SubManager.Application/  # Frontend application
+├── SubManager.Domain/       # Domain entities and interfaces
+├── SubManager.Infrastructure/ # Data access and external services
+└── SubManager.Tests/        # Unit tests
+```
+
+**Design patterns:**
+- Clean Architecture (separation of concerns)
+- Repository Pattern (data access abstraction)
+- Dependency Injection
+- DTOs for API contracts
+
+## Screenshots
+
+[Add 3-4 screenshots here]
+- Dashboard overview
+- Subscription list
+- Add/Edit form
+- Statistics view
+
+## Roadmap
+
+**Version 2.0:**
+- Email/push notifications for renewal reminders
+- PDF export of yearly expenses
+- Account sharing between users
+- Usage-based savings suggestions
+- Market average comparisons
+
+## Testing
+```bash
+cd SubManager.Tests
+dotnet test
+```
+
+## Deployment
+
+**Backend:** Azure App Service / Railway / Render
+**Frontend:** Vercel / Netlify
+**Database:** Azure SQL / Supabase PostgreSQL
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
