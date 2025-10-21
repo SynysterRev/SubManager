@@ -14,7 +14,6 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
       withCredentials: true
     });
   } else {
-    // Même sans token, on veut envoyer les cookies
     req = req.clone({
       withCredentials: true
     });

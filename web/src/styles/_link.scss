@@ -1,0 +1,11 @@
+a {
+    appearance: none;
+    color: var(--primary);
+    transition: var(--transition-smooth);
+
+    cursor: pointer;
+
+    &:hover {
+        color: var(--primary-glow);
+    }
+}

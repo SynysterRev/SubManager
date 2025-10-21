@@ -1,1 +1,117 @@
-/* You can add global styles to this file, and also import other style files */
+@use 'styles/input';
+@use 'styles/button';
+@use 'styles/link';
+
+:root {
+    --background: hsl(0, 0%, 100%);
+    --foreground: hsl(222.2, 47.4%, 11.2%);
+
+    --card: hsl(0, 0%, 100%);
+    --card-foreground: hsl(222.2, 47.4%, 11.2%);
+
+    --popover: hsl(0, 0%, 100%);
+    --popover-foreground: hsl(222.2, 47.4%, 11.2%);
+
+    /* Brand - Teal */
+    --primary: hsl(174, 100%, 29%);
+    --primary-foreground: hsl(0, 0%, 98%);
+    --primary-glow: hsl(174, 100%, 39%);
+
+    /* Warm Coral Secondary */
+    --secondary: hsl(14, 100%, 57%);
+    --secondary-foreground: hsl(0, 0%, 98%);
+
+    --muted: hsl(210, 40%, 96.1%);
+    --muted-foreground: hsl(215, 16.3%, 46.9%);
+
+    /* Soft Purple Accent */
+    --accent: hsl(271, 81%, 56%);
+    --accent-foreground: hsl(0, 0%, 98%);
+
+    --destructive: hsl(0, 84.2%, 60.2%);
+    --destructive-foreground: hsl(0, 0%, 98%);
+
+    --border: hsl(214.3, 31.8%, 91.4%);
+    --input: hsl(214.3, 31.8%, 91.4%);
+    --ring: hsl(174, 100%, 29%);
+
+    --success: hsl(142, 76%, 36%);
+    --warning: hsl(38, 92%, 50%);
+
+    /* Custom Design Tokens */
+    --gradient-primary: linear-gradient(135deg, hsl(174, 100%, 29%), hsl(174, 100%, 39%));
+    --gradient-secondary: linear-gradient(135deg, hsl(14, 100%, 57%), hsl(14, 100%, 67%));
+    --gradient-accent: linear-gradient(135deg, hsl(271, 81%, 56%), hsl(271, 81%, 66%));
+    --gradient-subtle: linear-gradient(180deg, hsl(0, 0%, 100%), hsl(0, 0%, 98%));
+
+    --shadow-elegant: 0 10px 30px -10px hsla(174, 100%, 29%, 0.2);
+    --shadow-glow: 0 0 40px hsla(174, 100%, 39%, 0.25);
+    --shadow-card: 0 4px 20px -4px hsla(0, 0%, 0%, 0.06);
+
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+    --radius: 0.75rem;
+
+    /* Sidebar (Light) */
+    --sidebar-background: hsl(0, 0%, 98%);
+    --sidebar-foreground: hsl(240, 5.3%, 26.1%);
+    --sidebar-primary: hsl(240, 5.9%, 10%);
+    --sidebar-primary-foreground: hsl(0, 0%, 98%);
+    --sidebar-accent: hsl(240, 4.8%, 95.9%);
+    --sidebar-accent-foreground: hsl(240, 5.9%, 10%);
+    --sidebar-border: hsl(220, 13%, 91%);
+    --sidebar-ring: hsl(217.2, 91.2%, 59.8%);
+}
+
+.dark {
+    /* Dark Theme */
+    --background: hsl(222.2, 84%, 4.9%);
+    --foreground: hsl(210, 40%, 98%);
+
+    --card: hsl(222.2, 84%, 4.9%);
+    --card-foreground: hsl(210, 40%, 98%);
+
+    --popover: hsl(222.2, 84%, 4.9%);
+    --popover-foreground: hsl(210, 40%, 98%);
+
+    /* Brand - keep teal in dark mode too */
+    --primary: hsl(174, 100%, 29%);
+    --primary-foreground: hsl(0, 0%, 98%);
+
+    --secondary: hsl(217.2, 32.6%, 17.5%);
+    --secondary-foreground: hsl(210, 40%, 98%);
+
+    --muted: hsl(217.2, 32.6%, 17.5%);
+    --muted-foreground: hsl(215, 20.2%, 65.1%);
+
+    --accent: hsl(217.2, 32.6%, 17.5%);
+    --accent-foreground: hsl(210, 40%, 98%);
+
+    --destructive: hsl(0, 62.8%, 30.6%);
+    --destructive-foreground: hsl(210, 40%, 98%);
+
+    --border: hsl(217.2, 32.6%, 17.5%);
+    --input: hsl(217.2, 32.6%, 17.5%);
+    --ring: hsl(174, 100%, 39%);
+
+    /* Ajout des gradients et shadows pour le dark theme */
+    --gradient-primary: linear-gradient(135deg, hsl(174, 100%, 29%), hsl(174, 100%, 39%));
+    --gradient-secondary: linear-gradient(135deg, hsl(217.2, 32.6%, 17.5%), hsl(217.2, 32.6%, 27.5%));
+    --gradient-accent: linear-gradient(135deg, hsl(217.2, 32.6%, 17.5%), hsl(217.2, 32.6%, 27.5%));
+    --gradient-subtle: linear-gradient(180deg, hsl(222.2, 84%, 4.9%), hsl(222.2, 84%, 6.9%));
+
+    --shadow-elegant: 0 10px 30px -10px hsla(174, 100%, 29%, 0.3);
+    --shadow-glow: 0 0 40px hsla(174, 100%, 39%, 0.35);
+    --shadow-card: 0 4px 20px -4px hsla(0, 0%, 0%, 0.2);
+
+    /* Sidebar (Dark) */
+    --sidebar-background: hsl(240, 5.9%, 10%);
+    --sidebar-foreground: hsl(240, 4.8%, 95.9%);
+    --sidebar-primary: hsl(224.3, 76.3%, 48%);
+    --sidebar-primary-foreground: hsl(0, 0%, 100%);
+    --sidebar-accent: hsl(240, 3.7%, 15.9%);
+    --sidebar-accent-foreground: hsl(240, 4.8%, 95.9%);
+    --sidebar-border: hsl(240, 3.7%, 15.9%);
+    --sidebar-ring: hsl(217.2, 91.2%, 59.8%);
+}

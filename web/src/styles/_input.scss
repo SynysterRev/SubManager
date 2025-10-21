@@ -1,0 +1,32 @@
+input {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    box-sizing: border-box;
+
+    border-radius: 1rem;
+    border: 1px solid var(--input);
+    padding: 0.25rem 0.75rem;
+    height: 3.5rem;
+    font-size: 0.875rem;
+
+    background: transparent;
+    background-clip: padding-box;
+    outline: none;
+    box-shadow: none;
+
+    width: 100%;
+}
+
+input:focus,
+input:focus-visible {
+    outline: none;
+    border-color: var(--ring);
+    box-shadow: 0 0 0 4px hsla(174, 100%, 39%, 0.12);
+}
+
+/* états utiles */
+input:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}

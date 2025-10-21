@@ -1,0 +1,36 @@
+.submit-button {
+    background: var(--gradient-primary);
+    border: none;
+    border-radius: 1rem;
+    height: 3.5rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: var(--primary-foreground);
+
+    cursor: pointer;
+
+    transition: transform 150ms cubic-bezier(.2, .8, .2, 1), box-shadow 150ms ease;
+    will-change: transform, box-shadow;
+    transform-origin: center center;
+
+    &:not(:disabled):hover {
+        transform: scale(1.03);
+        box-shadow: var(--shadow-glow);
+    }
+
+    &:not(:disabled):active {
+        transform: scale(0.99);
+    }
+
+    &:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 4px hsla(174, 100%, 39%, 0.12);
+    }
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}

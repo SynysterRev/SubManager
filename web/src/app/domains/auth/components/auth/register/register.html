@@ -1,0 +1,58 @@
+<app-auth-layout>
+    <div class="card">
+        <h2>Create Account</h2>
+        <p class="subtitle">Start managing your subscriptions today</p>
+
+        <form class="register-form" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+            <input type="email" formControlName="email" placeholder="Email address">
+
+            <input type="password" formControlName="password" placeholder="Password">
+
+            <input type="password" formControlName="confirmPassword" placeholder="Confirm password">
+
+            <button type="submit" class="submit-button" [disabled]="!registerForm.valid">
+                Create Account
+            </button>
+        </form>
+
+        <div class="divider">or continue with</div>
+
+        <div class="social-buttons">
+            <button>
+                <svg class="social-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                        fill="#4285F4" />
+                    <path
+                        d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                        fill="#34A853" />
+                    <path
+                        d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                        fill="#FBBC05" />
+                    <path
+                        d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                        fill="#EA4335" />
+                </svg>
+            </button>
+            <button>
+                <svg class="social-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M14.94 5.19A4.48 4.48 0 0016.87 2a4.53 4.53 0 00-3 1.52 4.19 4.19 0 00-1.86 3.15 3.72 3.72 0 002.93-1.48zm2.52 7.44a4.29 4.29 0 012.06-3.61 4.41 4.41 0 00-3.49-1.88c-1.46-.15-2.88.87-3.63.87s-1.93-.85-3.19-.82a4.62 4.62 0 00-3.91 2.37c-1.69 2.91-.43 7.2 1.19 9.54.82 1.17 1.78 2.48 3 2.43 1.22-.05 1.67-.78 3.13-.78s1.86.78 3.12.75c1.29-.02 2.11-1.17 2.89-2.35a9.8 9.8 0 001.31-2.67 4.13 4.13 0 01-2.48-3.85z"
+                        fill="#000000" />
+                </svg>
+            </button>
+
+            <button>
+                <svg class="social-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"
+                        fill="#1877F2" />
+                </svg>
+            </button>
+        </div>
+
+        <p class="switch-link">
+            Already have an account? <a routerLink="/login">Sign in</a>
+        </p>
+    </div>
+</app-auth-layout>
