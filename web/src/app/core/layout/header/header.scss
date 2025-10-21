@@ -1,0 +1,88 @@
+.logo-circle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 1rem;
+    height: 3rem;
+    width: 3rem;
+    background: var(--gradient-primary);
+    box-shadow: var(--shadow-glow);
+    color: var(--primary-foreground);
+    font-weight: 700;
+    font-size: x-large;
+}
+
+.header-logo {
+    display: flex;
+    align-items: center;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+    margin-left: 1rem;
+
+    .title {
+        color: var(--foreground);
+        font-weight: 700;
+        font-size: 1.5rem;
+    }
+
+    .sub-title {
+        margin: 0;
+        color: var(--muted-foreground);
+        font-size: large;
+    }
+}
+
+.card {
+    position: fixed;
+    width: 100%;
+    z-index: 50;
+    top: 0;
+}
+
+.nav {
+    display: flex;
+    align-items: center;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+
+    .nav-container {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 1rem 0 1rem;
+    }
+}
+
+.buttons-list {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.header-button {
+    appearance: none;
+    border: none;
+    border-radius: 100%;
+    background: transparent;
+    height: 3rem;
+    width: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+
+    &:hover {
+        background: var(--accent);
+        color: var(--background);
+    }
+}
+
+.button-icon {
+    width: 24px;
+    height: 24px;
+    display: inline-flex;
+}

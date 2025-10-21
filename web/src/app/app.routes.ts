@@ -1,9 +1,10 @@
 import { Routes } from '@angular/router';
 import { Register } from './domains/auth/components/register/register';
 import { Login } from './domains/auth/components/login/login';
+import { Dashboard } from './domains/subscriptions/components/dashboard/dashboard';
 
 export const routes: Routes = [
     { path: 'register', component: Register },
     { path: 'login', component: Login },
-    // { path: 'dashboard', component: }
+    { path: 'dashboard', component: Dashboard }
 ];

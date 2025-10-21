@@ -2,6 +2,11 @@
 @use 'styles/button';
 @use 'styles/link';
 
+body {
+    padding: 0;
+    margin: 0;
+}
+
 :root {
     --background: hsl(0, 0%, 100%);
     --foreground: hsl(222.2, 47.4%, 11.2%);
