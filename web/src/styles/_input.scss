@@ -30,3 +30,15 @@ input:disabled {
     opacity: 0.6;
     cursor: not-allowed;
 }
+
+input.has-error {
+  border-color: var(--warning) !important;
+  box-shadow: 0 0 0 4px rgba(220,38,38,0.12) !important;
+}
+
+.error {
+  color: var(--warning);
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  line-height: 1.2;
+}

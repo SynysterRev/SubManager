@@ -4,13 +4,38 @@
         <p class="subtitle">Start managing your subscriptions today</p>
 
         <form class="register-form" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-            <input type="email" formControlName="email" placeholder="Email address">
+            <input type="email" formControlName="email" placeholder="Email address"
+                [class.has-error]="email.touched && email.invalid" [attr.aria-invalid]="email.touched && email.invalid">
+            @if (email.touched && email.hasError('required')) {
+            <div class="error">Email is required</div>
+            }
+            @if (email.touched && email.hasError('email')) {
+            <div class="error">Enter a valid email</div>
+            }
 
-            <input type="password" formControlName="password" placeholder="Password">
+            <input type="password" formControlName="password" placeholder="Password"
+                [class.has-error]="password.touched && password.invalid"
+                [attr.aria-invalid]="password.touched && password.invalid">
+            @if (password.touched && password.hasError('required')) {
+            <div class="error">Password is required</div>
+            }
+            @if (password.touched && password.hasError('minlength')) {
+            <div class="error">
+                Password must be at least {{ password.getError('minlength').requiredLength }} characters
+            </div>
+            }
 
-            <input type="password" formControlName="confirmPassword" placeholder="Confirm password">
+            <input type="password" formControlName="confirmPassword" placeholder="Confirm password"
+                [class.has-error]="(registerForm.hasError('passwordMismatch') && confirmPassword.touched) || (confirmPassword.touched && confirmPassword.invalid)"
+                [attr.aria-invalid]="(registerForm.hasError('passwordMismatch') && confirmPassword.touched) || (confirmPassword.touched && confirmPassword.invalid)">
+            @if (confirmPassword.touched && confirmPassword.hasError('required')) {
+            <div class="error">Please confirm your password</div>
+            }
+            @if (registerForm.hasError('passwordMismatch') && confirmPassword.touched) {
+            <div class="error">Passwords do not match</div>
+            }
 
-            <button type="submit" class="submit-button" [disabled]="!registerForm.valid">
+            <button type="submit" class="submit-button" [disabled]="registerForm.invalid">
                 Create Account
             </button>
         </form>

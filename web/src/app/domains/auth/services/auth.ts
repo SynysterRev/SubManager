@@ -41,7 +41,7 @@ export class AuthService {
     return expirationDate > new Date();
   }
 
-  signIn(credentials: RegisterDto): Observable<TokenDto> {
+  register(credentials: RegisterDto): Observable<TokenDto> {
     return this.http.post<TokenDto>(
       `${environment.apiUrl}/register`,
       credentials,
