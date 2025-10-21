@@ -4,6 +4,9 @@
         <p class="subtitle">Start managing your subscriptions today</p>
 
         <form class="register-form" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+            @if (errorMessage()) {
+            <div class="error">{{errorMessage()}}</div>
+            }
             <input type="email" formControlName="email" placeholder="Email address"
                 [class.has-error]="email.touched && email.invalid" [attr.aria-invalid]="email.touched && email.invalid">
             @if (email.touched && email.hasError('required')) {

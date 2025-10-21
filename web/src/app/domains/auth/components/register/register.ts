@@ -1,9 +1,9 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { AuthLayout } from "../auth-layout/auth-layout";
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { passwordMatchValidator } from '../validators/password-match.validator';
-import { AuthService } from '../../../services/auth';
+import { AuthService } from '../../services/auth';
 
 @Component({
   selector: 'app-register',
@@ -15,6 +15,7 @@ export class Register {
 
   authService = inject(AuthService);
   router = inject(Router);
+  errorMessage = signal<string>('');
 
   registerForm: FormGroup = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -32,14 +33,17 @@ export class Register {
       this.registerForm.markAllAsTouched();
       return;
     }
+    this.errorMessage.set('');
+
     this.authService.register(this.registerForm.value).subscribe({
       next: (tokenDto) => {
         console.log('Registered with email: ', tokenDto.email);
         this.router.navigate(['/dashboard']);
       },
-      error: (err) => {
-        console.error('Login failed:', err);
+      error: (err: string) => {
+        this.errorMessage.set(err);
+        console.error('Registration failed:', err);
       }
-    })
+    });
   }
 }

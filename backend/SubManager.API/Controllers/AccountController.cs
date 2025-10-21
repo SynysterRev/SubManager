@@ -62,8 +62,11 @@ namespace SubManager.API.Controllers
             }
             else
             {
-                string errorMessage = string.Join(" | ", result.Errors.Select(e => e.Description));
-                return Problem(errorMessage);
+                return BadRequest(new
+                {
+                    message = "Registration failed",
+                    errors = result.Errors.Select(e => e.Description).ToList()
+                });
             }
         }
 

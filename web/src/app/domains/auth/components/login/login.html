@@ -4,8 +4,18 @@
         <p class="subtitle">Sign in to manage your subscriptions</p>
 
         <form class="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-            <input type="email" formControlName="email" placeholder="Email address">
+            @if (errorMessage()) {
+            <div class="error">{{errorMessage()}}</div>
+            }
 
+            <input type="email" formControlName="email" placeholder="Email address">
+            @if (email.touched && email.hasError('required')) {
+            <div class="error">Email is required</div>
+            }
+            @if (email.touched && email.hasError('email')) {
+            <div class="error">Enter a valid email</div>
+            }
+            
             <input type="password" formControlName="password" placeholder="Password">
 
             <button type="submit" class="submit-button" [disabled]="!loginForm.valid">

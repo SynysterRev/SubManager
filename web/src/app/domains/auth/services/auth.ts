@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { LoginDto, RegisterDto, TokenDto } from '../models/auth.model';
 import { BehaviorSubject, catchError, Observable, tap, throwError } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
 
 @Injectable({
@@ -51,11 +51,26 @@ export class AuthService {
         this.saveToken(tokenDto);
         this.currentUserSubject.next(tokenDto);
       }),
-      catchError(error => {
-        this.currentUserSubject.next(null);
-        return throwError(() => error);
-      })
+      catchError(this.handleError)
     );
+  }
+
+  private handleError(error: HttpErrorResponse): Observable<never> {
+    let errorMessage = 'An unknown error occurred';
+
+    if (error.error instanceof ErrorEvent) {
+      errorMessage = `Error: ${error.error.message}`;
+    } else {
+      if (error.status === 400 && error.error?.errors) {
+        errorMessage = error.error.errors.join(', ');
+      } else if (error.error?.message) {
+        errorMessage = error.error.message;
+      } else {
+        errorMessage = `Server error: ${error.status}`;
+      }
+    }
+
+    return throwError(() => errorMessage);
   }
 
   login(credentials: LoginDto): Observable<TokenDto> {
