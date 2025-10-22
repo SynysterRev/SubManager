@@ -6,8 +6,8 @@
   </div>
   <app-subscription-card />
 </main>
-@if(isModalOpen) {
-<app-add-subscription-modal (close)="isModalOpen = false" (add)="handleNewSubscription($event)" />
+@if(isModalOpen()) {
+<app-add-subscription-modal />
 }
 <!-- <div class="dashboard-container">
   <header class="dashboard-header">

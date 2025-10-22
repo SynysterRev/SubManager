@@ -12,6 +12,6 @@ export class Header {
   modalService = inject(ModalService);
 
   onAddSubcriptionClick() {
-    this.modalService.triggerOpenModal();
+    this.modalService.triggerOpenModal('addSubscription');
   }
 }
