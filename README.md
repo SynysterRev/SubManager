@@ -6,7 +6,7 @@ A web application for tracking and managing personal subscriptions with automati
 
 Personal project developed to:
 - Track my multiple subscriptions (streaming, SaaS, sports)
-- Demonstrate proficiency with .NET and React in a business context
+- Demonstrate proficiency with .NET and Angular in a business context
 - Apply software architecture patterns (Clean Architecture, Repository Pattern, JWT Authentication)
 
 ## Features
@@ -14,7 +14,6 @@ Personal project developed to:
 - JWT authentication with refresh tokens
 - Full CRUD operations for subscriptions
 - Dashboard with statistics (total monthly/yearly costs)
-- Cost breakdown by category
 - Multi-user support (isolated user data)
 - Paginated results
 - REST API with Swagger documentation
@@ -30,26 +29,13 @@ Personal project developed to:
 - Clean Architecture with Repository Pattern
 
 **Frontend:**
-- React 18 with TypeScript
-- Vite
-- Axios
-- Tailwind CSS
-- Recharts (data visualization)
+- Angular 20 with Typescript
 
 **Infrastructure:**
 - Docker & Docker Compose
 - Unit tests (xUnit)
 
 ## Getting Started
-
-### Using Docker (recommended)
-```bash
-# Build and start all services
-docker-compose -f docker-compose.yml -f docker-compose.dev.yml up --build
-
-# Start specific service
-docker-compose -f docker-compose.yml -f docker-compose.dev.yml up [service_name]
-```
 
 ### Manual Setup
 
@@ -70,7 +56,7 @@ npm run dev
 
 ## API Documentation
 
-Once running, access Swagger UI at: `https://localhost:5001/swagger`
+Once running, access Swagger UI at: `https://localhost:5267/swagger`
 
 **Main endpoints:**
 - `POST /api/register` - Create new account
@@ -121,7 +107,7 @@ cd SubManager.Tests
 dotnet test
 ```
 
-## Deployment
+## Deployment (To do)
 
 **Backend:** Azure App Service / Railway / Render
 **Frontend:** Vercel / Netlify
