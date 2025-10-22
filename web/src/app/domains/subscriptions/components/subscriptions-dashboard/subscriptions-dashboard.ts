@@ -9,6 +9,6 @@ import { ActiveSubscriptionsCard } from "../active-subscriptions-card/active-sub
   templateUrl: './subscriptions-dashboard.html',
   styleUrl: './subscriptions-dashboard.scss'
 })
-export class Dashboard {
+export class SubscriptionsDashboard {
 
 }
