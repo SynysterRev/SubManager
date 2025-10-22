@@ -82,7 +82,8 @@ SubManager/
 
 ## Screenshots
 
-[Add 3-4 screenshots here]
+![register-screen](assets/images/register-screen.png)
+- Register
 - Dashboard overview
 - Subscription list
 - Add/Edit form
