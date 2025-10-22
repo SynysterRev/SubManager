@@ -4,10 +4,10 @@ import { SubscriptionTotalCard } from "../subscription-total-card/subscription-t
 import { ActiveSubscriptionsCard } from "../active-subscriptions-card/active-subscriptions-card";
 
 @Component({
-  selector: 'app-dashboard',
+  selector: 'app-subscriptions-dashboard',
   imports: [Header, SubscriptionTotalCard, ActiveSubscriptionsCard],
-  templateUrl: './dashboard.html',
-  styleUrl: './dashboard.scss'
+  templateUrl: './subscriptions-dashboard.html',
+  styleUrl: './subscriptions-dashboard.scss'
 })
 export class Dashboard {
 
