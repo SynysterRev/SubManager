@@ -31,10 +31,6 @@ Personal project developed to:
 **Frontend:**
 - Angular 20 with Typescript
 
-**Infrastructure:**
-- Docker & Docker Compose
-- Unit tests (xUnit)
-
 ## Getting Started
 
 ### Manual Setup
