@@ -15,28 +15,48 @@
         <form class="subscription-form" [formGroup]="subForm">
 
             <label for="service-name" class="form-label">Service Name</label>
-            <input type="text" id="service-name" placeholder="e.g., Netflix, Spotify, Adobe...">
+            <input type="text" id="service-name" formControlName="name" placeholder="e.g., Netflix, Spotify, Adobe...">
             <label for="monthly-price" class="form-label">Monthly Price</label>
             <div class="input-group">
                 <span class="input-prefix">$</span>
-                <input type="number" id="monthly-price" value="9.99" step="0.01" class="input-price">
+                <input type="number" id="monthly-price" formControlName="price" value="9.99" step="0.01"
+                    class="input-price">
             </div>
 
             <label for="payment-day" class="form-label">Payment Day (1-31)</label>
-            <input type="number" id="payment-day" placeholder="15" min="1" max="31">
+            <input type="number" id="payment-day" formControlName="paymentDay" placeholder="15" min="1" max="31">
+             @if (paymentDay.touched && paymentDay.invalid) {
+            <div class="error">This must be between 1 and 31</div>
+            }
 
             <label for="category" class="form-label">Category</label>
             <div class="select-wrapper">
-                <select id="category" class="select-input">
+                <select id="category" class="select-input" formControlName="category">
                     <option value="" disabled selected>Select a category</option>
                 </select>
                 <div class="select-arrow">▼</div>
             </div>
 
         </form>
+        @if(price.valid){
+        <div class="cost-preview-container">
+            <h4>Cost Preview</h4>
+            <div class="plan-frequency-container">
+                <div class="cost-preview">
+                    <span class="plan-frequency">Monthly:</span>
+                    <span class="cost">${{price.value | number:'1.2-2'}}</span>
+                </div>
+                <div class="cost-preview">
+                    <span class="plan-frequency">Yearly:</span>
+                    <span class="cost">${{price.value * 12 | number:'1.2-2'}}</span>
+                </div>
+            </div>
+        </div>
+        }
 
         <div class="modal-footer">
-            <button class="button-primary" type="submit" (click)="addSubscription()" [disabled]="!subForm.valid">Add Subscription</button>
+            <button class="button-primary" type="submit" (click)="addSubscription()" [disabled]="!subForm.valid">Add
+                Subscription</button>
             <button class="button-secondary" (click)="closeModal()" type="button">Cancel</button>
         </div>
 

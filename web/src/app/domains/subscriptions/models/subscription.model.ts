@@ -4,7 +4,7 @@ export interface BaseSubscription {
     price: number;
 }
 
-export interface Subscription extends BaseSubscription {
+export interface SubscriptionDto extends BaseSubscription {
     id: number;
     createdAt: Date;
     daysBeforeNextPayment: number;
@@ -13,11 +13,11 @@ export interface Subscription extends BaseSubscription {
     isActive: boolean;
 }
 
-export interface SubscriptionCreate extends BaseSubscription {
+export interface SubscriptionCreateDto extends BaseSubscription {
     paymentDay: number;
 }
 
-export interface SubscriptionUpdate {
+export interface SubscriptionUpdateDto {
     name?: string;
     category?: string;
     price?: number;

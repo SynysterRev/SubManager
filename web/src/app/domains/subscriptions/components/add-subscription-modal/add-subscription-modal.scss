@@ -6,7 +6,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: hsla(222.2, 47.4%, 11.2%, 0.7); 
+    background-color: hsla(222.2, 47.4%, 11.2%, 0.7);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -14,14 +14,14 @@
 }
 
 .modal-content {
-    background-color: var(--card); 
+    background-color: var(--card);
     border-radius: 1rem;
     box-shadow: var(--shadow-card);
     width: 100%;
-    max-width: 30rem; 
+    max-width: 30rem;
     padding: 2rem;
     position: relative;
-    border: 1px solid var(--border-primary); 
+    border: 1px solid var(--border-primary);
 }
 
 .modal-header {
@@ -34,7 +34,7 @@
 .modal-title {
     font-size: 1.4rem;
     font-weight: 700;
-    color: var(--primary); 
+    color: var(--primary);
     margin: 0;
 }
 
@@ -46,6 +46,7 @@
     padding: 5px;
     transition: var(--transition-smooth);
 }
+
 .close-button:hover {
     color: var(--foreground);
 }
@@ -83,8 +84,8 @@
     box-shadow: none;
     width: 100%;
     color: var(--foreground);
-    
-    padding-right: 2.5rem; 
+
+    padding-right: 2.5rem;
     transition: var(--transition-smooth);
 }
 
@@ -131,7 +132,7 @@
 }
 
 .button-primary {
-    @include base-button; 
+    @include base-button;
     padding: 0 1.5rem;
     font-size: 1rem;
 }
@@ -155,6 +156,41 @@
 select {
     appearance: none;
     -webkit-appearance: none;
-  -moz-appearance: none;
+    -moz-appearance: none;
     font-size: 1.25rem;
+}
+
+.cost-preview-container {
+    background: var(--muted);
+    padding: 1rem;
+    border-radius: 1rem;
+    margin-top: 1rem;
+    line-height: 1.25rem;
+
+    h4 {
+        margin: 0;
+        font-weight: 600;
+        font-size: 1.02rem;
+    }
+}
+
+.cost-preview {
+    margin-top: 0.25rem;
+    display: flex;
+    justify-content: space-between;
+
+}
+
+.plan-frequency-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 0.5rem;
+}
+
+.plan-frequency {
+    color: var(--muted-foreground);
+}
+
+.cost {
+    font-weight: 600;
 }

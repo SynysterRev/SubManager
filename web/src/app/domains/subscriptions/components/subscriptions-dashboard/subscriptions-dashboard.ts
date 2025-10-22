@@ -6,6 +6,7 @@ import { SubscriptionCard } from "../subscription-card/subscription-card";
 import { ModalService } from '../../../../core/services/modal';
 import { AddSubscriptionModal } from "../add-subscription-modal/add-subscription-modal";
 import { Subscription } from 'rxjs';
+import { SubscriptionDto } from '../../models/subscription.model';
 
 @Component({
   selector: 'app-subscriptions-dashboard',
@@ -29,7 +30,7 @@ export class SubscriptionsDashboard implements OnInit, OnDestroy {
     this.sub?.unsubscribe();
   }
 
-  handleNewSubscription(data: any) {
+  handleNewSubscription(data: SubscriptionDto) {
 
   }
 }
