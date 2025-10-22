@@ -1,0 +1,56 @@
+<div class="subscription-card">
+    <div class="card-header">
+        <div class="app-icon-container">
+            <svg class="app-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15.5l-4.5-3.5 4.5-3.5v7zM11 7l4.5 3.5-4.5 3.5V7z" />
+            </svg>
+        </div>
+        <div class="app-name">Netflix</div>
+        <div class="price-info">
+            <div class="price">$15.99</div>
+            <div class="per-month">/month</div>
+        </div>
+
+        <div class="dropdown-menu-container" #dropdownContainer [class.active]="isDropdownOpen">
+            <div class="menu-icon" (click)="toggleDropdown($event)">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24px"
+                    height="24px">
+                    <path
+                        d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
+                </svg>
+            </div>
+
+            <div class="dropdown-menu">
+                <div class="menu-item">
+                    Edit Subscription
+                </div>
+                <div class="menu-item">
+                    Pause Subscription
+                </div>
+                <div class="menu-item delete-option">
+                    Delete Subscription
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-details">
+        <span class="tag tag-entertainment">Entertainment</span>
+        <span class="tag tag-due">Due in 24 days</span>
+    </div>
+    <div class="card-footer">
+        <div class="billing-info">
+            <svg class="calendar-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                width="16px" height="16px">
+                <path
+                    d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11zM5 7V6h14v1H5z" />
+            </svg>
+            <span>Monthly on 15th</span>
+            <span class="annual-cost">$192/yr</span>
+        </div>
+        <div class="toggle-switch-container">
+            <input type="checkbox" id="toggle" checked>
+            <label for="toggle" class="toggle-switch"></label>
+        </div>
+    </div>
+</div>

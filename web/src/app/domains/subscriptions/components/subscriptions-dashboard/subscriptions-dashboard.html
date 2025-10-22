@@ -4,7 +4,11 @@
     <app-subscription-total-card [monthlyCost]="101.96" [yearCost]="1224" />
     <app-active-subscriptions-card [activeSub]="1" [totalSub]="2" />
   </div>
+  <app-subscription-card />
 </main>
+@if(isModalOpen) {
+<app-add-subscription-modal (close)="isModalOpen = false" (add)="handleNewSubscription($event)" />
+}
 <!-- <div class="dashboard-container">
   <header class="dashboard-header">
     <h1>My Subscriptions</h1>
