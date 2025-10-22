@@ -1,0 +1,52 @@
+@use 'card' as *;
+@use 'utils' as *;
+
+.card {
+    @include card-base;
+    margin: 0 2rem;
+    padding: 1rem;
+    justify-content: space-between;
+    transition: var(--transition-smooth);
+
+    &:hover {
+        box-shadow: var(--shadow-elegant);
+        transform: translateY(-0.25rem);
+    }
+}
+
+.logo-circle {
+    @include circle;
+}
+
+.dollar-logo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+
+    .month-cost {
+        color: var(--foreground);
+        font-weight: 700;
+        font-size: 1.5rem;
+    }
+
+    .title {
+        margin: 0;
+        color: var(--muted-foreground);
+        font-size: 0.875rem;
+    }
+}
+
+.per-year {
+    align-items: end;
+
+    .year-cost {
+        font-weight: 700;
+        font-size: 1.5rem;
+        color: var(--secondary);
+    }
+}
