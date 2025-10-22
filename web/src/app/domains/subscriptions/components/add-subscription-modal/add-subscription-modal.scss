@@ -1,0 +1,196 @@
+@use 'button' as *;
+
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: hsla(222.2, 47.4%, 11.2%, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: var(--card);
+    border-radius: 1rem;
+    box-shadow: var(--shadow-card);
+    width: 100%;
+    max-width: 30rem;
+    padding: 2rem;
+    position: relative;
+    border: 1px solid var(--border-primary);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25rem;
+}
+
+.modal-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin: 0;
+}
+
+.close-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--muted-foreground);
+    padding: 5px;
+    transition: var(--transition-smooth);
+}
+
+.close-button:hover {
+    color: var(--foreground);
+}
+
+.subscription-form {
+    display: grid;
+    gap: 1rem;
+}
+
+.form-label {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--foreground);
+    display: block;
+}
+
+.input-group {
+    position: relative;
+}
+
+.select-input {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    box-sizing: border-box;
+
+    border-radius: 1rem;
+    border: 1px solid var(--input);
+    padding: 0.25rem 0.75rem;
+    height: 3.5rem;
+    font-size: 0.875rem;
+
+    background: transparent;
+    outline: none;
+    box-shadow: none;
+    width: 100%;
+    color: var(--foreground);
+
+    padding-right: 2.5rem;
+    transition: var(--transition-smooth);
+}
+
+.select-input:focus,
+.select-input:focus-visible {
+    outline: none;
+    border-color: var(--ring);
+    box-shadow: 0 0 0 4px hsla(174, 100%, 39%, 0.12);
+}
+
+.select-wrapper {
+    position: relative;
+}
+
+.select-arrow {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: var(--muted-foreground);
+    font-size: 0.7rem;
+}
+
+.input-prefix {
+    position: absolute;
+    color: var(--muted-foreground);
+    transform: translateY(-50%);
+    top: 50%;
+    left: 0.75rem;
+    font-size: large;
+}
+
+.input-price {
+    display: flex;
+    padding-left: 2rem;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.button-primary {
+    @include base-button;
+    padding: 0 1.5rem;
+    font-size: 1rem;
+}
+
+.button-secondary {
+    @include base-button;
+    background: var(--background);
+    color: var(--foreground);
+    border: 1px solid var(--border);
+    box-shadow: none;
+    padding: 0 1.5rem;
+    font-size: 1rem;
+
+    &:not(:disabled):hover {
+        background-color: var(--muted);
+        transform: scale(1.03);
+        box-shadow: none;
+    }
+}
+
+select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    font-size: 1.25rem;
+}
+
+.cost-preview-container {
+    background: var(--muted);
+    padding: 1rem;
+    border-radius: 1rem;
+    margin-top: 1rem;
+    line-height: 1.25rem;
+
+    h4 {
+        margin: 0;
+        font-weight: 600;
+        font-size: 1.02rem;
+    }
+}
+
+.cost-preview {
+    margin-top: 0.25rem;
+    display: flex;
+    justify-content: space-between;
+
+}
+
+.plan-frequency-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 0.5rem;
+}
+
+.plan-frequency {
+    color: var(--muted-foreground);
+}
+
+.cost {
+    font-weight: 600;
+}

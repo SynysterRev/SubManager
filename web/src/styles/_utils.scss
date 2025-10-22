@@ -1,0 +1,17 @@
+@mixin circle($size: 3rem, $bg: var(--gradient-primary), $color: var(--primary-foreground)) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 1rem;
+    height: $size;
+    width: $size;
+    background: $bg;
+    box-shadow: var(--shadow-glow);
+    color: $color;
+    font-weight: 700;
+    font-size: x-large;
+}
+
+.flex {
+    display: flex;
+}

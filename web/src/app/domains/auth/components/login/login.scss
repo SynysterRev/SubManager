@@ -1,13 +1,12 @@
+@use 'card' as *;
+@use 'button' as *;
+
 .card {
-    border-radius: 1rem;
-    border: solid 2px var(--border);
-    padding: 2rem;
-    margin-top: 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    @include card-base;
     max-width: 32rem;
     width: 100%;
+    flex-direction: column;
+    align-items: center;
 
     h2 {
         margin: 0;
@@ -85,4 +84,8 @@
     color: var(--muted-foreground);
     margin: 2rem 0 0 0;
     font-size: 1.1rem;
+}
+
+.submit-button {
+    @include base-button;
 }

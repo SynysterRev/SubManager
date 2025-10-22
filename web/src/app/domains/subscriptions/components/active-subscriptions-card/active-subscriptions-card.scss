@@ -1,0 +1,63 @@
+@use 'card' as *;
+@use 'utils' as *;
+
+.card {
+    @include card-base;
+    padding: 1.5rem;
+    justify-content: space-between;
+    box-shadow: none;
+
+    transition: var(--transition-smooth);
+
+    &:hover {
+        box-shadow: var(--shadow-elegant);
+        transform: translateY(-0.25rem);
+    }
+}
+
+.stonk-circle {
+    @include circle(3.5rem, var(--gradient-accent));
+    box-shadow: none;
+}
+
+.stonk-logo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+
+    .active-sub {
+        color: var(--foreground);
+        font-weight: 700;
+        line-height: 2.25rem;
+        font-size: 1.875rem;
+    }
+
+    .title {
+        margin: 0;
+        color: var(--muted-foreground);
+        font-size: 0.875rem;
+    }
+}
+
+.total-sub-bg {
+    background: var(--gradient-accent);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 9999px;
+    padding: 0.5rem 1rem;
+    width: 4rem;
+    height: 1.25rem;
+}
+
+.total-sub {
+    color: var(--primary-foreground);
+    font-weight: 600;
+    font-size: 1.2rem;
+    line-height: 1.25rem;
+}
