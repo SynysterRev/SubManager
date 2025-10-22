@@ -1,7 +1,9 @@
 <app-header />
 <main class="content">
-  <app-subscription-total-card [monthlyCost]="101.96" [yearCost]="1224" />
-  <app-active-subscriptions-card [activeSub]="1" [totalSub]="2" />
+  <div class="sub-recap">
+    <app-subscription-total-card [monthlyCost]="101.96" [yearCost]="1224" />
+    <app-active-subscriptions-card [activeSub]="1" [totalSub]="2" />
+  </div>
 </main>
 <!-- <div class="dashboard-container">
   <header class="dashboard-header">

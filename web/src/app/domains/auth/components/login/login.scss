@@ -1,4 +1,5 @@
 @use 'card' as *;
+@use 'button' as *;
 
 .card {
     @include card-base;
@@ -83,4 +84,8 @@
     color: var(--muted-foreground);
     margin: 2rem 0 0 0;
     font-size: 1.1rem;
+}
+
+.submit-button {
+    @include base-button;
 }

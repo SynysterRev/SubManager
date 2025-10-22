@@ -3,8 +3,7 @@
 
 .card {
     @include card-base;
-    margin: 0 2rem;
-    padding: 1rem;
+    padding: 1.5rem;
     justify-content: space-between;
     transition: var(--transition-smooth);
 
@@ -15,7 +14,7 @@
 }
 
 .logo-circle {
-    @include circle;
+    @include circle(3.5rem);
 }
 
 .dollar-logo {
@@ -31,7 +30,8 @@
     .month-cost {
         color: var(--foreground);
         font-weight: 700;
-        font-size: 1.5rem;
+        line-height: 2.25rem;
+        font-size: 1.875rem;
     }
 
     .title {
@@ -46,7 +46,8 @@
 
     .year-cost {
         font-weight: 700;
-        font-size: 1.5rem;
+        line-height: 2.25rem;
+        font-size: 1.875rem;
         color: var(--secondary);
     }
 }

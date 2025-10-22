@@ -1,4 +1,4 @@
-.submit-button {
+@mixin base-button {
     background: var(--gradient-primary);
     border: none;
     border-radius: 1rem;
