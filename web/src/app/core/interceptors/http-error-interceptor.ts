@@ -8,7 +8,7 @@ export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
       if (error.status === 401) {
-        // laisser passer pour le jwtInterceptor
+        // let jwtInterceptor handle it
         return throwError(() => error);
       }
       let errorMessage = 'An unexpected error occurred.';

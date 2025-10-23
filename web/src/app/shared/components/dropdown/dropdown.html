@@ -1,0 +1,9 @@
+<div class="dropdown-menu-container" [class.active]="isOpen">
+    <div class="menu-icon" (click)="toggleDropdown($event)">
+        <ng-content select="[icon]"></ng-content>
+    </div>
+
+    <div class="dropdown-menu">
+        <ng-content />
+    </div>
+</div>

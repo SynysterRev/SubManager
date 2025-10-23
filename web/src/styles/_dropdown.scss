@@ -1,0 +1,42 @@
+@use 'utils' as *;
+
+.menu-item {
+    @include flex-center();
+    padding: 10px 15px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--main-text);
+    cursor: pointer;
+    white-space: nowrap;
+
+    &:hover {
+        background-color: #f7f7f7;
+    }
+
+    &.delete-option {
+        color: #e74c3c;
+        margin-top: 8px;
+        border-top: 1px solid #f0f0f0;
+
+        .menu-icon-item {
+            color: #e74c3c;
+        }
+    }
+
+    .menu-icon-item {
+        width: 18px;
+        height: 18px;
+        margin-right: 0.25rem;
+        color: var(--light-text);
+    }
+}
+
+.menu-item.disabled {
+    color: #aaa;
+    cursor: not-allowed;
+    pointer-events: none;
+
+    &:hover {
+        background-color: transparent !important;
+    }
+}

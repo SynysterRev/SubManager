@@ -84,8 +84,23 @@
     display: inline-flex;
 }
 
+.dropdown-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .create-button {
     @include base-button;
     padding: 0.5rem 2rem;
     height: 3rem;
+}
+
+
+.dropdown-title {
+    border-bottom: 1px solid #f0f0f0;
+    font-weight: 700;
+    @include flex-center();
+    padding: 5px 15px 10px 15px;
+    white-space: nowrap;
 }

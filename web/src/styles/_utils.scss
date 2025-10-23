@@ -15,3 +15,9 @@
 .flex {
     display: flex;
 }
+
+@mixin flex-center($justify: flex-start) {
+    display: flex;
+    align-items: center;
+    justify-content: $justify;
+}

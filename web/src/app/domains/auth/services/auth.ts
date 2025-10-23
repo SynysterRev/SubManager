@@ -4,6 +4,7 @@ import { BehaviorSubject, catchError, Observable, of, tap, throwError } from 'rx
 import { HttpClient, HttpContext, HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
 import { SKIP_AUTH } from '../../../core/tokens/http-context.tokens';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,7 @@ import { SKIP_AUTH } from '../../../core/tokens/http-context.tokens';
 export class AuthService {
 
   private http = inject(HttpClient);
+  private router = inject(Router);
 
   private readonly TOKEN_KEY = 'access_token';
 
@@ -55,6 +57,7 @@ export class AuthService {
 
   isTokenExpired(token: string): boolean {
     const payload = JSON.parse(atob(token.split('.')[1]));
+    // convert milsec to sec
     const now = Math.floor(Date.now() / 1000);
     return payload.exp <= now;
   }
@@ -135,13 +138,18 @@ export class AuthService {
   }
 
   logout() {
-    return this.http.get(`${environment.apiUrl}/logout`,
+    return this.http.post(`${environment.apiUrl}/logout`,
+      {},
       { withCredentials: true }
-    ).pipe(
-      tap(() => {
-        localStorage.removeItem(this.TOKEN_KEY);
-        this.currentUserSubject.next(null);
-      })
-    );
+    ).subscribe({
+      next: () => this.cleanUp(),
+      error: () => this.cleanUp()
+    });
+  }
+
+  private cleanUp() {
+    localStorage.removeItem(this.TOKEN_KEY);
+    this.currentUserSubject.next(null);
+    this.router.navigate(['/login']);
   }
 }

@@ -11,27 +11,34 @@
             <div class="buttons-list">
                 <button class="create-button" (click)="onAddSubcriptionClick()">+ Add Subscription</button>
                 <button class="header-button">
-                    <svg class="button-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        stroke-width="2">
+                    <svg class="button-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
                         <path d="M21 12.79A9 9 0 1 1 11.21 3
            7 7 0 0 0 21 12.79z" />
                     </svg>
 
-                    <!-- <svg class="button-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2">
-                        <path
-                            d="M12 3v1M12 20v1M4.22 4.22l.7.7M18.36 18.36l.7.7M1 12h1M22 12h1M4.22 19.78l.7-.7M18.36 5.64l.7-.7" />
-                        <circle cx="12" cy="12" r="5" />
-                    </svg> -->
-
                 </button>
-                <button class="header-button">
-                    <svg class="button-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="8" r="4" />
-                        <path d="M6 20v-1a6 6 0 0 1 12 0v1" />
-                    </svg>
-                </button>
+                <app-dropdown class="dropdown-icon" #dropdownComponent (itemClick)="onDropdownItemClick($event)">
+                    <div icon class="header-button">
+                        <svg class="button-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="8" r="4" />
+                            <path d="M6 20v-1a6 6 0 0 1 12 0v1" />
+                        </svg>
+                    </div>
+                    <div class="dropdown-title">
+                        My Account
+                    </div>
+                    <div class="menu-item" [class.disabled]="true" (click)="dropdownComponent.onMenuItemClick($event, 'Profile')">
+                        Profile
+                    </div>
+                    <div class="menu-item" [class.disabled]="true" (click)="dropdownComponent.onMenuItemClick($event, 'Settings')">
+                        Settings
+                    </div>
+                    <div class="menu-item delete-option" (click)="dropdownComponent.onMenuItemClick($event, 'Logout')">
+                        Logout
+                    </div>
+                </app-dropdown>
             </div>
         </div>
     </nav>

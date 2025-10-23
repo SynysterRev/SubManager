@@ -1,10 +1,11 @@
 import { Component, computed, ElementRef, HostListener, input, output } from '@angular/core';
 import { SubscriptionDto } from '../../models/subscription.model';
 import { LocalDatePipe } from '../../pipes/local-date-pipe';
+import { Dropdown } from "../../../../shared/components/dropdown/dropdown";
 
 @Component({
   selector: 'app-subscription-card',
-  imports: [LocalDatePipe],
+  imports: [LocalDatePipe, Dropdown],
   templateUrl: './subscription-card.html',
   styleUrl: './subscription-card.scss'
 })
