@@ -1,4 +1,4 @@
-<div class="subscription-card">
+<div class="subscription-card" [class]="cardClass()">
     <div class="card-header">
         <div class="app-icon-container">
             <svg class="app-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
@@ -36,7 +36,12 @@
     </div>
     <div class="card-details">
         <span class="tag tag-entertainment">{{subscription().category}}</span>
+        @if(subscription().isActive){
         <span class="tag tag-due">Due in {{subscription().daysBeforeNextPayment}} days</span>
+        }
+        @else {
+        <span class="tag tag-paused">Paused</span>
+        }
     </div>
     <div class="card-footer">
         <div class="billing-info">
@@ -45,12 +50,14 @@
                 <path
                     d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11zM5 7V6h14v1H5z" />
             </svg>
-            <span>Monthly on {{subscription().paymentDate | localDate:{ year: 'numeric', month: '2-digit', day: '2-digit' } }}</span>
+            <span>{{subscription().paymentDate | localDate:{ year: 'numeric', month: '2-digit', day: '2-digit' }
+                }}</span>
             <span class="annual-cost">${{subscription().yearCost}}/yr</span>
         </div>
         <div class="toggle-switch-container">
-            <input type="checkbox" id="toggle" checked>
-            <label for="toggle" class="toggle-switch"></label>
+            <input type="checkbox" id="toggle-{{subscription().id}}" [checked]="subscription().isActive"
+                (change)="toggleActive()">
+            <label for="toggle-{{subscription().id}}" class="toggle-switch"></label>
         </div>
     </div>
 </div>

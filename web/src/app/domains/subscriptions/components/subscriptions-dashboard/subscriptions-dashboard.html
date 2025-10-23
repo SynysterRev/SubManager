@@ -16,7 +16,7 @@
   }
   <div class="subscriptions-list">
     @for(sub of subscriptions(); track sub.id) {
-    <app-subscription-card [subscription]="sub" />
+    <app-subscription-card [subscription]="sub" (toggled)="onSubscriptionToggled($event)" />
     }
   </div>
 </main>

@@ -10,8 +10,7 @@
 .subscription-card {
     @include card-base;
     display: block;
-    background: var(--subscription-card-active);
-    border: 1px solid var(--border-primary);
+    border: 2px solid var(--border-primary);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05), 0 0 0 1px var(--card-border);
     color: var(--foreground);
     padding: 1rem;
@@ -22,6 +21,14 @@
         box-shadow: var(--shadow-elegant);
         transform: translateY(-0.25rem);
     }
+}
+
+.card-active {
+    background: var(--subscription-card-active);
+}
+
+.card-not-active {
+    opacity: 0.6;
 }
 
 .card-header {
@@ -147,6 +154,11 @@
     &.tag-due {
         background-color: var(--success);
         color: white;
+    }
+
+    &.tag-paused {
+        background: var(--muted);
+        color: var(--muted-foreground);
     }
 }
 

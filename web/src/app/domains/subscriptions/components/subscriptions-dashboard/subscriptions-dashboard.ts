@@ -16,7 +16,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   styleUrl: './subscriptions-dashboard.scss'
 })
 export class SubscriptionsDashboard {
-  
+
   private destroyRef = inject(DestroyRef);
   modalService = inject(ModalService);
   subService = inject(SubscriptionService);
@@ -57,5 +57,9 @@ export class SubscriptionsDashboard {
 
   handleNewSubscription(newSub: SubscriptionDto) {
     this.subscriptions.update(list => [...list, newSub]);
+  }
+
+  onSubscriptionToggled(update: SubscriptionDto) {
+    this.subscriptions.update(list => list.map(s => s.id == update.id ? update : s));
   }
 }
