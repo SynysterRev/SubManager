@@ -7,9 +7,13 @@
   <div class="subscriptions-title-count">
     <h2>Your Subscriptions</h2>
     <div class="subscriptions-count">
-      6
+      {{subscriptions().length}}
     </div>
   </div>
+  @if(subscriptions().length == 0)
+  {
+    <span class="empty-sub">Create your first subscription!</span>
+  }
   <div class="subscriptions-list">
     @for(sub of subscriptions(); track sub.id) {
     <app-subscription-card [subscription]="sub" />
