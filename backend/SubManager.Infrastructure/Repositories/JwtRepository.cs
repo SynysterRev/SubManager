@@ -29,6 +29,11 @@ namespace SubManager.Infrastructure.Repositories
             return await _dbContext.RefreshTokens.FirstOrDefaultAsync(t => t.Token == token && t.UserId == userId);
         }
 
+        public async Task<RefreshToken?> GetRefreshToken(string token)
+        {
+            return await _dbContext.RefreshTokens.Include(rt => rt.User).FirstOrDefaultAsync(t => t.Token == token);
+        }
+
         public async Task SaveChangesAsync()
         {
             await _dbContext.SaveChangesAsync();

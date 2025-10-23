@@ -173,6 +173,18 @@ namespace SubManager.Application.Services
             };
         }
 
+        public async Task<RefreshToken> GetRefreshToken(string refreshToken)
+        {
+            var existingToken = await _jwtRepository.GetRefreshToken(refreshToken);
+
+            if (existingToken == null || existingToken.IsRevoked || existingToken.Expires <= DateTime.UtcNow)
+            {
+                throw new UnauthorizedAccessException("Refresh token invalid");
+            }
+
+            return existingToken;
+        }
+
         private async Task<RefreshToken> GetRefreshToken(string refreshToken, Guid userId)
         {
             var existingToken = await _jwtRepository.GetRefreshToken(refreshToken, userId);

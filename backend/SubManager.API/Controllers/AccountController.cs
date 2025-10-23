@@ -142,17 +142,20 @@ namespace SubManager.API.Controllers
         public async Task<ActionResult<TokenDto>> RefreshToken()
         {
             var token = Request.Cookies["refreshToken"];
-            var user = await _userManager.GetUserAsync(HttpContext.User);
 
             if (string.IsNullOrEmpty(token))
             {
                 return BadRequest("No refresh token found");
             }
 
-            if (user == null)
+            var refreshToken = await _jwtService.GetRefreshToken(token);
+
+            if (refreshToken == null)
             {
-                return BadRequest("No user found");
+                return Unauthorized("Invalid refresh token");
             }
+
+            var user = refreshToken.User;
 
             var newToken = await _jwtService.RotateRefreshTokenAsync(token, user);
             var accessToken = await _jwtService.CreateJwtTokenAsync(user);

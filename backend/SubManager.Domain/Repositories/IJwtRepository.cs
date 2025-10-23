@@ -24,6 +24,13 @@ namespace SubManager.Domain.Repositories
         public Task<RefreshToken?> GetRefreshToken(string token, Guid userId);
 
         /// <summary>
+        /// Get a refresh token by its token
+        /// </summary>
+        /// <param name="refreshTokenId">The token of the refresh token</param>
+        /// <returns>The refresh token if found, null otherwise</returns>
+        public Task<RefreshToken?> GetRefreshToken(string token);
+
+        /// <summary>
         /// Update an existing refresh token
         /// </summary>
         /// <param name="refreshTokenId">The ID of the token to update</param>

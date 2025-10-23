@@ -1,4 +1,5 @@
 ﻿using SubManager.Application.DTO.Account;
+using SubManager.Domain.Entities;
 using SubManager.Domain.IdentityEntities;
 using System.Security.Claims;
 
@@ -12,6 +13,13 @@ namespace SubManager.Application.Interfaces
         /// <param name="user">The connected user</param>
         /// <returns>A jwt token</returns>
         public Task<TokenDto> CreateJwtTokenAsync(ApplicationUser user);
+
+        /// <summary>
+        /// Get a refresh token
+        /// </summary>
+        /// <param name="refreshToken">The wanted token</param>
+        /// <returns>A refresh token</returns>
+        public Task<RefreshToken> GetRefreshToken(string refreshToken);
 
         /// <summary>
         /// Revoke the specified refresh token
