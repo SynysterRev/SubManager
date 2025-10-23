@@ -101,7 +101,7 @@ namespace SubManager.API.Controllers
             return Ok(token);
         }
 
-        [HttpGet("api/logout")]
+        [HttpPost("api/logout")]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
