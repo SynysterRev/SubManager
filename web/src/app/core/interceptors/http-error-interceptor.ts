@@ -7,6 +7,10 @@ export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
+      if (error.status === 401) {
+        // laisser passer pour le jwtInterceptor
+        return throwError(() => error);
+      }
       let errorMessage = 'An unexpected error occurred.';
 
       if (error.error instanceof ErrorEvent) {
@@ -25,9 +29,6 @@ export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
             break;
           case 400:
             errorMessage = 'Invalid request. Please check your data.';
-            break;
-          case 401:
-            errorMessage = 'You must be logged in.';
             break;
           case 403:
             errorMessage = 'Access denied.';
