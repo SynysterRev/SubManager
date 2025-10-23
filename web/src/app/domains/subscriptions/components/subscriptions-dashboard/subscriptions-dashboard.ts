@@ -55,11 +55,48 @@ export class SubscriptionsDashboard {
       });
   }
 
+  private recalculateTotals() {
+    const total = this.subscriptions()
+      .filter(s => s.isActive)
+      .reduce((sum, s) => sum + s.price, 0);
+    this.totalCostMonth.set(total);
+    this.totalCostYear.set(total * 12);
+  }
+
   handleNewSubscription(newSub: SubscriptionDto) {
     this.subscriptions.update(list => [...list, newSub]);
+    this.recalculateTotals();
+
+    this.loadSubscriptions();
   }
 
   onSubscriptionToggled(update: SubscriptionDto) {
+    const previousList = this.subscriptions();
+
     this.subscriptions.update(list => list.map(s => s.id == update.id ? update : s));
+    this.recalculateTotals();
+
+    this.subService.updateSubscription(update.id, {
+      isActive: update.isActive
+    })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (updatedSub) => {
+          this.subscriptions.update(list =>
+            list.map(s => s.id === updatedSub.id ? updatedSub : s)
+          );
+          this.recalculateTotals();
+
+          this.loadSubscriptions();
+        },
+        error: (err) => {
+          console.error('toggle failed: ', err);
+
+          this.subscriptions.set(previousList);
+          this.recalculateTotals();
+          
+          this.loadSubscriptions();
+        }
+      });
   }
 }

@@ -1,19 +1,20 @@
-import { HttpInterceptorFn } from '@angular/common/http';
+import { HttpContextToken, HttpInterceptorFn } from '@angular/common/http';
 import { AuthService } from '../../domains/auth/services/auth';
 import { inject } from '@angular/core';
 import { catchError, switchMap, throwError } from 'rxjs';
+import { SKIP_AUTH } from '../tokens/http-context.tokens';
 
 export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
-  const authService = inject(AuthService);
 
-  if (req.url.includes('/refresh-token')) {
-    return next(req.clone({ withCredentials: true }));
+  if (req.context.get(SKIP_AUTH)) {
+    return next(req);
   }
+
+  const authService = inject(AuthService);
 
   const ensureToken$ = authService.ensureTokenValid();
   return ensureToken$.pipe(
     switchMap(token => {
-      // Cloner la requête avec le token valide
       const authReq = req.clone({
         setHeaders: token ? { Authorization: `Bearer ${token.token}` } : {},
         withCredentials: true

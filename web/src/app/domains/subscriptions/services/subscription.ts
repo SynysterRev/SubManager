@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { SubscriptionCreateDto, SubscriptionDto } from '../models/subscription.model';
+import { SubscriptionCreateDto, SubscriptionDto, SubscriptionUpdateDto } from '../models/subscription.model';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { PaginatedResponse } from '../../../shared/models/paginated-response.model';
@@ -22,6 +22,15 @@ export class SubscriptionService {
   getSubscriptions(): Observable<PaginatedResponse> {
     return this.http.get<PaginatedResponse>(
       `${environment.apiUrl}/me/subscriptions`,
-      { withCredentials: true });
+      { withCredentials: true }
+    );
+  }
+
+  updateSubscription(id: number, sub: SubscriptionUpdateDto): Observable<SubscriptionDto> {
+    return this.http.put<SubscriptionDto>(
+      `${environment.apiUrl}/me/subscriptions/${id}`,
+      sub,
+      { withCredentials: true }
+    );
   }
 }

@@ -1,8 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import { LoginDto, RegisterDto, TokenDto } from '../models/auth.model';
 import { BehaviorSubject, catchError, Observable, of, tap, throwError } from 'rxjs';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpContext, HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
+import { SKIP_AUTH } from '../../../core/tokens/http-context.tokens';
 
 @Injectable({
   providedIn: 'root'
@@ -62,7 +63,10 @@ export class AuthService {
     return this.http.post<TokenDto>(
       `${environment.apiUrl}/refresh-token`,
       {},
-      { withCredentials: true }
+      {
+        withCredentials: true,
+        context: new HttpContext().set(SKIP_AUTH, true)
+      }
     ).pipe(
       tap(tokenDto => {
         this.saveToken(tokenDto);
@@ -79,7 +83,10 @@ export class AuthService {
     return this.http.post<TokenDto>(
       `${environment.apiUrl}/register`,
       credentials,
-      { withCredentials: true }
+      {
+        withCredentials: true,
+        context: new HttpContext().set(SKIP_AUTH, true)
+      }
     ).pipe(
       tap(tokenDto => {
         this.saveToken(tokenDto);
@@ -111,7 +118,10 @@ export class AuthService {
     return this.http.post<TokenDto>(
       `${environment.apiUrl}/login`,
       credentials,
-      { withCredentials: true }
+      {
+        withCredentials: true,
+        context: new HttpContext().set(SKIP_AUTH, true)
+      }
     ).pipe(
       tap(tokenDto => {
         this.saveToken(tokenDto);
