@@ -22,7 +22,7 @@ namespace SubManager.API.Controllers
         }
 
         [HttpGet("subscriptions")]
-        public async Task<ActionResult<PaginatedResponse<SubscriptionsResponseDto>>> GetSubscriptions([FromQuery] int pageNumber = 1)
+        public async Task<ActionResult<PaginatedSubscriptionsResponse>> GetSubscriptions([FromQuery] int pageNumber = 1)
         {
             var userId = User.GetUserId();
 

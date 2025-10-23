@@ -1,22 +1,27 @@
 ﻿using SubManager.Application.Commons;
 using SubManager.Application.DTO.Pagination;
+using SubManager.Application.DTO.Subscription;
+using SubManager.Domain.Entities;
 
 namespace SubManager.Application.Extensions
 {
     public static class PaginationExtensions
     {
-        public static PaginatedResponse<TResult> ToResponse<TSource, TResult>(
-            this PaginatedList<TSource> list,
-            TResult items)
+        public static PaginatedSubscriptionsResponse ToResponse(
+            this PaginatedList<Subscription> list,
+            List<SubscriptionDto> subscriptionDtos,
+            float totalCostMonth)
         {
-            return new PaginatedResponse<TResult>
+            return new PaginatedSubscriptionsResponse
             {
                 PageIndex = list.PageIndex,
                 TotalPages = list.TotalPages,
                 TotalCount = list.TotalCount,
                 HasNextPage = list.HasNextPage,
                 HasPreviousPage = list.HasPreviousPage,
-                Items = items,
+                Items = subscriptionDtos,
+                TotalCostMonth = totalCostMonth,
+                TotalCostYear = totalCostMonth * 12
             };
         }
     }

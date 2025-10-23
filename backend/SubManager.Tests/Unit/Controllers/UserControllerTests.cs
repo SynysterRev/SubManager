@@ -89,14 +89,11 @@ namespace SubManager.Tests.Unit.Controllers
             MeController userController = new MeController(_subscriptionService, _logger);
             SetUserWithClaims(userController, userId);
 
-            var expectedResponse = new PaginatedResponse<SubscriptionsResponseDto>
+            var expectedResponse = new PaginatedSubscriptionsResponse
             {
-                Items = new SubscriptionsResponseDto
-                {
-                    Subscriptions = subscriptions.Select(s => s.ToDto()).ToList(),
-                    TotalCostMonth = subscriptions.Sum(s => s.Price),
-                    TotalCostYear = subscriptions.Sum(s => s.Price) * 12
-                },
+                Items = subscriptions.Select(s => s.ToDto()).ToList(),
+                TotalCostMonth = subscriptions.Sum(s => s.Price),
+                TotalCostYear = subscriptions.Sum(s => s.Price) * 12,
                 PageIndex = 1,
                 TotalPages = 1,
                 TotalCount = subscriptions.Count(),
@@ -111,11 +108,11 @@ namespace SubManager.Tests.Unit.Controllers
             var result = await userController.GetSubscriptions(1);
 
             var okResult = result.Result.As<OkObjectResult>();
-            var model = okResult.Value.As<PaginatedResponse<SubscriptionsResponseDto>>();
+            var model = okResult.Value.As<PaginatedSubscriptionsResponse>();
 
-            model.Items?.TotalCostMonth.Should().Be(25);
-            model.Items?.Subscriptions.Should().HaveCount(2);
-            model.Items?.Subscriptions.Select(s => s.Name).Should().Contain(new[] { "Netflix", "Spotify" });
+            model.TotalCostMonth.Should().Be(25);
+            model.Items?.Should().HaveCount(2);
+            model.Items?.Select(s => s.Name).Should().Contain(new[] { "Netflix", "Spotify" });
         }
 
         [Fact]

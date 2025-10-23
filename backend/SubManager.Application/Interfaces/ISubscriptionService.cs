@@ -32,7 +32,7 @@ namespace SubManager.Application.Interfaces
         /// <param name="userId">ID of the user</param>
         /// <param name="pageNumber">Index of the pagination</param>
         /// <returns>A paginated list of SubscriptionsResponseDto created by the user</returns>
-        public Task<PaginatedResponse<SubscriptionsResponseDto>> GetSubscryptionsByUserAsync(Guid userId, int pageNumber);
+        public Task<PaginatedSubscriptionsResponse> GetSubscryptionsByUserAsync(Guid userId, int pageNumber);
 
         /// <summary>
         /// Get All the subscriptions

@@ -77,28 +77,21 @@ namespace SubManager.Application.Services
             return subscription.ToDto();
         }
 
-        public async Task<PaginatedResponse<SubscriptionsResponseDto>> GetSubscryptionsByUserAsync(Guid userId, int pageNumber)
+        public async Task<PaginatedSubscriptionsResponse> GetSubscryptionsByUserAsync(Guid userId, int pageNumber)
         {
             var subQuery = _subscriptionRepository.GetAllSubscriptionsByUser(userId);
-            var paginatedTask = PaginatedList<Subscription>.CreateAsync(
-                _subscriptionRepository.GetAllSubscriptionsByUser(userId),
+
+            var paginatedResult = await PaginatedList<Subscription>.CreateAsync(
+                subQuery,
                 pageNumber,
                 _paginationOptions.DefaultPageSize);
-            var totalCostTask = subQuery.Where(s => s.IsActive)
+
+            var totalCost = await subQuery.Where(s => s.IsActive)
                 .SumAsync(s => s.Price);
 
-            await Task.WhenAll(paginatedTask, totalCostTask);
+            var subscriptionDtos = paginatedResult.Select(s => s.ToDto()).ToList();
 
-            var subscriptionDtos = paginatedTask.Result.Select(s => s.ToDto()).ToList();
-
-            var response = new SubscriptionsResponseDto
-            {
-                Subscriptions = subscriptionDtos,
-                TotalCostMonth = totalCostTask.Result,
-                TotalCostYear = totalCostTask.Result * 12,
-            };
-
-            return paginatedTask.Result.ToResponse(response);
+            return paginatedResult.ToResponse(subscriptionDtos, totalCost);
         }
 
         public async Task<SubscriptionDto> UpdateSubscriptionAsync(int subscriptionId, SubscriptionUpdateDto subscriptionUpdate, Guid userId)

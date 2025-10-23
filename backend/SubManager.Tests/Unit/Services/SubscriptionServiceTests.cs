@@ -371,8 +371,8 @@ namespace SubManager.Tests.Unit.Services
             result.Should().NotBeNull();
             result.TotalCount.Should().Be(12);
             result.TotalPages.Should().Be(2);
-            result.Items?.Subscriptions.Should().HaveCount(10);
-            result.Items?.Subscriptions.All(s => s.UserId == userId).Should().BeTrue();
+            result.Items?.Should().HaveCount(10);
+            result.Items?.All(s => s.UserId == userId).Should().BeTrue();
         }
     }
 }
