@@ -5,8 +5,12 @@ import { catchError, switchMap, throwError } from 'rxjs';
 
 export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
-  const ensureToken$ = authService.ensureTokenValid();
 
+  if (req.url.includes('/refresh-token')) {
+    return next(req.clone({ withCredentials: true }));
+  }
+
+  const ensureToken$ = authService.ensureTokenValid();
   return ensureToken$.pipe(
     switchMap(token => {
       // Cloner la requête avec le token valide

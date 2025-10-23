@@ -61,6 +61,7 @@ export class AuthService {
   refreshToken(): Observable<TokenDto> {
     return this.http.post<TokenDto>(
       `${environment.apiUrl}/refresh-token`,
+      {},
       { withCredentials: true }
     ).pipe(
       tap(tokenDto => {

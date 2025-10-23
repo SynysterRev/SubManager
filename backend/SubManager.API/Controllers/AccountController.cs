@@ -138,6 +138,7 @@ namespace SubManager.API.Controllers
             return Ok(user == null);
         }
 
+        [AllowAnonymous]
         [HttpPost("api/refresh-token")]
         public async Task<ActionResult<TokenDto>> RefreshToken()
         {

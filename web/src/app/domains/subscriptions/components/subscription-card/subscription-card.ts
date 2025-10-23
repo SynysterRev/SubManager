@@ -1,9 +1,10 @@
 import { Component, ElementRef, HostListener, input } from '@angular/core';
 import { SubscriptionDto } from '../../models/subscription.model';
+import { LocalDatePipe } from '../../pipes/local-date-pipe';
 
 @Component({
   selector: 'app-subscription-card',
-  imports: [],
+  imports: [LocalDatePipe],
   templateUrl: './subscription-card.html',
   styleUrl: './subscription-card.scss'
 })
