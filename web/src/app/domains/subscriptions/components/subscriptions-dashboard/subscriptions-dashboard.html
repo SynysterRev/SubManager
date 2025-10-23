@@ -1,29 +1,21 @@
 <app-header />
 <main class="content">
   <div class="sub-recap">
-    <app-subscription-total-card [monthlyCost]="101.96" [yearCost]="1224" />
-    <app-active-subscriptions-card [activeSub]="1" [totalSub]="2" />
+    <app-subscription-total-card [monthlyCost]="totalCostMonth()" [yearCost]="totalCostYear()" />
+    <app-active-subscriptions-card [activeSub]="totalSubActive()" [totalSub]="subscriptions().length" />
   </div>
-  <app-subscription-card />
+  <div class="subscriptions-title-count">
+    <h2>Your Subscriptions</h2>
+    <div class="subscriptions-count">
+      6
+    </div>
+  </div>
+  <div class="subscriptions-list">
+    @for(sub of subscriptions(); track sub.id) {
+    <app-subscription-card [subscription]="sub" />
+    }
+  </div>
 </main>
 @if(isModalOpen()) {
 <app-add-subscription-modal />
 }
-<!-- <div class="dashboard-container">
-  <header class="dashboard-header">
-    <h1>My Subscriptions</h1>
-    <button (click)="openAddForm()">+ Add Subscription</button>
-  </header>
-
-  <app-subscription-stats 
-    [monthlyTotal]="stats?.monthlyTotal"
-    [yearlyTotal]="stats?.yearlyTotal"
-    [activeCount]="stats?.activeCount">
-  </app-subscription-stats>
-
-  <app-subscription-list 
-    [subscriptions]="subscriptions"
-    (edit)="onEdit($event)"
-    (delete)="onDelete($event)">
-  </app-subscription-list>
-</div> -->

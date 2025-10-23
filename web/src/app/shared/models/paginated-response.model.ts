@@ -1,8 +1,10 @@
-export interface PaginatedResponse<T> {
+export interface PaginatedResponse {
     pageIndex: number;
     totalPages: number;
     totalCount: number;
     hasPreviousPage: boolean;
     hasNextPage: boolean;
-    items: T[];
+    items: [];
+    totalCostMonth: number;
+    totalCostYear: number;
 }

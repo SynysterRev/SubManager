@@ -6,9 +6,9 @@
                     d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15.5l-4.5-3.5 4.5-3.5v7zM11 7l4.5 3.5-4.5 3.5V7z" />
             </svg>
         </div>
-        <div class="app-name">Netflix</div>
+        <div class="app-name">{{subscription().name}}</div>
         <div class="price-info">
-            <div class="price">$15.99</div>
+            <div class="price">${{subscription().price}}</div>
             <div class="per-month">/month</div>
         </div>
 
@@ -35,8 +35,8 @@
         </div>
     </div>
     <div class="card-details">
-        <span class="tag tag-entertainment">Entertainment</span>
-        <span class="tag tag-due">Due in 24 days</span>
+        <span class="tag tag-entertainment">{{subscription().category}}</span>
+        <span class="tag tag-due">Due in {{subscription().daysBeforeNextPayment}} days</span>
     </div>
     <div class="card-footer">
         <div class="billing-info">
@@ -45,8 +45,8 @@
                 <path
                     d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11zM5 7V6h14v1H5z" />
             </svg>
-            <span>Monthly on 15th</span>
-            <span class="annual-cost">$192/yr</span>
+            <span>Monthly on {{subscription().paymentDate}}</span>
+            <span class="annual-cost">${{subscription().yearCost}}/yr</span>
         </div>
         <div class="toggle-switch-container">
             <input type="checkbox" id="toggle" checked>

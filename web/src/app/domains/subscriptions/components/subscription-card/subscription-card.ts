@@ -1,4 +1,5 @@
-import { Component, ElementRef, HostListener } from '@angular/core';
+import { Component, ElementRef, HostListener, input } from '@angular/core';
+import { SubscriptionDto } from '../../models/subscription.model';
 
 @Component({
   selector: 'app-subscription-card',
@@ -7,7 +8,9 @@ import { Component, ElementRef, HostListener } from '@angular/core';
   styleUrl: './subscription-card.scss'
 })
 export class SubscriptionCard {
+
   isDropdownOpen: boolean = false;
+  subscription = input.required<SubscriptionDto>();
 
   constructor(private elementRef: ElementRef) { }
 

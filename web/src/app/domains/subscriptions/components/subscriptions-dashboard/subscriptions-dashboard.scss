@@ -1,5 +1,5 @@
 .content {
-    margin-top: 4rem;
+    margin-top: 6rem;
     display: flex;
     flex-direction: column;
     gap: 1rem;
@@ -15,8 +15,49 @@
     gap: 1.5rem;
 }
 
+.subscriptions-title-count {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    h2 {
+        line-height: 2rem;
+        font-weight: 600;
+        font-size: 1.5rem;
+    }
+}
+
+.subscriptions-count {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    line-height: 1.25rem;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 0.25rem 1.25rem;
+    border-radius: 9999px;
+    background: var(--secondary);
+    color: var(--secondary-foreground);
+}
+
+.subscriptions-list {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: 1rem;
+}
+
 @media (min-width: 768px) {
     .sub-recap {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .subscriptions-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 1024px) {
+    .subscriptions-list {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 }
