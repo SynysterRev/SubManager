@@ -119,7 +119,6 @@ export class SubscriptionsDashboard {
         price: formData.price!,
         paymentDay: formData.paymentDay!
       };
-      console.log(createDto);
       this.subService.createNewSubcription(createDto).subscribe({
         next: (newSub) => {
           this.subscriptions.update(list => [...list, newSub]);
@@ -164,12 +163,12 @@ export class SubscriptionsDashboard {
       list.filter(s => s.id !== sub.id)
     );
     this.recalculateTotals();
+    this.modalService.closeModal();
     this.subService.deleteSubscription(sub.id)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
           this.loadSubscriptions();
-          this.modalService.closeModal();
         }
       })
   }
