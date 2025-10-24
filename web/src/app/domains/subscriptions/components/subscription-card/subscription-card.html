@@ -27,7 +27,7 @@
         </app-dropdown>
     </div>
     <div class="card-details">
-        <span class="tag tag-entertainment">{{subscription().category}}</span>
+        <span class="tag tag-entertainment">{{getCategory(subscription().categoryId)}}</span>
         @if(subscription().isActive){
         <span class="tag tag-due">Due in {{subscription().daysBeforeNextPayment}} days</span>
         }

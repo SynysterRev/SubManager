@@ -9,6 +9,8 @@ import { SubscriptionCreateDto, SubscriptionDto, SubscriptionFormData, Subscript
 import { SubscriptionService } from '../../services/subscription';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DeleteSubscriptionModal } from "../delete-subscription-modal/delete-subscription-modal";
+import { Category } from '../../models/category.model';
+import { CategoryService } from '../../services/category';
 
 @Component({
   selector: 'app-subscriptions-dashboard',
@@ -21,12 +23,14 @@ export class SubscriptionsDashboard {
   private destroyRef = inject(DestroyRef);
   modalService = inject(ModalService);
   subService = inject(SubscriptionService);
+  categoryService = inject(CategoryService);
 
   totalSubActive = computed(() => this.subscriptions().filter(s => s.isActive).length);
 
   subscriptions = signal<SubscriptionDto[]>([]);
   totalCostMonth = signal<number>(0);
   totalCostYear = signal<number>(0);
+  categories = signal<Category[]>([]);
 
   isAddModalOpen = signal(false);
   isDeleteModalOpen = signal(false);
@@ -47,6 +51,12 @@ export class SubscriptionsDashboard {
     effect(() => {
       this.isDeleteModalOpen.set(this.modalService.openModal() === 'deleteSubscription');
     })
+
+    this.categoryService.getAllCategories()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(categories => {
+        this.categories.set(categories);
+      });
   }
 
   private loadSubscriptions() {
@@ -82,7 +92,6 @@ export class SubscriptionsDashboard {
         list.map(s => s.id === sub.id ? { ...s, ...formData } as SubscriptionDto : s)
       );
 
-      console.log(this.subscriptions());
       this.recalculateTotals();
 
       this.modalService.closeModal();
@@ -106,10 +115,11 @@ export class SubscriptionsDashboard {
       // since it's already validate by the form
       const createDto: SubscriptionCreateDto = {
         name: formData.name!,
-        category: formData.category!,
+        categoryId: formData.categoryId,
         price: formData.price!,
         paymentDay: formData.paymentDay!
       };
+      console.log(createDto);
       this.subService.createNewSubcription(createDto).subscribe({
         next: (newSub) => {
           this.subscriptions.update(list => [...list, newSub]);

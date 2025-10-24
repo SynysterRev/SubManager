@@ -4,6 +4,7 @@ import { LocalDatePipe } from '../../pipes/local-date-pipe';
 import { Dropdown } from "../../../../shared/components/dropdown/dropdown";
 import { SubCardDropdown } from '../../../../shared/types/dropdown.type';
 import { ModalService } from '../../../../core/services/modal';
+import { Category } from '../../models/category.model';
 
 @Component({
   selector: 'app-subscription-card',
@@ -15,6 +16,7 @@ export class SubscriptionCard {
 
   isDropdownOpen: boolean = false;
   subscription = input.required<SubscriptionDto>();
+  categories = input.required<Category[]>();
   toggled = output<SubscriptionDto>();
   modalService = inject(ModalService);
 
@@ -50,9 +52,12 @@ export class SubscriptionCard {
         this.modalService.triggerOpenModal('editSubscription', this.subscription());
         break;
       case 'Delete':
-        console.log("delete");
         this.modalService.triggerOpenModal('deleteSubscription', this.subscription());
         break;
     }
+  }
+
+  getCategory(categoryId: number | undefined): string {
+    return this.categories().find(c => c.id == categoryId)?.name ?? "";
   }
 }

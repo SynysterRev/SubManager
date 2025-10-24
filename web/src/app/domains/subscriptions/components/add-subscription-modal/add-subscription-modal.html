@@ -31,8 +31,12 @@
 
             <label for="category" class="form-label">Category</label>
             <div class="select-wrapper">
-                <select id="category" class="select-input" formControlName="category">
+                <select id="category" class="select-input" formControlName="categoryId">
                     <option value="" disabled selected>Select a category</option>
+                    @for(category of categories(); track category.id)
+                    {
+                    <option [ngValue]="category.id">{{category.name}}</option>
+                    }
                 </select>
                 <div class="select-arrow">▼</div>
             </div>
@@ -55,7 +59,7 @@
         }
 
         <div class="modal-footer">
-            <button class="button-primary" type="submit" (click)="onSubmit()" [disabled]="!subForm.valid">{{ isEdit ?
+            <button class="button-primary" type="submit" (click)="onSubmit()" [disabled]="!subForm.valid">{{ isEdit() ?
                 'Update Subscription' : 'Add Subscription'}}
             </button>
             <button class="button-secondary" (click)="closeModal()" type="button">Cancel</button>

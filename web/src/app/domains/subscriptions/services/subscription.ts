@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { SubscriptionCreateDto, SubscriptionDto, SubscriptionUpdateDto } from '../models/subscription.model';
-import { Observable, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { PaginatedResponse } from '../../../shared/models/paginated-response.model';
 

@@ -1,6 +1,6 @@
 export interface BaseSubscription {
     name: string;
-    category: string;
+    categoryId?: number;
     price: number;
 }
 
@@ -11,6 +11,7 @@ export interface SubscriptionDto extends BaseSubscription {
     paymentDate: Date;
     yearCost: number;
     paymentDay: number;
+    categoryName?: string;
     isActive: boolean;
 }
 
@@ -20,6 +21,7 @@ export interface SubscriptionCreateDto extends BaseSubscription {
 
 export interface SubscriptionUpdateDto extends Partial<BaseSubscription> {
     isActive?: boolean;
+    categoryName?: string;
     paymentDay?: number;
 }
 

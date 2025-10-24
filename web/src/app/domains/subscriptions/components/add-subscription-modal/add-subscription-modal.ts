@@ -1,9 +1,10 @@
-import { Component, effect, inject, input, output } from '@angular/core';
+import { Component, computed, effect, inject, input, output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SubscriptionService } from '../../services/subscription';
 import { SubscriptionDto, SubscriptionFormData } from '../../models/subscription.model';
 import { DecimalPipe } from '@angular/common';
 import { ModalService } from '../../../../core/services/modal';
+import { Category } from '../../models/category.model';
 
 @Component({
   selector: 'app-add-subscription-modal',
@@ -18,20 +19,21 @@ export class AddSubscriptionModal {
   get price() { return this.subForm.get('price')!; }
   get paymentDay() { return this.subForm.get('paymentDay')!; }
 
-  subscription = input<SubscriptionDto>();
+  subscription = input<SubscriptionDto | undefined>(undefined);
+  categories = input<Category[]>();
   submitForm = output<SubscriptionFormData>();
 
-  isEdit: boolean = this.subscription() !== null;
+  isEdit = computed(() => !!this.subscription());
 
   subForm: FormGroup;
 
   constructor() {
     this.subForm = new FormGroup({
-      name: new FormControl(this.subscription()?.name ?? '', [Validators.required]),
-      price: new FormControl(this.subscription()?.price ?? '', [Validators.required]),
+      name: new FormControl(this.subscription()?.name ?? '', [Validators.required, Validators.minLength(3)]),
+      price: new FormControl(this.subscription()?.price ?? '', [Validators.required, Validators.min(0)]),
       paymentDay: new FormControl(this.subscription()?.paymentDay ?? '', [Validators.required, Validators.min(1),
       Validators.max(31)]),
-      category: new FormControl(this.subscription()?.category ?? '',)
+      categoryId: new FormControl(this.subscription()?.categoryId ?? '',)
     });
 
     effect(() => {
@@ -41,7 +43,7 @@ export class AddSubscriptionModal {
           name: sub.name,
           price: sub.price,
           paymentDay: sub.paymentDay,
-          category: sub.category
+          categoryId: sub.categoryId
         });
       }
     });

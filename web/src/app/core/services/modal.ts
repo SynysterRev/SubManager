@@ -20,6 +20,7 @@ export class ModalService {
 
   closeModal() {
     this.openModal.set(null);
+    this.modalData.set(null);
   }
 
   notifyModalData(modal: ModalType, data: any) {

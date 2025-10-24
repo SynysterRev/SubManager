@@ -16,12 +16,12 @@
   }
   <div class="subscriptions-list">
     @for(sub of subscriptions(); track sub.id) {
-    <app-subscription-card [subscription]="sub" (toggled)="onSubscriptionToggled($event)" />
+    <app-subscription-card [subscription]="sub" [categories]="categories()" (toggled)="onSubscriptionToggled($event)" />
     }
   </div>
 </main>
 @if(isAddModalOpen() || isEditModalOpen()) {
-<app-add-subscription-modal [subscription]="modalService.modalData()?.data" (submitForm)="handleSubscription($event)" />
+<app-add-subscription-modal [subscription]="modalService.modalData()?.data ?? null" [categories]="categories()" (submitForm)="handleSubscription($event)" />
 }
 
 @if(isDeleteModalOpen()) {
