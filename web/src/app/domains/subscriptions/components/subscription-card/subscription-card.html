@@ -12,19 +12,19 @@
             <div class="per-month">/month</div>
         </div>
 
-        <app-dropdown>
+        <app-dropdown #subscriptionDropdown (itemClick)="onDropdownItemClick($event)">
             <svg icon class="dropdown-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24px"
                 height="24px">
                 <path
                     d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
             </svg>
-            <div class="menu-item">
+            <div class="menu-item" (click)="subscriptionDropdown.onMenuItemClick($event, 'Edit')">
                 Edit Subscription
             </div>
-            <div class="menu-item">
+            <div class="menu-item" (click)="subscriptionDropdown.onMenuItemClick($event, 'Pause')">
                 Pause Subscription
             </div>
-            <div class="menu-item delete-option">
+            <div class="menu-item delete-option" (click)="subscriptionDropdown.onMenuItemClick($event, 'Delete')">
                 Delete Subscription
             </div>
         </app-dropdown>

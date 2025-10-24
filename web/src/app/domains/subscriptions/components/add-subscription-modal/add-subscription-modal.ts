@@ -1,7 +1,7 @@
 import { Component, inject, output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SubscriptionService } from '../../services/subscription';
-import { SubscriptionDto } from '../../models/subscription.model';
+import { SubscriptionCreateDto, SubscriptionDto } from '../../models/subscription.model';
 import { DecimalPipe } from '@angular/common';
 import { ModalService } from '../../../../core/services/modal';
 
@@ -18,6 +18,8 @@ export class AddSubscriptionModal {
   get price() { return this.subForm.get('price')!; }
   get paymentDay() { return this.subForm.get('paymentDay')!; }
 
+  submitForm = output<SubscriptionCreateDto>();
+
 
   subForm: FormGroup = new FormGroup({
     name: new FormControl('', [Validators.required]),
@@ -31,18 +33,12 @@ export class AddSubscriptionModal {
     this.modalService.closeModal();
   }
 
-  addSubscription(): void {
+  onSubmit(): void {
     if (this.subForm.invalid) {
       this.subForm.markAllAsTouched();
       return;
     }
 
-    this.subService.createNewSubcription(this.subForm.value).subscribe({
-      next: (newSub) => {
-        this.modalService.notifyModalData('addSubscription', newSub);
-        this.closeModal();
-      }
-    });
-
+    this.submitForm.emit(this.subForm.value as SubscriptionCreateDto);
   }
 }

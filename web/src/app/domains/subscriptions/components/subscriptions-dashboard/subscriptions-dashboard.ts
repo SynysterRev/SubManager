@@ -5,13 +5,14 @@ import { ActiveSubscriptionsCard } from "../active-subscriptions-card/active-sub
 import { SubscriptionCard } from "../subscription-card/subscription-card";
 import { ModalService } from '../../../../core/services/modal';
 import { AddSubscriptionModal } from "../add-subscription-modal/add-subscription-modal";
-import { SubscriptionDto } from '../../models/subscription.model';
+import { SubscriptionCreateDto, SubscriptionDto } from '../../models/subscription.model';
 import { SubscriptionService } from '../../services/subscription';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { DeleteSubscriptionModal } from "../delete-subscription-modal/delete-subscription-modal";
 
 @Component({
   selector: 'app-subscriptions-dashboard',
-  imports: [Header, SubscriptionTotalCard, ActiveSubscriptionsCard, SubscriptionCard, AddSubscriptionModal],
+  imports: [Header, SubscriptionTotalCard, ActiveSubscriptionsCard, SubscriptionCard, AddSubscriptionModal, DeleteSubscriptionModal],
   templateUrl: './subscriptions-dashboard.html',
   styleUrl: './subscriptions-dashboard.scss'
 })
@@ -27,22 +28,25 @@ export class SubscriptionsDashboard {
   totalCostMonth = signal<number>(0);
   totalCostYear = signal<number>(0);
 
-  isModalOpen = signal(false);
+  isAddModalOpen = signal(false);
+  isDeleteModalOpen = signal(false);
+  isEditModalOpen = signal(false);
 
   constructor() {
 
     this.loadSubscriptions();
 
     effect(() => {
-      this.isModalOpen.set(this.modalService.openModal() === 'addSubscription');
+      this.isAddModalOpen.set(this.modalService.openModal() === 'addSubscription');
     })
 
     effect(() => {
-      const data = this.modalService.modalData();
-      if (data?.modal === 'addSubscription' && data.data) {
-        this.handleNewSubscription(data.data);
-      }
-    });
+      this.isDeleteModalOpen.set(this.modalService.openModal() === 'deleteSubscription');
+    })
+
+    effect(() => {
+      this.isEditModalOpen.set(this.modalService.openModal() === 'editSubscription');
+    })
   }
 
   private loadSubscriptions() {
@@ -59,15 +63,23 @@ export class SubscriptionsDashboard {
     const total = this.subscriptions()
       .filter(s => s.isActive)
       .reduce((sum, s) => sum + s.price, 0);
-    this.totalCostMonth.set(total);
-    this.totalCostYear.set(total * 12);
+
+    const totalRounded = parseFloat(total.toFixed(2));
+    this.totalCostMonth.set(totalRounded);
+    this.totalCostYear.set(parseFloat((totalRounded * 12).toFixed(2)));
   }
 
-  handleNewSubscription(newSub: SubscriptionDto) {
-    this.subscriptions.update(list => [...list, newSub]);
-    this.recalculateTotals();
+  handleNewSubscription(newSub: SubscriptionCreateDto) {
 
-    this.loadSubscriptions();
+    this.subService.createNewSubcription(newSub).subscribe({
+      next: (newSub) => {
+        this.subscriptions.update(list => [...list, newSub]);
+        this.recalculateTotals();
+
+        this.loadSubscriptions();
+        this.modalService.closeModal();
+      }
+    });
   }
 
   onSubscriptionToggled(update: SubscriptionDto) {
@@ -94,9 +106,28 @@ export class SubscriptionsDashboard {
 
           this.subscriptions.set(previousList);
           this.recalculateTotals();
-          
+
           this.loadSubscriptions();
         }
       });
+  }
+
+  onDeleteSubscription() {
+    const sub: SubscriptionDto = this.modalService.modalData()?.data;
+    if (!sub) return;
+
+    this.subService.deleteSubscription(sub.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.subscriptions.update(list =>
+            list.filter(s => s.id !== sub.id)
+          );
+          this.recalculateTotals();
+
+          this.loadSubscriptions();
+          this.modalService.closeModal();
+        }
+      })
   }
 }

@@ -12,7 +12,7 @@
   </div>
   @if(subscriptions().length == 0)
   {
-    <span class="empty-sub">Create your first subscription!</span>
+  <span class="empty-sub">Create your first subscription!</span>
   }
   <div class="subscriptions-list">
     @for(sub of subscriptions(); track sub.id) {
@@ -20,6 +20,10 @@
     }
   </div>
 </main>
-@if(isModalOpen()) {
-<app-add-subscription-modal />
+@if(isAddModalOpen()) {
+<app-add-subscription-modal (submitForm)="handleNewSubscription($event)" />
+}
+
+@if(isDeleteModalOpen()) {
+<app-delete-subscription-modal [subscription]="modalService.modalData()?.data" (confirm)="onDeleteSubscription()"/>
 }

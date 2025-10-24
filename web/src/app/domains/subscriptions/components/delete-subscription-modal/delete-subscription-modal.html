@@ -1,0 +1,12 @@
+<div class="modal-backdrop">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+            <h2 class="modal-title">Delete Subscription</h2>
+        </div>
+        <p class="text-warning">Are you sure you want to delete "{{subscription().name}}"? This action cannot be undone.</p>
+        <div class="modal-footer">
+            <button class="button-secondary" (click)="closeModal()" type="button">Cancel</button>
+            <button class="button-primary" type="submit" (click)="onConfirm()">Delete</button>
+        </div>
+    </div>
+</div>

@@ -1,16 +1,18 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ModalService } from '../../services/modal';
 import { Dropdown } from "../../../shared/components/dropdown/dropdown";
 import { AuthService } from '../../../domains/auth/services/auth';
+import { AccountDropdown } from '../../../shared/types/dropdown.type';
 
 @Component({
   selector: 'app-header',
-  imports: [RouterModule, Dropdown],
+  imports: [RouterModule, Dropdown,],
   templateUrl: './header.html',
   styleUrl: './header.scss'
 })
 export class Header {
+  @ViewChild('accountDropdown') accountDropdown!: Dropdown<AccountDropdown>;
   modalService = inject(ModalService);
   authService = inject(AuthService);
 
@@ -18,7 +20,8 @@ export class Header {
     this.modalService.triggerOpenModal('addSubscription');
   }
 
-  onDropdownItemClick(selectedItem: string) {
+  onDropdownItemClick(event: string) {
+    const selectedItem = event as AccountDropdown;
     switch (selectedItem) {
       case 'Profile':
         console.log("profile");

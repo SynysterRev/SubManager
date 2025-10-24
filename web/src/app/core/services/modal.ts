@@ -1,8 +1,6 @@
 import { Injectable, signal } from '@angular/core';
-import { Subject } from 'rxjs';
-import { SubscriptionDto } from '../../domains/subscriptions/models/subscription.model';
 
-type ModalType = 'addSubscription' | 'editSubscription';
+type ModalType = 'addSubscription' | 'editSubscription' | 'deleteSubscription';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +11,10 @@ export class ModalService {
 
   modalData = signal<{ modal: ModalType, data: any } | null>(null);
 
-  triggerOpenModal(modalType: ModalType) {
+  triggerOpenModal(modalType: ModalType, data?: any) {
+    if (data) {
+      this.modalData.set({ modal: modalType, data });
+    }
     this.openModal.set(modalType);
   }
 

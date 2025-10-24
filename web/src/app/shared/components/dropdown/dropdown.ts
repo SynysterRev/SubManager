@@ -6,9 +6,9 @@ import { Component, ElementRef, HostListener, input, output } from '@angular/cor
   templateUrl: './dropdown.html',
   styleUrl: './dropdown.scss'
 })
-export class Dropdown {
+export class Dropdown<T = string> {
   isOpen = false;
-  itemClick = output<string>();
+  itemClick = output<T>();
 
 
   constructor(private elementRef: ElementRef) { }
@@ -18,7 +18,7 @@ export class Dropdown {
     this.isOpen = !this.isOpen;
   }
 
-  onMenuItemClick(event: Event, itemData: any = null) {
+  onMenuItemClick(event: Event, itemData: T) {
     event.stopPropagation();
     this.isOpen = false;
     this.itemClick.emit(itemData);

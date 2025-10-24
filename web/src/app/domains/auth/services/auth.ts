@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { LoginDto, RegisterDto, TokenDto } from '../models/auth.model';
-import { BehaviorSubject, catchError, Observable, of, tap, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable, of, tap, throwError } from 'rxjs';
 import { HttpClient, HttpContext, HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
 import { SKIP_AUTH } from '../../../core/tokens/http-context.tokens';

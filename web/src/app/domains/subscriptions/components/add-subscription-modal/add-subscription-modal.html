@@ -55,7 +55,7 @@
         }
 
         <div class="modal-footer">
-            <button class="button-primary" type="submit" (click)="addSubscription()" [disabled]="!subForm.valid">Add
+            <button class="button-primary" type="submit" (click)="onSubmit()" [disabled]="!subForm.valid">Add
                 Subscription</button>
             <button class="button-secondary" (click)="closeModal()" type="button">Cancel</button>
         </div>

@@ -1,7 +1,9 @@
-import { Component, computed, ElementRef, HostListener, input, output } from '@angular/core';
+import { Component, computed, ElementRef, HostListener, inject, input, output } from '@angular/core';
 import { SubscriptionDto } from '../../models/subscription.model';
 import { LocalDatePipe } from '../../pipes/local-date-pipe';
 import { Dropdown } from "../../../../shared/components/dropdown/dropdown";
+import { SubCardDropdown } from '../../../../shared/types/dropdown.type';
+import { ModalService } from '../../../../core/services/modal';
 
 @Component({
   selector: 'app-subscription-card',
@@ -14,6 +16,7 @@ export class SubscriptionCard {
   isDropdownOpen: boolean = false;
   subscription = input.required<SubscriptionDto>();
   toggled = output<SubscriptionDto>();
+  modalService = inject(ModalService);
 
   constructor(private elementRef: ElementRef) { }
 
@@ -27,9 +30,9 @@ export class SubscriptionCard {
     this.isDropdownOpen = !this.isDropdownOpen;
   }
 
-  cardClass = computed(() => 
-  this.subscription().isActive ? 'card-active' : 'card-not-active'
-);
+  cardClass = computed(() =>
+    this.subscription().isActive ? 'card-active' : 'card-not-active'
+  );
 
   @HostListener('document:click', ['$event'])
   onClickOutside(event: Event) {
@@ -37,6 +40,22 @@ export class SubscriptionCard {
       if (!this.elementRef.nativeElement.contains(event.target)) {
         this.isDropdownOpen = false;
       }
+    }
+  }
+
+  onDropdownItemClick(event: string) {
+    const selectedItem = event as SubCardDropdown;
+    switch (selectedItem) {
+      case 'Edit':
+        console.log("Edit");
+        break;
+      case 'Pause':
+        this.toggleActive();
+        break;
+      case 'Delete':
+        console.log("delete");
+        this.modalService.triggerOpenModal('deleteSubscription', this.subscription());
+        break;
     }
   }
 }

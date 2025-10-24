@@ -33,4 +33,11 @@ export class SubscriptionService {
       { withCredentials: true }
     );
   }
+
+  deleteSubscription(id: number): Observable<void> {
+    return this.http.delete<void>(
+      `${environment.apiUrl}/me/subscriptions/${id}`,
+      { withCredentials: true }
+    );
+  }
 }
