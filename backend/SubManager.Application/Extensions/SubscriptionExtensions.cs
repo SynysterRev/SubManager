@@ -21,7 +21,8 @@ namespace SubManager.Application.Extensions
             return new SubscriptionDto
             {
                 Id = subscription.Id,
-                Category = subscription.Category ?? "",
+                CategoryId = subscription.CategoryId,
+                CategoryName = subscription.Category?.Name,
                 CreatedAt = subscription.CreatedAt,
                 IsActive = subscription.IsActive,
                 Name = subscription.Name,
@@ -39,7 +40,7 @@ namespace SubManager.Application.Extensions
             return new Subscription
             {
                 Name = createDto.Name,
-                Category = createDto.Category,
+                CategoryId = createDto.CategoryId,
                 CreatedAt = DateTime.UtcNow,
                 IsActive = true,
                 Price = createDto.Price,
@@ -61,9 +62,9 @@ namespace SubManager.Application.Extensions
             {
                 subscription.Name = updateDto.Name;
             }
-            if (!string.IsNullOrEmpty(updateDto.Category))
+            if (updateDto.CategoryId.HasValue)
             {
-                subscription.Category = updateDto.Category;
+                subscription.CategoryId = updateDto.CategoryId;
             }
             if (updateDto.Price.HasValue)
             {

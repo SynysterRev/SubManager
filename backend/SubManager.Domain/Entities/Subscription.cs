@@ -1,11 +1,6 @@
 ﻿using SubManager.Domain.IdentityEntities;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SubManager.Domain.Entities
 {
@@ -18,8 +13,8 @@ namespace SubManager.Domain.Entities
         [MaxLength(150)]
         public required string Name { get; set; }
 
-        [MaxLength(100)]
-        public string? Category { get; set; }
+        [ForeignKey(nameof(Category))]
+        public int? CategoryId { get; set; }
 
         [Required]
         [Range(typeof(decimal), "0", "100000")]
@@ -38,5 +33,7 @@ namespace SubManager.Domain.Entities
         public virtual ApplicationUser User { get; set; } = null!;
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        public Category? Category { get; set; }
     }
 }

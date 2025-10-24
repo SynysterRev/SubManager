@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace SubManager.Application.DTO.Subscription
 {
@@ -11,7 +6,7 @@ namespace SubManager.Application.DTO.Subscription
     {
         [Required]
         [StringLength(150, MinimumLength = 3)]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         [Required]
         [Range(typeof(decimal), "0", "100000")]
@@ -21,6 +16,6 @@ namespace SubManager.Application.DTO.Subscription
         [Range(1, 31)]
         public int PaymentDay { get; set; }
 
-        public string Category { get; set; }
+        public int? CategoryId { get; set; }
     }
 }

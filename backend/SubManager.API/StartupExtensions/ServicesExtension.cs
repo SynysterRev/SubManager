@@ -50,6 +50,9 @@ namespace SubManager.API.StartupExtensions
             services.AddScoped<ISubscriptionService, SubscriptionService>();
             services.AddScoped<IJwtService, JwtService>();
 
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<ICategoryService, CategoryService>();
+
             services.Configure<PaginationOptions>(configuration.GetSection(PaginationOptions.SectionName));
 
             var allowedOrigins = configuration.GetSection("AllowedOrigins").Get<string[]>();

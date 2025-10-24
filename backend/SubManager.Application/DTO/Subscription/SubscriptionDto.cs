@@ -10,7 +10,8 @@ namespace SubManager.Application.DTO.Subscription
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
-        public string Category { get; set; } = string.Empty;
+        public int? CategoryId { get; set; }
+        public string? CategoryName { get; set; }
         public decimal Price { get; set; }
         public decimal YearCost { get; set; }
         public bool IsActive { get; set; }

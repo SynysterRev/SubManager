@@ -2,6 +2,7 @@
 using FluentAssertions;
 using JuniorOnly.Application.Commons;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MockQueryable;
 using Moq;
@@ -22,6 +23,7 @@ namespace SubManager.Tests.Unit.Services
     {
         private readonly ISubscriptionService _subscriptionService;
         private readonly Mock<ISubscriptionRepository> _subscriptionRepositoryMock;
+        private readonly Mock<ICategoryRepository> _categoryRepositoryMock;
         private readonly Mock<UserManager<ApplicationUser>> _userManagerMock;
         private readonly IFixture _fixture;
 
@@ -43,9 +45,19 @@ namespace SubManager.Tests.Unit.Services
 
             var store = new Mock<IUserStore<ApplicationUser>>();
             _userManagerMock = new Mock<UserManager<ApplicationUser>>(
-                store.Object, null, null, null, null, null, null, null, null);
+                store.Object,
+                new Mock<IOptions<IdentityOptions>>().Object,
+                new Mock<IPasswordHasher<ApplicationUser>>().Object,
+                new IUserValidator<ApplicationUser>[0],
+                new IPasswordValidator<ApplicationUser>[0],
+                new Mock<ILookupNormalizer>().Object,
+                new Mock<IdentityErrorDescriber>().Object,
+                new Mock<IServiceProvider>().Object,
+                new Mock<ILogger<UserManager<ApplicationUser>>>().Object);
 
-            _subscriptionService = new SubscriptionService(_subscriptionRepositoryMock.Object, options, _userManagerMock.Object);
+            _categoryRepositoryMock = new Mock<ICategoryRepository>();
+
+            _subscriptionService = new SubscriptionService(_subscriptionRepositoryMock.Object, options, _userManagerMock.Object, _categoryRepositoryMock.Object);
         }
 
         [Fact]
@@ -55,11 +67,28 @@ namespace SubManager.Tests.Unit.Services
             var subcriptionCreate = _fixture.Build<SubscriptionCreateDto>()
                 .With(temp => temp.Price, -1m)
                 .Create();
+            _userManagerMock.Setup(u => u.FindByIdAsync(userId.ToString())).ReturnsAsync(new ApplicationUser { Id = userId });
             Func<Task> action = async () =>
             {
                 await _subscriptionService.CreateSubscriptionAsync(subcriptionCreate, userId);
             };
             await action.Should().ThrowAsync<ValidationException>();
+        }
+
+        [Fact]
+        public async Task CreateSubscriptionAsync_ShouldThrowNotFoundException_InvalidCategoryId()
+        {
+            var userId = Guid.NewGuid();
+            var subcriptionCreate = _fixture.Build<SubscriptionCreateDto>()
+                .With(temp => temp.CategoryId, 199)
+                .Create();
+            _userManagerMock.Setup(u => u.FindByIdAsync(userId.ToString())).ReturnsAsync(new ApplicationUser { Id = userId });
+            _categoryRepositoryMock.Setup(c => c.GetByIdAsync(199)).ReturnsAsync((Category?)null);
+            Func<Task> action = async () =>
+            {
+                await _subscriptionService.CreateSubscriptionAsync(subcriptionCreate, userId);
+            };
+            await action.Should().ThrowAsync<NotFoundException>();
         }
 
         [Fact]
@@ -69,6 +98,7 @@ namespace SubManager.Tests.Unit.Services
             var subcriptionCreate = _fixture.Build<SubscriptionCreateDto>()
                 .With(temp => temp.PaymentDay, 34)
                 .Create();
+            _userManagerMock.Setup(u => u.FindByIdAsync(userId.ToString())).ReturnsAsync(new ApplicationUser { Id = userId });
             Func<Task> action = async () =>
             {
                 await _subscriptionService.CreateSubscriptionAsync(subcriptionCreate, userId);
@@ -86,8 +116,10 @@ namespace SubManager.Tests.Unit.Services
                 .Create();
 
             var subEntity = subcriptionCreate.ToEntity();
+            var Category = new Category { Name = "Test" };
             _userManagerMock.Setup(u => u.FindByIdAsync(userId.ToString())).ReturnsAsync(new ApplicationUser { Id = userId });
             _subscriptionRepositoryMock.Setup(s => s.AddSubscriptionAsync(It.IsAny<Subscription>())).ReturnsAsync(subEntity);
+            _categoryRepositoryMock.Setup(c => c.GetByIdAsync(It.IsAny<int>())).ReturnsAsync(Category);
             var expectedSub = subEntity.ToDto();
             var subscription = await _subscriptionService.CreateSubscriptionAsync(subcriptionCreate, userId);
             expectedSub.Id = subscription.Id;
@@ -110,7 +142,6 @@ namespace SubManager.Tests.Unit.Services
                 Name = "Netflix",
                 Price = 9.99m,
                 PaymentDay = 5,
-                Category = "Streaming"
             };
 
             var subcriptionUpdate = _fixture.Build<SubscriptionUpdateDto>()
@@ -139,7 +170,6 @@ namespace SubManager.Tests.Unit.Services
                 Name = "Netflix",
                 Price = 9.99m,
                 PaymentDay = 5,
-                Category = "Streaming"
             };
 
             var subcriptionUpdate = _fixture.Build<SubscriptionUpdateDto>()
@@ -183,7 +213,6 @@ namespace SubManager.Tests.Unit.Services
                 Name = "Netflix",
                 Price = 9.99m,
                 PaymentDay = 5,
-                Category = "Streaming"
             };
 
             var subcriptionUpdate = _fixture.Build<SubscriptionUpdateDto>()
@@ -210,17 +239,17 @@ namespace SubManager.Tests.Unit.Services
                 Name = "Netflix",
                 Price = 9.99m,
                 PaymentDay = 5,
-                Category = "Streaming"
             };
 
+            var Category = new Category { Name = "Test" };
             var subcriptionUpdate = _fixture.Build<SubscriptionUpdateDto>()
                 .With(temp => temp.PaymentDay, 18)
                 .With(temp => temp.Name, "Amazon")
                 .With(temp => temp.Price, 9.99m)
-                .With(temp => temp.Category, "Streaming")
                 .Create();
 
             _subscriptionRepositoryMock.Setup(s => s.GetSubscriptionByIdAsync(subscriptionId, userId)).ReturnsAsync(baseSub);
+            _categoryRepositoryMock.Setup(c => c.GetByIdAsync(It.IsAny<int>())).ReturnsAsync(Category);
 
             //_subscriptionRepositoryMock.Setup(s => s.UpdateSubscriptionAsync(It.IsAny<Subscription>())).ReturnsAsync((Subscription s) => s);
 
@@ -246,7 +275,6 @@ namespace SubManager.Tests.Unit.Services
                 Name = "Netflix",
                 Price = 9.99m,
                 PaymentDay = 5,
-                Category = "Streaming"
             };
 
             _subscriptionRepositoryMock.Setup(s => s.GetSubscriptionByIdAsync(It.IsAny<int>(), userId)).ReturnsAsync(null as Subscription);
@@ -267,7 +295,6 @@ namespace SubManager.Tests.Unit.Services
                 Name = "Netflix",
                 Price = 9.99m,
                 PaymentDay = 5,
-                Category = "Streaming"
             };
 
             _subscriptionRepositoryMock.Setup(s => s.GetSubscriptionByIdAsync(subscriptionId, userId)).ReturnsAsync(baseSub);
@@ -288,7 +315,6 @@ namespace SubManager.Tests.Unit.Services
                 Name = "Netflix",
                 Price = 9.99m,
                 PaymentDay = 5,
-                Category = "Streaming"
             };
 
             _subscriptionRepositoryMock.Setup(s => s.GetSubscriptionByIdAsync(subscriptionId, userId)).ReturnsAsync(baseSub);

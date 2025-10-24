@@ -18,19 +18,36 @@ namespace SubManager.Application.Services
     public class SubscriptionService : ISubscriptionService
     {
         private readonly ISubscriptionRepository _subscriptionRepository;
+        private readonly ICategoryRepository _categoryRepository;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly PaginationOptions _paginationOptions;
 
-        public SubscriptionService(ISubscriptionRepository subscriptionRepository, IOptions<PaginationOptions> paginationOptions, UserManager<ApplicationUser> userManager)
+        public SubscriptionService(
+            ISubscriptionRepository subscriptionRepository,
+            IOptions<PaginationOptions> paginationOptions,
+            UserManager<ApplicationUser> userManager,
+            ICategoryRepository categoryRepository)
         {
             _subscriptionRepository = subscriptionRepository;
             _paginationOptions = paginationOptions.Value;
             _userManager = userManager;
+            _categoryRepository = categoryRepository;
         }
 
         public async Task<SubscriptionDto> CreateSubscriptionAsync(SubscriptionCreateDto subscriptionCreate, Guid userId)
         {
             Validator.ValidateObject(subscriptionCreate, new ValidationContext(subscriptionCreate), validateAllProperties: true);
+
+            Category? category = null;
+
+            if (subscriptionCreate.CategoryId.HasValue)
+            {
+                category = await _categoryRepository.GetByIdAsync(subscriptionCreate.CategoryId.Value);
+                if (category == null)
+                {
+                    throw new NotFoundException($"Category with ID {subscriptionCreate.CategoryId.Value} not found");
+                }
+            }
 
             var user = await _userManager.FindByIdAsync(userId.ToString());
 
@@ -41,6 +58,7 @@ namespace SubManager.Application.Services
 
             var newSubscription = subscriptionCreate.ToEntity();
             newSubscription.UserId = userId;
+            newSubscription.Category = category;
             var subscription = await _subscriptionRepository.AddSubscriptionAsync(newSubscription);
             return subscription.ToDto();
         }
@@ -103,6 +121,17 @@ namespace SubManager.Application.Services
             if (subscription == null)
             {
                 throw new NotFoundException($"Subscription with id {subscriptionId} not found");
+            }
+
+            Category? category = null;
+
+            if (subscriptionUpdate.CategoryId.HasValue)
+            {
+                category = await _categoryRepository.GetByIdAsync(subscriptionUpdate.CategoryId.Value);
+                if (category == null)
+                {
+                    throw new NotFoundException($"Category with ID {subscriptionUpdate.CategoryId.Value} not found");
+                }
             }
 
             subscription.UpdateFrom(subscriptionUpdate);

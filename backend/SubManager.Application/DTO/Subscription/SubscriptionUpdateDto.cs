@@ -6,7 +6,7 @@ namespace SubManager.Application.DTO.Subscription
     {
         [StringLength(150, MinimumLength = 3)]
         public string? Name { get; set; }
-        public string? Category { get; set; }
+        public int? CategoryId { get; set; }
 
         [Range(typeof(decimal), "0", "100000")]
         public decimal? Price { get; set; }

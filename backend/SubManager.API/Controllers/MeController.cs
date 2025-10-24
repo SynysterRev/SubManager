@@ -9,7 +9,7 @@ namespace SubManager.API.Controllers
 {
     [ApiController]
     [Authorize]
-    [Route("api/[controller]")]
+    [Route("api/[controller]/subscriptions")]
     public class MeController : Controller
     {
         private readonly ISubscriptionService _subscriptionService;
@@ -21,7 +21,7 @@ namespace SubManager.API.Controllers
             _logger = logger;
         }
 
-        [HttpGet("subscriptions")]
+        [HttpGet]
         public async Task<ActionResult<PaginatedSubscriptionsResponse>> GetSubscriptions([FromQuery] int pageNumber = 1)
         {
             var userId = User.GetUserId();
@@ -31,7 +31,7 @@ namespace SubManager.API.Controllers
             return Ok(subscriptions);
         }
 
-        [HttpPost("subscriptions")]
+        [HttpPost]
         public async Task<ActionResult<SubscriptionDto>> CreateSubscription(SubscriptionCreateDto subscriptionCreate)
         {
             var userId = User.GetUserId();
@@ -41,7 +41,7 @@ namespace SubManager.API.Controllers
             return CreatedAtAction(nameof(GetSubscriptionDetails), new { subId = newSub.Id }, newSub);
         }
 
-        [HttpGet("subscriptions/{subId}")]
+        [HttpGet("{subId}")]
         public async Task<ActionResult<SubscriptionDto>> GetSubscriptionDetails(int subId)
         {
             var userId = User.GetUserId();
@@ -51,7 +51,7 @@ namespace SubManager.API.Controllers
             return Ok(subscriptions);
         }
 
-        [HttpPut("subscriptions/{subId}")]
+        [HttpPut("{subId}")]
         public async Task<ActionResult<SubscriptionDto>> UpdateSubscription(int subId, SubscriptionUpdateDto subscriptionUpdate)
         {
             var userId = User.GetUserId();
@@ -60,7 +60,7 @@ namespace SubManager.API.Controllers
             return Ok(updatedSub);
         }
 
-        [HttpDelete("subscriptions/{subId}")]
+        [HttpDelete("{subId}")]
         public async Task<IActionResult> DeleteSubscription(int subId)
         {
             var userId = User.GetUserId();
