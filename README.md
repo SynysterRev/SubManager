@@ -24,7 +24,7 @@ Personal project developed to:
 - .NET 8 / C#
 - ASP.NET Core Web API
 - Entity Framework Core (Code First)
-- PostgreSQL / SQL Server
+- (localdb)\MSSQLLocalDB
 - JWT Authentication
 - Clean Architecture with Repository Pattern
 
@@ -39,20 +39,20 @@ Personal project developed to:
 ```bash
 cd SubManager.API
 dotnet restore
-dotnet ef database update
+dotnet-ef database update
 dotnet run
 ```
 
 **Frontend:**
 ```bash
-cd SubManager.Application
+cd web
 npm install
-npm run dev
+ng serve
 ```
 
 ## API Documentation
 
-Once running, access Swagger UI at: `https://localhost:5267/swagger`
+Once running, access Swagger UI at: `http://localhost:5267/swagger/index.html`
 
 **Main endpoints:**
 - `POST /api/register` - Create new account
@@ -89,15 +89,6 @@ SubManager/
 - Add/Edit form
 - Statistics view
 
-## Roadmap
-
-**Version 2.0:**
-- Email/push notifications for renewal reminders
-- PDF export of yearly expenses
-- Account sharing between users
-- Usage-based savings suggestions
-- Market average comparisons
-
 ## Testing
 ```bash
 cd SubManager.Tests
@@ -105,10 +96,6 @@ dotnet test
 ```
 
 ## Deployment (To do)
-
-**Backend:** Azure App Service / Railway / Render
-**Frontend:** Vercel / Netlify
-**Database:** Azure SQL / Supabase PostgreSQL
 
 ## License
 
