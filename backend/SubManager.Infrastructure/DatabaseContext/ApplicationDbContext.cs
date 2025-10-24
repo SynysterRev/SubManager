@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using SubManager.Domain.Entities;
 using SubManager.Domain.IdentityEntities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection.Emit;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace SubManager.Infrastructure.DatabaseContext
 {
@@ -32,6 +33,10 @@ namespace SubManager.Infrastructure.DatabaseContext
                 .WithMany(a => a.Subscriptions)
                 .HasForeignKey(s => s.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Subscription>()
+                .Property(s => s.Price)
+                .HasColumnType("decimal(18,2)");
 
             builder.Entity<RefreshToken>()
                 .HasOne(r => r.User)

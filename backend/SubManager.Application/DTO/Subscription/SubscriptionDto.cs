@@ -11,8 +11,8 @@ namespace SubManager.Application.DTO.Subscription
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Category { get; set; } = string.Empty;
-        public float Price { get; set; }
-        public float YearCost { get; set; }
+        public decimal Price { get; set; }
+        public decimal YearCost { get; set; }
         public bool IsActive { get; set; }
         public DateTime CreatedAt { get; set; }
         public int DaysBeforeNextPayment { get; set; }

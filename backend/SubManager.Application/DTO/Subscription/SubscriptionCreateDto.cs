@@ -14,8 +14,8 @@ namespace SubManager.Application.DTO.Subscription
         public string Name { get; set; }
 
         [Required]
-        [Range(0, float.MaxValue)]
-        public float Price { get; set; }
+        [Range(typeof(decimal), "0", "100000")]
+        public decimal Price { get; set; }
 
         [Required]
         [Range(1, 31)]

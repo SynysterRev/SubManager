@@ -53,7 +53,7 @@ namespace SubManager.Tests.Unit.Services
         {
             var userId = Guid.NewGuid();
             var subcriptionCreate = _fixture.Build<SubscriptionCreateDto>()
-                .With(temp => temp.Price, -1f)
+                .With(temp => temp.Price, -1m)
                 .Create();
             Func<Task> action = async () =>
             {
@@ -82,7 +82,7 @@ namespace SubManager.Tests.Unit.Services
             var userId = Guid.NewGuid();
             var subcriptionCreate = _fixture.Build<SubscriptionCreateDto>()
                 .With(temp => temp.PaymentDay, 15)
-                .With(temp => temp.Price, 15f)
+                .With(temp => temp.Price, 15m)
                 .Create();
 
             var subEntity = subcriptionCreate.ToEntity();
@@ -108,13 +108,13 @@ namespace SubManager.Tests.Unit.Services
                 Id = subscriptionId,
                 UserId = userId,
                 Name = "Netflix",
-                Price = 9.99f,
+                Price = 9.99m,
                 PaymentDay = 5,
                 Category = "Streaming"
             };
 
             var subcriptionUpdate = _fixture.Build<SubscriptionUpdateDto>()
-                .With(temp => temp.Price, -1f)
+                .With(temp => temp.Price, -1m)
                 .Create();
 
             _subscriptionRepositoryMock.Setup(s => s.GetSubscriptionByIdAsync(It.IsAny<int>(), userId)).ReturnsAsync(subscription);
@@ -137,7 +137,7 @@ namespace SubManager.Tests.Unit.Services
                 Id = subscriptionId,
                 UserId = userId,
                 Name = "Netflix",
-                Price = 9.99f,
+                Price = 9.99m,
                 PaymentDay = 5,
                 Category = "Streaming"
             };
@@ -181,7 +181,7 @@ namespace SubManager.Tests.Unit.Services
                 Id = subscriptionId,
                 UserId = userId,
                 Name = "Netflix",
-                Price = 9.99f,
+                Price = 9.99m,
                 PaymentDay = 5,
                 Category = "Streaming"
             };
@@ -208,7 +208,7 @@ namespace SubManager.Tests.Unit.Services
                 Id = subscriptionId,
                 UserId = userId,
                 Name = "Netflix",
-                Price = 9.99f,
+                Price = 9.99m,
                 PaymentDay = 5,
                 Category = "Streaming"
             };
@@ -216,7 +216,7 @@ namespace SubManager.Tests.Unit.Services
             var subcriptionUpdate = _fixture.Build<SubscriptionUpdateDto>()
                 .With(temp => temp.PaymentDay, 18)
                 .With(temp => temp.Name, "Amazon")
-                .With(temp => temp.Price, 9.99f)
+                .With(temp => temp.Price, 9.99m)
                 .With(temp => temp.Category, "Streaming")
                 .Create();
 
@@ -244,7 +244,7 @@ namespace SubManager.Tests.Unit.Services
                 Id = subscriptionId,
                 UserId = userId,
                 Name = "Netflix",
-                Price = 9.99f,
+                Price = 9.99m,
                 PaymentDay = 5,
                 Category = "Streaming"
             };
@@ -265,7 +265,7 @@ namespace SubManager.Tests.Unit.Services
                 Id = subscriptionId,
                 UserId = userId,
                 Name = "Netflix",
-                Price = 9.99f,
+                Price = 9.99m,
                 PaymentDay = 5,
                 Category = "Streaming"
             };
@@ -286,7 +286,7 @@ namespace SubManager.Tests.Unit.Services
                 Id = subscriptionId,
                 UserId = userId,
                 Name = "Netflix",
-                Price = 9.99f,
+                Price = 9.99m,
                 PaymentDay = 5,
                 Category = "Streaming"
             };
@@ -356,7 +356,7 @@ namespace SubManager.Tests.Unit.Services
             var subscriptions = _fixture.Build<Subscription>()
                 .With(s => s.UserId, userId)
                 .With(s => s.PaymentDay, 15)
-                .With(s => s.Price, 9.99)
+                .With(s => s.Price, 9.99m)
                 .CreateMany(12)
                 .ToList();
 

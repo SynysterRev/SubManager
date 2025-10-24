@@ -86,7 +86,7 @@ namespace SubManager.Application.Services
                 pageNumber,
                 _paginationOptions.DefaultPageSize);
 
-            var totalCost = await subQuery.Where(s => s.IsActive)
+            decimal totalCost = await subQuery.Where(s => s.IsActive)
                 .SumAsync(s => s.Price);
 
             var subscriptionDtos = paginatedResult.Select(s => s.ToDto()).ToList();

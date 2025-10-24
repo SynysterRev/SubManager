@@ -8,8 +8,8 @@ namespace SubManager.Application.DTO.Subscription
         public string? Name { get; set; }
         public string? Category { get; set; }
 
-        [Range(0, float.MaxValue)]
-        public float? Price { get; set; }
+        [Range(typeof(decimal), "0", "100000")]
+        public decimal? Price { get; set; }
         public bool? IsActive { get; set; }
 
         [Range(1, 31)]

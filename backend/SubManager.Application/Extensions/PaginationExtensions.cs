@@ -10,7 +10,7 @@ namespace SubManager.Application.Extensions
         public static PaginatedSubscriptionsResponse ToResponse(
             this PaginatedList<Subscription> list,
             List<SubscriptionDto> subscriptionDtos,
-            float totalCostMonth)
+            decimal totalCostMonth)
         {
             return new PaginatedSubscriptionsResponse
             {
@@ -20,8 +20,8 @@ namespace SubManager.Application.Extensions
                 HasNextPage = list.HasNextPage,
                 HasPreviousPage = list.HasPreviousPage,
                 Items = subscriptionDtos,
-                TotalCostMonth = totalCostMonth,
-                TotalCostYear = totalCostMonth * 12
+                TotalCostMonth = Math.Round(totalCostMonth, 2),
+                TotalCostYear = Math.Round(totalCostMonth * 12, 2),
             };
         }
     }

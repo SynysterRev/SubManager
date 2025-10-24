@@ -22,8 +22,8 @@ namespace SubManager.Domain.Entities
         public string? Category { get; set; }
 
         [Required]
-        [Range(0, float.MaxValue)]
-        public float Price { get; set; }
+        [Range(typeof(decimal), "0", "100000")]
+        public decimal Price { get; set; }
 
         [Required]
         [Range(1, 31)]

@@ -11,7 +11,7 @@ namespace SubManager.Application.DTO.Pagination
         public bool HasNextPage { get; set; }
         public List<SubscriptionDto> Items { get; set; } = new List<SubscriptionDto>();
 
-        public float TotalCostMonth { get; set; }
-        public float TotalCostYear { get; set; }
+        public decimal TotalCostMonth { get; set; }
+        public decimal TotalCostYear { get; set; }
     }
 }

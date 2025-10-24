@@ -156,7 +156,7 @@ namespace SubManager.Tests.Unit.Controllers
 
             var subcriptionCreate = _fixture.Build<SubscriptionCreateDto>()
                 .With(temp => temp.PaymentDay, 15)
-                .With(temp => temp.Price, 15f)
+                .With(temp => temp.Price, 15m)
                 .Create();
 
             var subscription = subcriptionCreate.ToEntity();
