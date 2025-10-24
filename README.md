@@ -82,11 +82,12 @@ SubManager/
 
 ## Screenshots
 
-![register-screen](assets/images/register-screen.png)
 - Register
+![register-screen](assets/images/register-screen.png)
 - Dashboard overview
 - Subscription list
 - Add/Edit form
+- ![create-sub](assets/images/create-sub.gif)
 - Statistics view
 
 ## Testing
