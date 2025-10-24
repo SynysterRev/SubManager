@@ -40,3 +40,12 @@
         background-color: transparent !important;
     }
 }
+
+.disabled {
+    cursor: not-allowed;
+    pointer-events: none;
+
+    &:hover {
+        background-color: transparent !important;
+    }
+}

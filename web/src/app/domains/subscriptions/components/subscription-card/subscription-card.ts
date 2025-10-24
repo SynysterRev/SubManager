@@ -49,9 +49,6 @@ export class SubscriptionCard {
       case 'Edit':
         this.modalService.triggerOpenModal('editSubscription', this.subscription());
         break;
-      case 'Pause':
-        this.toggleActive();
-        break;
       case 'Delete':
         console.log("delete");
         this.modalService.triggerOpenModal('deleteSubscription', this.subscription());
