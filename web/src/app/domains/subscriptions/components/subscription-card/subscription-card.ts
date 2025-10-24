@@ -47,7 +47,7 @@ export class SubscriptionCard {
     const selectedItem = event as SubCardDropdown;
     switch (selectedItem) {
       case 'Edit':
-        console.log("Edit");
+        this.modalService.triggerOpenModal('editSubscription', this.subscription());
         break;
       case 'Pause':
         this.toggleActive();

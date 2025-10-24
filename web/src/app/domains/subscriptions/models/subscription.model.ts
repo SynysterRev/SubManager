@@ -10,6 +10,7 @@ export interface SubscriptionDto extends BaseSubscription {
     daysBeforeNextPayment: number;
     paymentDate: Date;
     yearCost: number;
+    paymentDay: number;
     isActive: boolean;
 }
 
@@ -18,6 +19,11 @@ export interface SubscriptionCreateDto extends BaseSubscription {
 }
 
 export interface SubscriptionUpdateDto extends Partial<BaseSubscription> {
+    isActive?: boolean;
+    paymentDay?: number;
+}
+
+export interface SubscriptionFormData extends Partial<BaseSubscription> {
     isActive?: boolean;
     paymentDay?: number;
 }

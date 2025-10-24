@@ -5,7 +5,7 @@ import { ActiveSubscriptionsCard } from "../active-subscriptions-card/active-sub
 import { SubscriptionCard } from "../subscription-card/subscription-card";
 import { ModalService } from '../../../../core/services/modal';
 import { AddSubscriptionModal } from "../add-subscription-modal/add-subscription-modal";
-import { SubscriptionCreateDto, SubscriptionDto } from '../../models/subscription.model';
+import { SubscriptionCreateDto, SubscriptionDto, SubscriptionFormData, SubscriptionUpdateDto } from '../../models/subscription.model';
 import { SubscriptionService } from '../../services/subscription';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DeleteSubscriptionModal } from "../delete-subscription-modal/delete-subscription-modal";
@@ -41,11 +41,11 @@ export class SubscriptionsDashboard {
     })
 
     effect(() => {
-      this.isDeleteModalOpen.set(this.modalService.openModal() === 'deleteSubscription');
+      this.isEditModalOpen.set(this.modalService.openModal() === 'editSubscription');
     })
 
     effect(() => {
-      this.isEditModalOpen.set(this.modalService.openModal() === 'editSubscription');
+      this.isDeleteModalOpen.set(this.modalService.openModal() === 'deleteSubscription');
     })
   }
 
@@ -69,17 +69,57 @@ export class SubscriptionsDashboard {
     this.totalCostYear.set(parseFloat((totalRounded * 12).toFixed(2)));
   }
 
-  handleNewSubscription(newSub: SubscriptionCreateDto) {
+  handleSubscription(formData: SubscriptionFormData) {
+    if (this.isEditModalOpen()) {
 
-    this.subService.createNewSubcription(newSub).subscribe({
-      next: (newSub) => {
-        this.subscriptions.update(list => [...list, newSub]);
-        this.recalculateTotals();
+      const sub: SubscriptionDto = this.modalService.modalData()?.data;
+      if (!sub) return;
 
-        this.loadSubscriptions();
-        this.modalService.closeModal();
-      }
-    });
+      const updateDto: SubscriptionUpdateDto = formData;
+      const previousList = this.subscriptions();
+
+      this.subscriptions.update(list =>
+        list.map(s => s.id === sub.id ? { ...s, ...formData } as SubscriptionDto : s)
+      );
+
+      console.log(this.subscriptions());
+      this.recalculateTotals();
+
+      this.modalService.closeModal();
+      // check to reuse onSubscriptionToggled
+      this.subService.updateSubscription(sub.id, updateDto)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: (updatedSub) => {
+            this.loadSubscriptions();
+          },
+          error: (err) => {
+            console.error('toggle failed: ', err);
+
+            this.subscriptions.set(previousList);
+            this.recalculateTotals();
+            // need to optimize here and then and not reload everything each time
+            this.loadSubscriptions();
+          }
+        });
+    } else {
+      // since it's already validate by the form
+      const createDto: SubscriptionCreateDto = {
+        name: formData.name!,
+        category: formData.category!,
+        price: formData.price!,
+        paymentDay: formData.paymentDay!
+      };
+      this.subService.createNewSubcription(createDto).subscribe({
+        next: (newSub) => {
+          this.subscriptions.update(list => [...list, newSub]);
+          this.recalculateTotals();
+
+          this.loadSubscriptions();
+          this.modalService.closeModal();
+        }
+      });
+    }
   }
 
   onSubscriptionToggled(update: SubscriptionDto) {
@@ -94,11 +134,6 @@ export class SubscriptionsDashboard {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (updatedSub) => {
-          this.subscriptions.update(list =>
-            list.map(s => s.id === updatedSub.id ? updatedSub : s)
-          );
-          this.recalculateTotals();
-
           this.loadSubscriptions();
         },
         error: (err) => {
@@ -115,16 +150,14 @@ export class SubscriptionsDashboard {
   onDeleteSubscription() {
     const sub: SubscriptionDto = this.modalService.modalData()?.data;
     if (!sub) return;
-
+    this.subscriptions.update(list =>
+      list.filter(s => s.id !== sub.id)
+    );
+    this.recalculateTotals();
     this.subService.deleteSubscription(sub.id)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
-          this.subscriptions.update(list =>
-            list.filter(s => s.id !== sub.id)
-          );
-          this.recalculateTotals();
-
           this.loadSubscriptions();
           this.modalService.closeModal();
         }

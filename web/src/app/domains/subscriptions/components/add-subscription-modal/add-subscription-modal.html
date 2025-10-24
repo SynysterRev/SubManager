@@ -25,7 +25,7 @@
 
             <label for="payment-day" class="form-label">Payment Day (1-31)</label>
             <input type="number" id="payment-day" formControlName="paymentDay" placeholder="15" min="1" max="31">
-             @if (paymentDay.touched && paymentDay.invalid) {
+            @if (paymentDay.touched && paymentDay.invalid) {
             <div class="error">This must be between 1 and 31</div>
             }
 
@@ -55,8 +55,9 @@
         }
 
         <div class="modal-footer">
-            <button class="button-primary" type="submit" (click)="onSubmit()" [disabled]="!subForm.valid">Add
-                Subscription</button>
+            <button class="button-primary" type="submit" (click)="onSubmit()" [disabled]="!subForm.valid">{{ isEdit ?
+                'Update Subscription' : 'Add Subscription'}}
+            </button>
             <button class="button-secondary" (click)="closeModal()" type="button">Cancel</button>
         </div>
 

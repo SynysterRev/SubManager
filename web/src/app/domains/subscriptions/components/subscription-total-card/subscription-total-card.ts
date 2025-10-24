@@ -1,9 +1,8 @@
-import { DecimalPipe } from '@angular/common';
 import { Component, input } from '@angular/core';
 
 @Component({
   selector: 'app-subscription-total-card',
-  imports: [DecimalPipe],
+  imports: [],
   templateUrl: './subscription-total-card.html',
   styleUrl: './subscription-total-card.scss'
 })

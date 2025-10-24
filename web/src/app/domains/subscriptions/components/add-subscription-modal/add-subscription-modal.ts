@@ -1,7 +1,7 @@
-import { Component, inject, output } from '@angular/core';
+import { Component, effect, inject, input, output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SubscriptionService } from '../../services/subscription';
-import { SubscriptionCreateDto, SubscriptionDto } from '../../models/subscription.model';
+import { SubscriptionDto, SubscriptionFormData } from '../../models/subscription.model';
 import { DecimalPipe } from '@angular/common';
 import { ModalService } from '../../../../core/services/modal';
 
@@ -18,16 +18,34 @@ export class AddSubscriptionModal {
   get price() { return this.subForm.get('price')!; }
   get paymentDay() { return this.subForm.get('paymentDay')!; }
 
-  submitForm = output<SubscriptionCreateDto>();
+  subscription = input<SubscriptionDto>();
+  submitForm = output<SubscriptionFormData>();
 
+  isEdit: boolean = this.subscription() !== null;
 
-  subForm: FormGroup = new FormGroup({
-    name: new FormControl('', [Validators.required]),
-    price: new FormControl('', [Validators.required]),
-    paymentDay: new FormControl('', [Validators.required, Validators.min(1),
-    Validators.max(31)]),
-    category: new FormControl('',)
-  });
+  subForm: FormGroup;
+
+  constructor() {
+    this.subForm = new FormGroup({
+      name: new FormControl(this.subscription()?.name ?? '', [Validators.required]),
+      price: new FormControl(this.subscription()?.price ?? '', [Validators.required]),
+      paymentDay: new FormControl(this.subscription()?.paymentDay ?? '', [Validators.required, Validators.min(1),
+      Validators.max(31)]),
+      category: new FormControl(this.subscription()?.category ?? '',)
+    });
+
+    effect(() => {
+      const sub = this.subscription();
+      if (sub) {
+        this.subForm.patchValue({
+          name: sub.name,
+          price: sub.price,
+          paymentDay: sub.paymentDay,
+          category: sub.category
+        });
+      }
+    });
+  }
 
   closeModal(): void {
     this.modalService.closeModal();
@@ -38,7 +56,6 @@ export class AddSubscriptionModal {
       this.subForm.markAllAsTouched();
       return;
     }
-
-    this.submitForm.emit(this.subForm.value as SubscriptionCreateDto);
+    this.submitForm.emit(this.subForm.value);
   }
 }

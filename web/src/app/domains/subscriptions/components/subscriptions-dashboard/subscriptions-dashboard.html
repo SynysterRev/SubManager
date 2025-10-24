@@ -20,8 +20,8 @@
     }
   </div>
 </main>
-@if(isAddModalOpen()) {
-<app-add-subscription-modal (submitForm)="handleNewSubscription($event)" />
+@if(isAddModalOpen() || isEditModalOpen()) {
+<app-add-subscription-modal [subscription]="modalService.modalData()?.data" (submitForm)="handleSubscription($event)" />
 }
 
 @if(isDeleteModalOpen()) {
