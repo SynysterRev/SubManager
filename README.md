@@ -82,13 +82,9 @@ SubManager/
 
 ## Screenshots
 
-- Register
 ![register-screen](assets/images/register-screen.png)
-- Dashboard overview
-- Subscription list
-- Add/Edit form
-- ![create-sub](assets/images/create-sub.gif)
-- Statistics view
+![create-sub](assets/images/create-sub.gif)
+![stats-view](assets/images/stats-view.png)
 
 ## Testing
 ```bash
