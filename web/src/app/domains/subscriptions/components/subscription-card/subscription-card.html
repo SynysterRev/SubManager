@@ -12,7 +12,7 @@
             <div class="per-month">/month</div>
         </div>
 
-        <app-dropdown #subscriptionDropdown (itemClick)="onDropdownItemClick($event)">
+        <app-dropdown #subscriptionDropdown (itemClick)="onDropdownItemClick($event)" [class.disabled]="!subscription().isActive">
             <svg icon class="dropdown-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24px"
                 height="24px">
                 <path
@@ -20,9 +20,6 @@
             </svg>
             <div class="menu-item" (click)="subscriptionDropdown.onMenuItemClick($event, 'Edit')">
                 Edit Subscription
-            </div>
-            <div class="menu-item" (click)="subscriptionDropdown.onMenuItemClick($event, 'Pause')">
-                Pause Subscription
             </div>
             <div class="menu-item delete-option" (click)="subscriptionDropdown.onMenuItemClick($event, 'Delete')">
                 Delete Subscription
