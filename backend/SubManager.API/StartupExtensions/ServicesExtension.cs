@@ -1,10 +1,8 @@
 ﻿using JuniorOnly.Application.Commons;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using SubManager.Application.Interfaces;
 using SubManager.Application.Services;
@@ -18,13 +16,35 @@ namespace SubManager.API.StartupExtensions
 {
     public static class ServicesExtension
     {
-        public static void ConfigureServices(this IServiceCollection services, IConfiguration configuration)
+        public static void ConfigureServices(this IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
+            if (environment.IsProduction())
             {
-                options.UseSqlServer(configuration.GetConnectionString("Default"));
-            });
+                var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
 
+                if (!string.IsNullOrEmpty(databaseUrl))
+                {
+                    var uri = new Uri(databaseUrl);
+                    var userInfo = uri.UserInfo.Split(':');
+
+                    var connectionString = $"Host={uri.Host};Port={uri.Port};Database={uri.LocalPath.TrimStart('/')};Username={userInfo[0]};Password={userInfo[1]};SSL Mode=Require;Trust Server Certificate=true";
+
+                    configuration["ConnectionStrings:Default"] = connectionString;
+                }
+
+                services.AddDbContext<ApplicationDbContext>(options =>
+                {
+                    options.UseNpgsql(configuration.GetConnectionString("Default"));
+                });
+
+            }
+            else
+            {
+                services.AddDbContext<ApplicationDbContext>(options =>
+                {
+                    options.UseSqlServer(configuration.GetConnectionString("Default"));
+                });
+            }
             services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
             {
                 options.Password.RequiredLength = 6;
