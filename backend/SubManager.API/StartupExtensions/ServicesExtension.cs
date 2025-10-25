@@ -35,8 +35,11 @@ namespace SubManager.API.StartupExtensions
 
                 services.AddDbContext<ApplicationDbContext>(options =>
                 {
-                    options.UseNpgsql(configuration.GetConnectionString("Default"));
-                    options.ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning));
+                    options.UseNpgsql(configuration.GetConnectionString("Default"),
+                        npgsqlOptions =>
+                        {
+                            npgsqlOptions.MapRange<Guid>("uuid");
+                        });
                 });
 
             }
