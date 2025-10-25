@@ -76,7 +76,7 @@ namespace SubManager.API.StartupExtensions
 
             var allowedOrigins = configuration.GetSection("AllowedOrigins").Get<string[]>();
             var defaultOrigins = new string[] { "http://localhost:4200" };
-            Console.WriteLine(allowedOrigins);
+            Console.WriteLine(allowedOrigins?.ToString());
             // CORS
             services.AddCors(options =>
             {
