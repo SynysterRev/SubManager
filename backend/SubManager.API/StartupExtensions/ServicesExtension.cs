@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.IdentityModel.Tokens;
 using SubManager.Application.Interfaces;
 using SubManager.Application.Services;
@@ -35,6 +36,7 @@ namespace SubManager.API.StartupExtensions
                 services.AddDbContext<ApplicationDbContext>(options =>
                 {
                     options.UseNpgsql(configuration.GetConnectionString("Default"));
+                    options.ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning));
                 });
 
             }
