@@ -123,7 +123,7 @@ namespace SubManager.API.StartupExtensions
             {
                 options.Cookie.SameSite = SameSiteMode.None;
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-            })
+            });
 
             services.AddAuthentication(options =>
             {

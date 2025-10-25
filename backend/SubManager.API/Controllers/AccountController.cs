@@ -55,7 +55,7 @@ namespace SubManager.API.Controllers
                     HttpOnly = true,
                     Secure = true,
                     SameSite = SameSiteMode.None,
-                    Expires = refreshToken.Expire
+                    Expires = refreshToken.Expire,
                     IsEssential = true
                 });
 
