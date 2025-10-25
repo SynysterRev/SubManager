@@ -54,8 +54,9 @@ namespace SubManager.API.Controllers
                 {
                     HttpOnly = true,
                     Secure = true,
-                    SameSite = SameSiteMode.Strict,
+                    SameSite = SameSiteMode.None,
                     Expires = refreshToken.Expire
+                    IsEssential = true
                 });
 
                 return Ok(token);
@@ -94,8 +95,9 @@ namespace SubManager.API.Controllers
             {
                 HttpOnly = true,
                 Secure = true,
-                SameSite = SameSiteMode.Strict,
-                Expires = refreshToken.Expire
+                SameSite = SameSiteMode.None,
+                Expires = refreshToken.Expire,
+                IsEssential = true
             });
 
             return Ok(token);
@@ -165,8 +167,9 @@ namespace SubManager.API.Controllers
             {
                 HttpOnly = true,
                 Secure = true,
-                SameSite = SameSiteMode.Strict,
-                Expires = newToken.Expire
+                SameSite = SameSiteMode.None,
+                Expires = newToken.Expire,
+                IsEssential = true
             });
 
             return Ok(accessToken);
