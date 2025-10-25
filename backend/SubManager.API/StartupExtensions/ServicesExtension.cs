@@ -40,6 +40,7 @@ namespace SubManager.API.StartupExtensions
                         {
                             npgsqlOptions.MapRange<Guid>("uuid");
                         });
+                    options.ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning));
                 });
 
             }
