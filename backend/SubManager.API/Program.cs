@@ -2,6 +2,7 @@ using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
@@ -9,6 +10,7 @@ using SubManager.API.Data;
 using SubManager.API.Middlewares;
 using SubManager.API.StartupExtensions;
 using SubManager.Domain.IdentityEntities;
+using SubManager.Infrastructure.DatabaseContext;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -84,8 +86,22 @@ else
 
 using (var scope = app.Services.CreateScope())
 {
-    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
-    await RoleSeeder.SeedRolesAsync(roleManager);
+    var services = scope.ServiceProvider;
+    try
+    {
+        var db = services.GetRequiredService<ApplicationDbContext>();
+        Console.WriteLine("Applying migrations...");
+        db.Database.Migrate();
+
+        var roleManager = services.GetRequiredService<RoleManager<ApplicationRole>>();
+        await RoleSeeder.SeedRolesAsync(roleManager);
+
+        Console.WriteLine("Database ready.");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Migration failed: {ex.Message}");
+    }
 }
 
 app.UseCors();
