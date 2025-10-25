@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.IdentityModel.Tokens;
 using SubManager.Application.Interfaces;
 using SubManager.Application.Services;
@@ -32,25 +31,19 @@ namespace SubManager.API.StartupExtensions
 
                     configuration["ConnectionStrings:Default"] = connectionString;
                 }
-
-                services.AddDbContext<ApplicationDbContext>(options =>
-                {
-                    options.UseNpgsql(configuration.GetConnectionString("Default"),
-                        npgsqlOptions =>
-                        {
-                            npgsqlOptions.MapRange<Guid>("uuid");
-                        });
-                    options.ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning));
-                });
-
             }
-            else
+            services.AddDbContext<ApplicationDbContext>(options =>
             {
-                services.AddDbContext<ApplicationDbContext>(options =>
-                {
-                    options.UseSqlServer(configuration.GetConnectionString("Default"));
-                });
-            }
+                options.UseNpgsql(configuration.GetConnectionString("Default"));
+            });
+
+            //else
+            //{
+            //    services.AddDbContext<ApplicationDbContext>(options =>
+            //    {
+            //        options.UseSqlServer(configuration.GetConnectionString("Default"));
+            //    });
+            //}
             services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
             {
                 options.Password.RequiredLength = 6;
