@@ -85,7 +85,8 @@ namespace SubManager.API.StartupExtensions
                     builder
                     .WithOrigins(allowedOrigins ?? defaultOrigins)
                     .AllowAnyHeader()
-                    .WithMethods("GET", "POST", "PUT", "DELETE", "OPTIONS");
+                    .WithMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                    .AllowCredentials();
                 });
             });
 
