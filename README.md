@@ -24,7 +24,7 @@ Personal project developed to:
 - .NET 8 / C#
 - ASP.NET Core Web API
 - Entity Framework Core (Code First)
-- (localdb)\MSSQLLocalDB
+- PostgreSQL
 - JWT Authentication
 - Clean Architecture with Repository Pattern
 
@@ -34,6 +34,13 @@ Personal project developed to:
 ## Getting Started
 
 ### Manual Setup
+
+**Database:**
+Port : 5433
+With Docker
+```
+docker run --name postgres-submanager -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=submanager -p 5433:5432 -d postgres
+```
 
 **Backend:**
 ```bash
@@ -92,7 +99,10 @@ cd SubManager.Tests
 dotnet test
 ```
 
-## Deployment (To do)
+## Deployment
+
+Backend + Database: Railway
+Frontend: Vercel
 
 ## License
 
