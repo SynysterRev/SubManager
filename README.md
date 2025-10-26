@@ -102,6 +102,7 @@ dotnet test
 ## Deployment
 
 Backend + Database: Railway
+
 Frontend: Vercel
 
 ## License
