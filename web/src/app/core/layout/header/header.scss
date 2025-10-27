@@ -57,6 +57,7 @@
 .buttons-list {
     display: flex;
     gap: 0.5rem;
+    align-items: center;
 }
 
 .header-button {
@@ -94,8 +95,11 @@
     @include base-button;
     padding: 0.5rem 2rem;
     height: 3rem;
-}
 
+    .label {
+        display: inline;
+    }
+}
 
 .dropdown-title {
     border-bottom: 1px solid #f0f0f0;
@@ -103,4 +107,14 @@
     @include flex-center();
     padding: 5px 15px 10px 15px;
     white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+    .create-button {
+        height: 2.5rem;
+        padding: 0.5rem 1rem;
+        .label {
+            display: none;
+        }
+    }
 }

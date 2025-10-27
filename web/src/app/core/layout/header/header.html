@@ -9,7 +9,10 @@
                 </div>
             </a>
             <div class="buttons-list">
-                <button class="create-button" (click)="onAddSubcriptionClick()">+ Add Subscription</button>
+                <button class="create-button" (click)="onAddSubcriptionClick()">
+                    <span class="symbol">+</span>
+                    <span class="label">Add Subscription</span>
+                </button>
                 <button class="header-button">
                     <svg class="button-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2">
@@ -29,10 +32,12 @@
                     <div class="dropdown-title">
                         My Account
                     </div>
-                    <div class="menu-item" [class.disabled]="true" (click)="accountDropdown.onMenuItemClick($event, 'Profile')">
+                    <div class="menu-item" [class.disabled]="true"
+                        (click)="accountDropdown.onMenuItemClick($event, 'Profile')">
                         Profile
                     </div>
-                    <div class="menu-item" [class.disabled]="true" (click)="accountDropdown.onMenuItemClick($event, 'Settings')">
+                    <div class="menu-item" [class.disabled]="true"
+                        (click)="accountDropdown.onMenuItemClick($event, 'Settings')">
                         Settings
                     </div>
                     <div class="menu-item delete-option" (click)="accountDropdown.onMenuItemClick($event, 'Logout')">
