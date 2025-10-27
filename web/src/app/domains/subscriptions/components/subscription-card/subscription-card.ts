@@ -5,10 +5,11 @@ import { Dropdown } from "../../../../shared/components/dropdown/dropdown";
 import { SubCardDropdown } from '../../../../shared/types/dropdown.type';
 import { ModalService } from '../../../../core/services/modal';
 import { Category } from '../../models/category.model';
+import { CurrencyPipe } from '../../pipes/currency-pipe';
 
 @Component({
   selector: 'app-subscription-card',
-  imports: [LocalDatePipe, Dropdown],
+  imports: [LocalDatePipe, Dropdown, CurrencyPipe],
   templateUrl: './subscription-card.html',
   styleUrl: './subscription-card.scss'
 })
