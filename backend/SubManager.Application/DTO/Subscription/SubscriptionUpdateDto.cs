@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using SubManager.Domain.Validation;
+using System.ComponentModel.DataAnnotations;
 
 namespace SubManager.Application.DTO.Subscription
 {
@@ -11,6 +12,7 @@ namespace SubManager.Application.DTO.Subscription
         [Range(typeof(decimal), "0", "100000")]
         public decimal? Price { get; set; }
 
+        [ValidCurrency]
         [RegularExpression("^[A-Z]{3}$", ErrorMessage = "Invalid currency code")]
         public string? CurrencyCode { get; set; }
         public bool? IsActive { get; set; }

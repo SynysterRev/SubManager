@@ -1,4 +1,5 @@
 ﻿using SubManager.Domain.IdentityEntities;
+using SubManager.Domain.Validation;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -25,6 +26,7 @@ namespace SubManager.Domain.Entities
         public int PaymentDay { get; set; }
 
         [Required]
+        [ValidCurrency]
         [RegularExpression("^[A-Z]{3}$", ErrorMessage ="Invalid currency code")]
         public string Currency {  get; set; } = "EUR";
 
