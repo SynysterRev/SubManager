@@ -1,10 +1,8 @@
-﻿using Azure.Core;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SubManager.Application.DTO.Account;
 using SubManager.Application.Interfaces;
-using SubManager.Domain.Entities;
 using SubManager.Domain.IdentityEntities;
 using System.Security.Claims;
 
@@ -50,13 +48,7 @@ namespace SubManager.API.Controllers
                 var token = await _jwtService.CreateJwtTokenAsync(user);
                 var refreshToken = await _jwtService.GenerateRefreshTokenAsync(user);
 
-                Response.Cookies.Append("refreshToken", refreshToken.Token, new CookieOptions
-                {
-                    HttpOnly = true,
-                    Secure = true,
-                    SameSite = SameSiteMode.Strict,
-                    Expires = refreshToken.Expire
-                });
+                SetCookie(Response, refreshToken);
 
                 return Ok(token);
             }
@@ -90,13 +82,7 @@ namespace SubManager.API.Controllers
             var token = await _jwtService.CreateJwtTokenAsync(user);
             var refreshToken = await _jwtService.GenerateRefreshTokenAsync(user);
 
-            Response.Cookies.Append("refreshToken", refreshToken.Token, new CookieOptions
-            {
-                HttpOnly = true,
-                Secure = true,
-                SameSite = SameSiteMode.Strict,
-                Expires = refreshToken.Expire
-            });
+            SetCookie(Response, refreshToken);
 
             return Ok(token);
         }
@@ -161,15 +147,21 @@ namespace SubManager.API.Controllers
             var newToken = await _jwtService.RotateRefreshTokenAsync(token, user);
             var accessToken = await _jwtService.CreateJwtTokenAsync(user);
 
-            Response.Cookies.Append("refreshToken", newToken.Token, new CookieOptions
+            SetCookie(Response, newToken);
+
+            return Ok(accessToken);
+        }
+
+        private void SetCookie(HttpResponse response, RefreshTokenDto refreshToken)
+        {
+            response.Cookies.Append("refreshToken", refreshToken.Token, new CookieOptions
             {
                 HttpOnly = true,
                 Secure = true,
-                SameSite = SameSiteMode.Strict,
-                Expires = newToken.Expire
+                SameSite = SameSiteMode.None,
+                Expires = refreshToken.Expire,
+                IsEssential = true
             });
-
-            return Ok(accessToken);
         }
     }
 }

@@ -104,6 +104,8 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
+app.UseCookiePolicy();
+
 app.UseCors();
 
 app.UseAuthentication();
