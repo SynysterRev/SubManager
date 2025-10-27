@@ -74,16 +74,21 @@ namespace SubManager.API.StartupExtensions
 
             services.Configure<PaginationOptions>(configuration.GetSection(PaginationOptions.SectionName));
 
-            var allowedOrigins = configuration.GetSection("AllowedOrigins").Get<string[]>();
+            var originsString = configuration.GetValue<string>("AllowedOrigins");
             var defaultOrigins = new string[] { "http://localhost:4200" };
-
+            var allowedOrigins = originsString?
+                .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                .Select(s => s.Trim())
+                .ToArray()
+                ?? defaultOrigins;
+            Console.WriteLine($"Loaded origins : {allowedOrigins}");
             // CORS
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(builder =>
                 {
                     builder
-                    .WithOrigins(allowedOrigins ?? defaultOrigins)
+                    .WithOrigins(allowedOrigins)
                     .AllowAnyHeader()
                     .WithMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                     .AllowCredentials();
