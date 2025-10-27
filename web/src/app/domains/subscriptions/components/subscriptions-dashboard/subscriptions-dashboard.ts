@@ -117,7 +117,8 @@ export class SubscriptionsDashboard {
         name: formData.name!,
         categoryId: formData.categoryId,
         price: formData.price!,
-        paymentDay: formData.paymentDay!
+        paymentDay: formData.paymentDay!,
+        currencyCode: formData.currencyCode!,
       };
       this.subService.createNewSubcription(createDto).subscribe({
         next: (newSub) => {

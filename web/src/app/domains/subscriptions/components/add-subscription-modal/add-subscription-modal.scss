@@ -18,7 +18,7 @@
     border-radius: 1rem;
     box-shadow: var(--shadow-card);
     width: 100%;
-    max-width: 30rem;
+    max-width: 24rem;
     padding: 2rem;
     position: relative;
     border: 1px solid var(--border-primary);
@@ -64,7 +64,8 @@
 }
 
 .input-group {
-    position: relative;
+    display: flex;
+    gap: 0.5rem;
 }
 
 .select-input {
@@ -98,6 +99,7 @@
 
 .select-wrapper {
     position: relative;
+    width: 100%;
 }
 
 .select-arrow {

@@ -8,7 +8,7 @@
         </div>
         <div class="app-name">{{subscription().name}}</div>
         <div class="price-info">
-            <div class="price">${{subscription().price}}</div>
+            <div class="price">{{subscription().price | currency: subscription().currencyCode}}</div>
             <div class="per-month">/month</div>
         </div>
 
@@ -44,7 +44,7 @@
             </svg>
             <span>{{subscription().paymentDate | localDate:{ year: 'numeric', month: '2-digit', day: '2-digit' }
                 }}</span>
-            <span class="annual-cost">${{subscription().yearCost}}/yr</span>
+            <span class="annual-cost">{{subscription().yearCost | currency: subscription().currencyCode}}/yr</span>
         </div>
         <div class="toggle-switch-container">
             <input type="checkbox" id="toggle-{{subscription().id}}" [checked]="subscription().isActive"

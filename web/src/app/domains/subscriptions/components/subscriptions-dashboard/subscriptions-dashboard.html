@@ -1,7 +1,7 @@
 <app-header />
 <main class="content">
   <div class="sub-recap">
-    <app-subscription-total-card [monthlyCost]="totalCostMonth()" [yearCost]="totalCostYear()" />
+    <app-subscription-total-card [monthlyCost]="totalCostMonth()" [yearCost]="totalCostYear()" currencyCode="EUR" />
     <app-active-subscriptions-card [activeSub]="totalSubActive()" [totalSub]="subscriptions().length" />
   </div>
   <div class="subscriptions-title-count">

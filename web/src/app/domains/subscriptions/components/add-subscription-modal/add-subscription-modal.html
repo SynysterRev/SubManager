@@ -18,9 +18,17 @@
             <input type="text" id="service-name" formControlName="name" placeholder="e.g., Netflix, Spotify, Adobe...">
             <label for="monthly-price" class="form-label">Monthly Price</label>
             <div class="input-group">
-                <span class="input-prefix">$</span>
-                <input type="number" id="monthly-price" formControlName="price" value="9.99" step="0.01"
-                    class="input-price">
+                <!-- <span class="input-prefix">$</span> -->
+                <input type="number" id="monthly-price" formControlName="price" value="9.99" step="0.01">
+                <div class="select-wrapper">
+                    <select id="currency" class="select-input" formControlName="currencyCode">
+                        @for(currency of getCurrencies(); track currency.code)
+                        {
+                        <option [ngValue]="currency.code">{{currency.symbol}} {{currency.code}}</option>
+                        }
+                    </select>
+                    <div class="select-arrow">▼</div>
+                </div>
             </div>
 
             <label for="payment-day" class="form-label">Payment Day (1-31)</label>
@@ -48,11 +56,11 @@
             <div class="plan-frequency-container">
                 <div class="cost-preview">
                     <span class="plan-frequency">Monthly:</span>
-                    <span class="cost">${{price.value | number:'1.2-2'}}</span>
+                    <span class="cost">{{price.value | currency: subForm.value.currencyCode}}</span>
                 </div>
                 <div class="cost-preview">
                     <span class="plan-frequency">Yearly:</span>
-                    <span class="cost">${{price.value * 12 | number:'1.2-2'}}</span>
+                    <span class="cost">{{price.value * 12 | currency: subForm.value.currencyCode}}</span>
                 </div>
             </div>
         </div>

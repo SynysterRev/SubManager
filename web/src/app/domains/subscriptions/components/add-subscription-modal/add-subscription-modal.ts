@@ -2,13 +2,14 @@ import { Component, computed, effect, inject, input, output } from '@angular/cor
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SubscriptionService } from '../../services/subscription';
 import { SubscriptionDto, SubscriptionFormData } from '../../models/subscription.model';
-import { DecimalPipe } from '@angular/common';
 import { ModalService } from '../../../../core/services/modal';
 import { Category } from '../../models/category.model';
+import { CURRENCIES } from '../../../../shared/constants/currency';
+import { CurrencyPipe } from '../../pipes/currency-pipe';
 
 @Component({
   selector: 'app-add-subscription-modal',
-  imports: [ReactiveFormsModule, DecimalPipe],
+  imports: [ReactiveFormsModule, CurrencyPipe],
   templateUrl: './add-subscription-modal.html',
   styleUrl: './add-subscription-modal.scss'
 })
@@ -25,6 +26,8 @@ export class AddSubscriptionModal {
 
   isEdit = computed(() => !!this.subscription());
 
+  userLocale = navigator.language;
+
   subForm: FormGroup;
 
   constructor() {
@@ -33,7 +36,8 @@ export class AddSubscriptionModal {
       price: new FormControl(this.subscription()?.price ?? '', [Validators.required, Validators.min(0)]),
       paymentDay: new FormControl(this.subscription()?.paymentDay ?? '', [Validators.required, Validators.min(1),
       Validators.max(31)]),
-      categoryId: new FormControl(this.subscription()?.categoryId ?? '',)
+      categoryId: new FormControl(this.subscription()?.categoryId ?? '',),
+      currencyCode: new FormControl(this.subscription()?.currencyCode ?? 'EUR',)
     });
 
     effect(() => {
@@ -59,5 +63,9 @@ export class AddSubscriptionModal {
       return;
     }
     this.submitForm.emit(this.subForm.value);
+  }
+
+  getCurrencies() {
+    return CURRENCIES;
   }
 }
