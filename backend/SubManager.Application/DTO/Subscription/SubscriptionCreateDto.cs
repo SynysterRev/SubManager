@@ -16,6 +16,10 @@ namespace SubManager.Application.DTO.Subscription
         [Range(1, 31)]
         public int PaymentDay { get; set; }
 
+        [Required]
+        [RegularExpression("^[A-Z]{3}$", ErrorMessage = "Invalid currency code")]
+        public string CurrencyCode { get; set; } = "EUR";
+
         public int? CategoryId { get; set; }
     }
 }

@@ -32,6 +32,7 @@ namespace SubManager.Application.Extensions
                 DaysBeforeNextPayment = (nextPayment - today).Days,
                 YearCost = subscription.Price * 12,
                 UserId = subscription.UserId,
+                CurrencyCode = subscription.Currency
             };
         }
 
@@ -45,6 +46,7 @@ namespace SubManager.Application.Extensions
                 IsActive = true,
                 Price = createDto.Price,
                 PaymentDay = createDto.PaymentDay,
+                Currency = createDto.CurrencyCode
             };
         }
 
@@ -69,6 +71,10 @@ namespace SubManager.Application.Extensions
             if (updateDto.Price.HasValue)
             {
                 subscription.Price = updateDto.Price.Value;
+            }
+            if (!string.IsNullOrEmpty(updateDto.CurrencyCode))
+            {
+                subscription.Currency = updateDto.CurrencyCode;
             }
         }
     }
