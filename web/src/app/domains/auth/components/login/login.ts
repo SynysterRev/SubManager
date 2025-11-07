@@ -33,7 +33,7 @@ export class Login {
 
     this.authService.login(this.loginForm.value).subscribe({
       next: (tokenDto) => {
-        console.log('Logged in with email: ', tokenDto.email);
+        // console.log('Logged in with email: ', tokenDto.email);
         this.router.navigate(['/dashboard']);
       },
       error: (err: any) => {
