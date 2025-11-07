@@ -13,4 +13,5 @@ export interface TokenDto {
     email: string;
     token: string;
     expiration: string;
+    currencyCode: string;
 }

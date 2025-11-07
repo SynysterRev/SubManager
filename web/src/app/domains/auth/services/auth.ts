@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { computed, inject, Injectable } from '@angular/core';
 import { LoginDto, RegisterDto, TokenDto } from '../models/auth.model';
 import { BehaviorSubject, catchError, map, Observable, of, tap, throwError } from 'rxjs';
 import { HttpClient, HttpContext, HttpErrorResponse } from '@angular/common/http';
@@ -20,6 +20,10 @@ export class AuthService {
     this.getTokenDto()
   );
   public currentUser$ = this.currentUserSubject.asObservable();
+
+  public currency = computed(() =>
+    this.currentUserSubject.value?.currencyCode ?? 'EUR'
+  );
 
   saveToken(tokenDto: TokenDto): void {
     localStorage.setItem(this.TOKEN_KEY, JSON.stringify(tokenDto));
@@ -95,18 +99,21 @@ export class AuthService {
         this.saveToken(tokenDto);
         this.currentUserSubject.next(tokenDto);
       }),
-      catchError(this.handleError)
+      catchError((error) => this.handleError(error))
     );
   }
 
-  private handleError(error: HttpErrorResponse): Observable<never> {
+  private handleError = (error: HttpErrorResponse): Observable<never> => {
     let errorMessage = 'An unknown error occurred';
+
     this.currentUserSubject.next(null);
+
     if (error.error instanceof ErrorEvent) {
       errorMessage = `Error: ${error.error.message}`;
     } else {
-      if (error.status === 400 && error.error?.errors) {
-        errorMessage = error.error.errors.join(', ');
+      if (error.status === 400 && error.error?.errors?.length > 0) {
+        // Prendre la première erreur du tableau
+        errorMessage = error.error.errors[0];
       } else if (error.error?.message) {
         errorMessage = error.error.message;
       } else {

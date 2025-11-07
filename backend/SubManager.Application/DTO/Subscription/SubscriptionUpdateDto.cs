@@ -11,10 +11,6 @@ namespace SubManager.Application.DTO.Subscription
 
         [Range(typeof(decimal), "0", "100000")]
         public decimal? Price { get; set; }
-
-        [ValidCurrency]
-        [RegularExpression("^[A-Z]{3}$", ErrorMessage = "Invalid currency code")]
-        public string? CurrencyCode { get; set; }
         public bool? IsActive { get; set; }
 
         [Range(1, 31)]

@@ -1,10 +1,5 @@
 ﻿using SubManager.Application.DTO.Subscription;
 using SubManager.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SubManager.Application.Extensions
 {
@@ -31,8 +26,7 @@ namespace SubManager.Application.Extensions
                 PaymentDay = subscription.PaymentDay,
                 DaysBeforeNextPayment = (nextPayment - today).Days,
                 YearCost = subscription.Price * 12,
-                UserId = subscription.UserId,
-                CurrencyCode = subscription.Currency
+                UserId = subscription.UserId
             };
         }
 
@@ -45,8 +39,7 @@ namespace SubManager.Application.Extensions
                 CreatedAt = DateTime.UtcNow,
                 IsActive = true,
                 Price = createDto.Price,
-                PaymentDay = createDto.PaymentDay,
-                Currency = createDto.CurrencyCode
+                PaymentDay = createDto.PaymentDay
             };
         }
 
@@ -71,10 +64,6 @@ namespace SubManager.Application.Extensions
             if (updateDto.Price.HasValue)
             {
                 subscription.Price = updateDto.Price.Value;
-            }
-            if (!string.IsNullOrEmpty(updateDto.CurrencyCode))
-            {
-                subscription.Currency = updateDto.CurrencyCode;
             }
         }
     }

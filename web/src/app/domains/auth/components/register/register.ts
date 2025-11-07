@@ -4,6 +4,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router, RouterModule } from '@angular/router';
 import { passwordMatchValidator } from '../validators/password-match.validator';
 import { AuthService } from '../../services/auth';
+import { CURRENCIES } from '../../../../shared/constants/currency';
 
 @Component({
   selector: 'app-register',
@@ -20,7 +21,8 @@ export class Register {
   registerForm: FormGroup = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required, Validators.minLength(8)]),
-    confirmPassword: new FormControl('', [Validators.required])
+    confirmPassword: new FormControl('', [Validators.required]),
+    currencyCode: new FormControl('EUR')
   }, { validators: passwordMatchValidator() });
 
   get email() { return this.registerForm.get('email')!; }
@@ -45,5 +47,9 @@ export class Register {
         console.error('Registration failed:', err);
       }
     });
+  }
+
+  getCurrencies() {
+    return CURRENCIES;
   }
 }

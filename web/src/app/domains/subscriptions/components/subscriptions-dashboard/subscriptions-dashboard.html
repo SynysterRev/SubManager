@@ -1,7 +1,7 @@
 <app-header />
 <main class="content">
   <div class="sub-recap">
-    <app-subscription-total-card [monthlyCost]="totalCostMonth()" [yearCost]="totalCostYear()" currencyCode="EUR" />
+    <app-subscription-total-card [monthlyCost]="totalCostMonth()" [yearCost]="totalCostYear()" [currencyCode]="getCurrency()" />
     <app-active-subscriptions-card [activeSub]="totalSubActive()" [totalSub]="subscriptions().length" />
   </div>
   <div class="subscriptions-title-count">
@@ -16,12 +16,12 @@
   }
   <div class="subscriptions-list">
     @for(sub of subscriptions(); track sub.id) {
-    <app-subscription-card [subscription]="sub" [categories]="categories()" (toggled)="onSubscriptionToggled($event)" />
+    <app-subscription-card [subscription]="sub" [categories]="categories()" [currencyCode]="getCurrency()" (toggled)="onSubscriptionToggled($event)" />
     }
   </div>
 </main>
 @if(isAddModalOpen() || isEditModalOpen()) {
-<app-add-subscription-modal [subscription]="modalService.modalData()?.data ?? null" [categories]="categories()" (submitForm)="handleSubscription($event)" />
+<app-add-subscription-modal [subscription]="modalService.modalData()?.data ?? null" [currencyCode]="getCurrency()" [categories]="categories()" (submitForm)="handleSubscription($event)" />
 }
 
 @if(isDeleteModalOpen()) {

@@ -76,21 +76,6 @@ namespace SubManager.Tests.Unit.Services
         }
 
         [Fact]
-        public async Task CreateSubscriptionAsync_ShouldThrowValidationException_InvalidCurrency()
-        {
-            var userId = Guid.NewGuid();
-            var subcriptionCreate = _fixture.Build<SubscriptionCreateDto>()
-                .With(temp => temp.CurrencyCode, "asdfg")
-                .Create();
-            _userManagerMock.Setup(u => u.FindByIdAsync(userId.ToString())).ReturnsAsync(new ApplicationUser { Id = userId });
-            Func<Task> action = async () =>
-            {
-                await _subscriptionService.CreateSubscriptionAsync(subcriptionCreate, userId);
-            };
-            await action.Should().ThrowAsync<ValidationException>();
-        }
-
-        [Fact]
         public async Task CreateSubscriptionAsync_ShouldThrowNotFoundException_InvalidCategoryId()
         {
             var userId = Guid.NewGuid();
@@ -362,6 +347,12 @@ namespace SubManager.Tests.Unit.Services
         public async Task GetSubscriptionByIdAsync_ShouldReturnSubscription_WhenExists()
         {
             var userId = Guid.NewGuid();
+            //var user = new ApplicationUser
+            //{
+            //    Email = "test@test.com",
+            //    Id = userId,
+            //    Cur
+            //}
             var subscription = _fixture.Build<Subscription>()
                 .With(s => s.PaymentDay, 15)
                 .Create();

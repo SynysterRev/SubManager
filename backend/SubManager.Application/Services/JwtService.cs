@@ -91,6 +91,7 @@ namespace SubManager.Application.Services
                 Expiration = expiration,
                 Token = token,
                 IsPremium = user.IsPremium,
+                Currency = user.Currency
             };
         }
 

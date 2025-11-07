@@ -25,11 +25,6 @@ namespace SubManager.Domain.Entities
         [Range(1, 31)]
         public int PaymentDay { get; set; }
 
-        [Required]
-        [ValidCurrency]
-        [RegularExpression("^[A-Z]{3}$", ErrorMessage ="Invalid currency code")]
-        public string Currency {  get; set; } = "EUR";
-
         public bool IsActive { get; set; }
 
         [Required]

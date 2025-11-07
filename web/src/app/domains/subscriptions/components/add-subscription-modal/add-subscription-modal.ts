@@ -22,6 +22,7 @@ export class AddSubscriptionModal {
 
   subscription = input<SubscriptionDto | undefined>(undefined);
   categories = input<Category[]>();
+  currencyCode = input.required<string>();
   submitForm = output<SubscriptionFormData>();
 
   isEdit = computed(() => !!this.subscription());
@@ -37,7 +38,6 @@ export class AddSubscriptionModal {
       paymentDay: new FormControl(this.subscription()?.paymentDay ?? '', [Validators.required, Validators.min(1),
       Validators.max(31)]),
       categoryId: new FormControl(this.subscription()?.categoryId ?? '',),
-      currencyCode: new FormControl(this.subscription()?.currencyCode ?? 'EUR',)
     });
 
     effect(() => {

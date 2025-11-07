@@ -7,10 +7,11 @@ import { ModalService } from '../../../../core/services/modal';
 import { AddSubscriptionModal } from "../add-subscription-modal/add-subscription-modal";
 import { SubscriptionCreateDto, SubscriptionDto, SubscriptionFormData, SubscriptionUpdateDto } from '../../models/subscription.model';
 import { SubscriptionService } from '../../services/subscription';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { DeleteSubscriptionModal } from "../delete-subscription-modal/delete-subscription-modal";
 import { Category } from '../../models/category.model';
 import { CategoryService } from '../../services/category';
+import { AuthService } from '../../../auth/services/auth';
 
 @Component({
   selector: 'app-subscriptions-dashboard',
@@ -24,6 +25,7 @@ export class SubscriptionsDashboard {
   modalService = inject(ModalService);
   subService = inject(SubscriptionService);
   categoryService = inject(CategoryService);
+  authService = inject(AuthService);
 
   totalSubActive = computed(() => this.subscriptions().filter(s => s.isActive).length);
 
@@ -35,6 +37,7 @@ export class SubscriptionsDashboard {
   isAddModalOpen = signal(false);
   isDeleteModalOpen = signal(false);
   isEditModalOpen = signal(false);
+
 
   constructor() {
 
@@ -118,7 +121,6 @@ export class SubscriptionsDashboard {
         categoryId: formData.categoryId,
         price: formData.price!,
         paymentDay: formData.paymentDay!,
-        currencyCode: formData.currencyCode!,
       };
       this.subService.createNewSubcription(createDto).subscribe({
         next: (newSub) => {
@@ -172,5 +174,9 @@ export class SubscriptionsDashboard {
           this.loadSubscriptions();
         }
       })
+  }
+
+  getCurrency(): string {
+    return this.authService.currency();
   }
 }

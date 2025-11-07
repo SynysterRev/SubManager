@@ -18,6 +18,7 @@ export class SubscriptionCard {
   isDropdownOpen: boolean = false;
   subscription = input.required<SubscriptionDto>();
   categories = input.required<Category[]>();
+  currencyCode = input.required<string>();
   toggled = output<SubscriptionDto>();
   modalService = inject(ModalService);
 

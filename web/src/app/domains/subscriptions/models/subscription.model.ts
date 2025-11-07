@@ -2,7 +2,6 @@ export interface BaseSubscription {
     name: string;
     categoryId?: number;
     price: number;
-    currencyCode: string;
 }
 
 export interface SubscriptionDto extends BaseSubscription {

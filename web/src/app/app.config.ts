@@ -12,7 +12,7 @@ export const appConfig: ApplicationConfig = {
     provideZonelessChangeDetection(),
     provideRouter(routes),
     provideHttpClient(
-      withInterceptors([jwtInterceptor, httpErrorInterceptor])
+      withInterceptors([jwtInterceptor])
     )
   ]
 };

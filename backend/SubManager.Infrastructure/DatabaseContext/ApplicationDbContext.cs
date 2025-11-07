@@ -2,12 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using SubManager.Domain.Entities;
 using SubManager.Domain.IdentityEntities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SubManager.Infrastructure.DatabaseContext
 {
@@ -61,7 +55,7 @@ namespace SubManager.Infrastructure.DatabaseContext
                 new Category { Id = 7, Name = "Development" },
                 new Category { Id = 8, Name = "Education" },
                 new Category { Id = 9, Name = "Communication" },
-                new Category { Id = 10, Name = "news_media" },
+                new Category { Id = 10, Name = "News Media" },
                 new Category { Id = 11, Name = "Other" }
             );
         }

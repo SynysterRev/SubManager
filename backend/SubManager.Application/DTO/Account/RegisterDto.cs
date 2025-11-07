@@ -16,5 +16,7 @@ namespace SubManager.Application.DTO.Account
         [Required(ErrorMessage = "Confirm password is required")]
         [Compare("Password", ErrorMessage = "Password and confirm password do not match")]
         public string ConfirmPassword { get; set; } = string.Empty;
+
+        public string Currency { get; set; } = string.Empty;
     }
 }

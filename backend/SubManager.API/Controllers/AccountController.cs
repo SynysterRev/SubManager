@@ -35,7 +35,8 @@ namespace SubManager.API.Controllers
             ApplicationUser user = new ApplicationUser()
             {
                 Email = registerDto.Email,
-                UserName = registerDto.Email
+                UserName = registerDto.Email,
+                Currency = registerDto.Currency
             };
 
             IdentityResult result = await _userManager.CreateAsync(user, registerDto.Password);

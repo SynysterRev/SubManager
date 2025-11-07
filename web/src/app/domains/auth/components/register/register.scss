@@ -89,3 +89,47 @@
 .submit-button {
     @include base-button;
 }
+
+.select-input {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    box-sizing: border-box;
+
+    border-radius: 1rem;
+    border: 1px solid var(--input);
+    padding: 0.25rem 0.75rem;
+    height: 3.5rem;
+    font-size: 0.875rem;
+
+    background: transparent;
+    outline: none;
+    box-shadow: none;
+    width: 100%;
+    color: var(--foreground);
+
+    padding-right: 2.5rem;
+    transition: var(--transition-smooth);
+}
+
+.select-input:focus,
+.select-input:focus-visible {
+    outline: none;
+    border-color: var(--ring);
+    box-shadow: 0 0 0 4px hsla(174, 100%, 39%, 0.12);
+}
+
+.select-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.select-arrow {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: var(--muted-foreground);
+    font-size: 0.7rem;
+}
