@@ -69,7 +69,6 @@ Once running, access Swagger UI at: `http://localhost:5267/swagger/index.html`
 - `GET /api/me/subscriptions/{id}` - Get subscription details
 - `PUT /api/me/subscriptions/{id}` - Update subscription
 - `DELETE /api/me/subscriptions/{id}` - Delete subscription
-- `GET /api/me/subscriptions/stats` - Get user statistics
 
 ## Architecture
 ```
