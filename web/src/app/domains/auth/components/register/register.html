@@ -38,15 +38,15 @@
             <div class="error">Passwords do not match</div>
             }
 
-            <!-- <div class="select-wrapper">
-                <select id="currency" class="select-input" formControlName="currencyCode">
+            <div class="select-wrapper">
+                <select id="currency" class="select-input" formControlName="currency">
                     @for(currency of getCurrencies(); track currency.code)
                     {
                     <option [ngValue]="currency.code">{{currency.symbol}} {{currency.code}}</option>
                     }
                 </select>
                 <div class="select-arrow">▼</div>
-            </div> -->
+            </div>
 
             <button type="submit" class="submit-button" [disabled]="registerForm.invalid">
                 Create Account

@@ -1,4 +1,4 @@
-import { computed, inject, Injectable } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { LoginDto, RegisterDto, TokenDto } from '../models/auth.model';
 import { BehaviorSubject, catchError, map, Observable, of, tap, throwError } from 'rxjs';
 import { HttpClient, HttpContext, HttpErrorResponse } from '@angular/common/http';
@@ -16,17 +16,19 @@ export class AuthService {
 
   private readonly TOKEN_KEY = 'access_token';
 
-  private currentUserSubject = new BehaviorSubject<TokenDto | null>(
-    this.getTokenDto()
-  );
-  public currentUser$ = this.currentUserSubject.asObservable();
+  private currentUser = signal<TokenDto | null>(this.getTokenDto());
+  public readonly currentUserSignal = this.currentUser.asReadonly();
 
   public currency = computed(() =>
-    this.currentUserSubject.value?.currencyCode ?? 'EUR'
+    this.currentUserSignal()?.currency ?? 'EUR'
   );
 
   saveToken(tokenDto: TokenDto): void {
     localStorage.setItem(this.TOKEN_KEY, JSON.stringify(tokenDto));
+  }
+
+  private setCurrentUser(tokenDto: TokenDto | null) {
+    this.currentUser.set(tokenDto);
   }
 
   getTokenDto(): TokenDto | null {
@@ -77,10 +79,10 @@ export class AuthService {
     ).pipe(
       tap(tokenDto => {
         this.saveToken(tokenDto);
-        this.currentUserSubject.next(tokenDto);
+        this.setCurrentUser(tokenDto);
       }),
       catchError(error => {
-        this.currentUserSubject.next(null);
+        this.setCurrentUser(null);
         return throwError(() => error);
       })
     );
@@ -97,7 +99,7 @@ export class AuthService {
     ).pipe(
       tap(tokenDto => {
         this.saveToken(tokenDto);
-        this.currentUserSubject.next(tokenDto);
+        this.setCurrentUser(tokenDto);
       }),
       catchError((error) => this.handleError(error))
     );
@@ -106,7 +108,7 @@ export class AuthService {
   private handleError = (error: HttpErrorResponse): Observable<never> => {
     let errorMessage = 'An unknown error occurred';
 
-    this.currentUserSubject.next(null);
+    this.setCurrentUser(null);
 
     if (error.error instanceof ErrorEvent) {
       errorMessage = `Error: ${error.error.message}`;
@@ -135,10 +137,10 @@ export class AuthService {
     ).pipe(
       tap(tokenDto => {
         this.saveToken(tokenDto);
-        this.currentUserSubject.next(tokenDto);
+        this.setCurrentUser(tokenDto);
       }),
       catchError(error => {
-        this.currentUserSubject.next(null);
+        this.setCurrentUser(null);
         return throwError(() => error);
       })
     );
@@ -156,7 +158,7 @@ export class AuthService {
 
   private cleanUp() {
     localStorage.removeItem(this.TOKEN_KEY);
-    this.currentUserSubject.next(null);
+    this.setCurrentUser(null);
     this.router.navigate(['/login']);
   }
 }

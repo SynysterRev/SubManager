@@ -7,12 +7,12 @@ export interface RegisterDto {
     email: string;
     password: string;
     confirmPassword: string;
-    currencyCode: string;
+    currency: string;
 }
 
 export interface TokenDto {
     email: string;
     token: string;
     expiration: string;
-    currencyCode: string;
+    currency: string;
 }
